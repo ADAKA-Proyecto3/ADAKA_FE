@@ -1,1 +1,153 @@
-<p>landing works!</p>
+<div id="parallax-core">
+    <section>
+        <div class="parallax-one">
+            <div class="container text-center justify-content-center align-content-center">
+                <div>
+                    <span class="loader"></span>
+                </div>
+            </div>
+            <h2 class="main-title">ADAKA SOTFWARE</h2>
+
+        </div>
+    </section>
+
+    <section>
+
+        <div class="elevation bg-purple-light">
+            <div class="container-fluid">
+                <div class="row gap-3  justify-content-evenly elevation_container">
+
+                    <div class="col-6 example-container pt-3 m elevation_container_first"
+                        [class.mat-elevation-z24]="true">
+
+                        <div class="text-center elevation_container_first_title">
+                            Misión
+                        </div>
+
+                        <p class="elevation_container_first_body">
+                            Utilizar nuestra experiencia en desarrollo de software para crear soluciones informáticas
+                            que generen conciencia y brinden información precisa en el campo de la salud. Nos enfocamos
+                            en
+                            recopilar, analizar y presentar datos específicos relacionados con la salud para ayudar a
+                            las personas a tomar
+                            decisiones informadas sobre su bienestar. Nos esforzamos por superar las expectativas de
+                            nuestros
+                            clientes y contribuir al avance global de la salud a través de nuestras soluciones
+                            tecnológicas
+                            confiables y orientadas a resultados.
+                        </p>
+                    </div>
+
+                    <div class="col-6 example-container pt-3 m2 elevation_container_second"
+                        [class.mat-elevation-z15]="true">
+
+                        <div class="text-center elevation_container_second_title">
+                            Visión
+                        </div>
+
+                        <p class="elevation_container_second_body">
+                            Ser el equipo líder en el desarrollo de soluciones informáticas innovadoras y de vanguardia,
+                            utilizando
+                            tecnología de vanguardia para crear conciencia y proporcionar soluciones efectivas en el
+                            área de salud.
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="parallax-two">
+            <h2 class="main-title">NUESTRO EQUIPO</h2>
+        </div>
+    </section>
+
+    <section>
+        <div class="container-fluid pt-5 pb-5 bg-purple-light">
+            <div class="row">
+                <div class="col justify-content-center d-flex" *ngFor="let card of cards">
+                    <app-card [cardData]="card"></app-card>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="parallax-three">
+            <h2 class="main-title">Valores</h2>
+        </div>
+    </section>
+
+    <section>
+
+        <div class="container-fluid d-flex justify-content-center gap-1 bg-purple-light">
+            <div class="row">
+
+                <div class="col d-flex justify-content-center pt-3">
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <i class="fa-solid fa-hands-holding fa-3x"></i>
+                                <p class="title-card pt-2">SOLIDARIDAD</p>
+                            </div>
+                            <div class="flip-card-back">
+                                <p class="title-card ">Tenemos voluntad y compromiso hacia los intereses de nuestros
+                                    clientes dando apoyo absoluto en cada fase de los proyectos.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col d-flex justify-content-center pt-3">
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <i class="fa-solid fa-shuttle-space fa-3x"></i>
+                                <p class="title-card pt-2">EFICIENCIA</p>
+                            </div>
+                            <div class="flip-card-back">
+                                <p class="title-card ">Nos esforzamos por crear y mantener un ambiente que fomenta
+                                    el trabajo sano en equipo para mejorar la productividad en general y dar
+                                    resultados óptimos a nuestros clientes.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col d-flex justify-content-center pt-3">
+                    <div class="flip-card">
+                        <div class="flip-card-inner">
+                            <div class="flip-card-front">
+                                <i class="fa-solid fa-handshake fa-3x"></i>
+                                <p class="title-card pt-2">HONRADEZ</p>
+                            </div>
+                            <div class="flip-card-back">
+                                <p class="title-card">Nuestras acciones reflejan respeto, amabilidad y
+                                    transparencia con todas las personas externas e internas que interactuamos.
+
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+    </section>
+
+</div>
+
+<div
+    class="d-flex container-fluid w-100 justify-content-center pt-5 pb-5 align-content-center text-center bg-purple-light">
+
+    <button class="btn" type="button" (click)="goToHome()">
+        REGRESAR A LA PÁGINA PRINCIPAL
+    </button>
+
+
+</div>

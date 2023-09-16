@@ -1,4 +1,4 @@
-export enum UrlPages{
+export enum UrlPages {
     HOME = 'home',
     LANDING = 'landing',
 }
