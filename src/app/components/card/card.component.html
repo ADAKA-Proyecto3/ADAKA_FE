@@ -1,0 +1,24 @@
+<mat-card class="example-card my-10">
+
+    <mat-card-header class="card-head">
+      <div mat-card-avatar class="example-header-image"></div>
+      <mat-card-title>{{cardData.title}}</mat-card-title>
+      <mat-card-subtitle class="card-sub pt-1">{{cardData.subtitle}}</mat-card-subtitle>
+    </mat-card-header>
+
+    <img mat-card-image src={{cardData.image}} alt="Photo of a Shiba Inu">
+
+    <mat-card-content class="pt-2 card-content-container">
+      <p class="card-content ">
+        {{cardData.content_1}}
+      </p>
+    </mat-card-content>
+
+    <mat-card-content class="pt-2 card-content-container">
+      <p class="card-content">
+        {{cardData.content_2}}
+      </p>
+    </mat-card-content>
+  
+  </mat-card>
+  

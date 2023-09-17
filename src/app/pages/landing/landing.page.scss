@@ -1,0 +1,273 @@
+@import url(https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap);
+
+$Barlow: "Barlow Semi Condensed", sans-serif;
+
+@font-face {
+  font-family: "BLANKA";
+  src: url("/assets/fonts/Blanka-Regular.otf") format("opentype"); /* Adjust the path as per your project structure */
+  font-weight: normal;
+  font-style: normal;
+}
+
+.bg-purple-light {
+  background: #7e7afa12;
+}
+
+.margin-top-10 {
+  padding-top: 10px;
+}
+.margin-bot-10 {
+  padding-bottom: 10px;
+}
+
+.main-title {
+  font-family: BLANKA;
+  color: #fec900;
+  font-size: 4.5rem;
+  line-height: 12.5rem;
+  text-align: center;
+  z-index: 10;
+  font-weight: 400;
+}
+
+.elevation_container {
+  padding-top: 3.75rem;
+  padding-bottom: 3.75rem;
+
+  &_first {
+    background-color: #fec900;
+    border-radius: 15px;
+    min-width: 28.25rem;
+
+    &_title {
+      color: #5a309b;
+      font-size: 2rem;
+      font-family: BLANKA;
+    }
+
+    &_body {
+      color: #5a309b;
+      padding-top: 30px;
+      white-space: pre-line;
+      word-break: break-word;
+      overflow-x: auto;
+      font-size: 1rem;
+      line-height: 40px;
+      font-family: $Barlow;
+      text-align: center;
+    }
+  }
+
+  &_second {
+    background-color: #5859ea;
+    border-radius: 15px;
+    min-width: 28.25rem;
+
+    &_title {
+      color: white;
+      font-size: 2rem;
+      font-family: BLANKA;
+    }
+
+    &_body {
+      color: white;
+      padding-top: 30px;
+      white-space: pre-line;
+      word-break: break-word;
+      overflow-x: auto;
+      font-size: 1rem;
+      line-height: 40px;
+      font-family: $Barlow;
+      text-align: center;
+    }
+  }
+}
+
+#parallax-core .parallax-one {
+  padding-top: 200px;
+  padding-bottom: 25vh;
+  overflow: hidden;
+  // position: relative;
+  width: 100%;
+  background-image: url(/assets/images/parallax_1.jpeg);
+  background-attachment: fixed;
+  background-size: cover;
+  -moz-background-size: cover;
+  -webkit-background-size: cover;
+  background-repeat: no-repeat;
+  background-position: top center;
+}
+#parallax-core .parallax-two {
+  padding-top: 200px;
+  padding-bottom: 25vh;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  background-image: url(/assets/images/parallax_2.jpeg);
+  background-attachment: fixed;
+  background-size: cover;
+  -moz-background-size: cover;
+  -webkit-background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+#parallax-core .parallax-three {
+  padding-top: 200px;
+  padding-bottom: 5vh;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  background-image: url(/assets/images/parallax_3.jpeg);
+  background-attachment: fixed;
+  background-size: cover;
+  -moz-background-size: cover;
+  -webkit-background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.loader {
+  transform: rotateZ(45deg);
+  perspective: 1000px;
+  border-radius: 70%;
+  width: 150px;
+  height: 150px;
+  color: red;
+}
+.loader:before,
+.loader:after {
+  content: "";
+  display: block;
+  position: absolute;
+  //top: 0;
+  //left: 0;
+  width: inherit;
+  height: inherit;
+  border-radius: 50%;
+  transform: rotateX(70deg);
+  animation: 1s spin linear infinite;
+}
+.loader:after {
+  color: #fedf01;
+  transform: rotateY(70deg);
+  animation-delay: 0.4s;
+}
+
+@keyframes rotate {
+  0% {
+    transform: translate(-50%, -50%) rotateZ(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotateZ(360deg);
+  }
+}
+
+@keyframes rotateccw {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(-360deg);
+  }
+}
+
+@keyframes spin {
+  0%,
+  100% {
+    box-shadow: 0.5em 0px 0 0px currentcolor;
+  }
+  12% {
+    box-shadow: 0.5em 0.5em 0 0 currentcolor;
+  }
+  25% {
+    box-shadow: 0 1em 0 0px currentcolor;
+  }
+  37% {
+    box-shadow: -0.2em 0.2em 0 0 currentcolor;
+  }
+  50% {
+    box-shadow: -0.2em 0 0 0 currentcolor;
+  }
+  62% {
+    box-shadow: -0.2em -0.2em 0 0 currentcolor;
+  }
+  75% {
+    box-shadow: 0px -0.2em 0 0 currentcolor;
+  }
+  87% {
+    box-shadow: 0.2em -0.2em 0 0 currentcolor;
+  }
+}
+
+.flip-card {
+  background-color: transparent;
+  width: 300px;
+  height: 600px;
+  perspective: 1000px;
+  //font-family: sans-serif;
+}
+
+.title-card {
+  font-size: 1.5em;
+  font-weight: 900;
+  text-align: center;
+  line-height: 35px;
+  margin: 0;
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
+
+.flip-card:hover .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front,
+.flip-card-back {
+  box-shadow: 0 8px 14px 0 rgba(0, 0, 0, 0.2);
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  //border: 1px solid #5859ea;
+  border-radius: 1rem;
+}
+
+.flip-card-front {
+  background: #081b4f;
+  color: white;
+}
+
+.flip-card-back {
+  background: #d3d0ed;
+  color: #00001c;
+  transform: rotateY(180deg);
+}
+
+.fa-solid {
+  color: #fec900;
+  font-size: 100px;
+}
+
+.btn {
+  background-color: #fec900;
+  padding: 20px;
+  color: black;
+  font-weight: bold;
+  border-radius: 50px;
+
+  &:hover {
+    background-color: #5a309b;
+    color: #fec900;
+  }
+}

@@ -1,0 +1,29 @@
+
+.example-card {
+  max-width: 400px;
+}
+
+.example-header-image {
+  background-image: url("/assets/images/adaka_logo_simple.png");
+  background-size: cover;
+}
+
+.card-head{
+    background-color: #5859ea;
+    color: white;
+}
+.card-sub{
+    color: white;
+}
+
+
+.card-content-container{
+    background-color: #fec900;
+    //color: #2d1575;
+}
+
+
+.card-content{
+    color: black;
+    font-size: 0.8rem;
+}
