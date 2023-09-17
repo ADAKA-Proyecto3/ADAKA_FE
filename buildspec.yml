@@ -8,7 +8,7 @@ phases:
       - npm install
   build:
     commands:
-      - ng build --prod
+      - ng build --configuration production
 artifacts:
   files:
     - 'dist/**/*'
