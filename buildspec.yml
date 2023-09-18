@@ -9,7 +9,7 @@ phases:
       - npm install
   build:
     commands:
-      - ng build --configuration production
+      - ng build --base-href /dist/adaka_fe/
   post_build:
     commands:
       - aws s3 sync dist/ s3://adaka-front-end-prod/ --metadata-directive REPLACE --content-type "application/javascript; charset=utf-8" --exclude "*.*"
