@@ -15,6 +15,7 @@ phases:
       - aws s3 sync dist/ s3://adaka-front-end-prod/ --metadata-directive REPLACE --content-type "application/javascript; charset=utf-8" --exclude "*.*"
       - aws s3 sync dist/ s3://adaka-front-end-prod/ --metadata-directive REPLACE --content-type "text/css; charset=utf-8" --exclude "*.*" --include "*.css"
       - aws s3 sync dist/ s3://adaka-front-end-prod/ --metadata-directive REPLACE --content-type "text/html; charset=utf-8" --exclude "*.*" --include "*.html"
+      - aws s3 mv s3://adaka-front-end-prod/dist/adaka_fe/ s3://adaka-front-end-prod/ --recursive
 
 artifacts:
   files:
