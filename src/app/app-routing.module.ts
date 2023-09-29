@@ -9,12 +9,21 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
+    path: UrlPages.AUTH,
+    loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
+
+  },
+  {
     path: UrlPages.HOME,
     loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule)
   },
   {
     path: UrlPages.LANDING,
     loadChildren: () => import('./pages/landing/landing.module').then(m => m.LandingModule)
+  },
+  {
+    path: 'x',
+    loadChildren: () => import('./pages/dash-board/layout-page/layout-page.module').then(m => m.LayoutPageModule)
   }
 ];
 

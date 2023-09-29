@@ -30,4 +30,12 @@ export class HomePage implements OnInit {
   goToLanding(): void {
     this.router.navigate([UrlPages.LANDING]);
   }
+
+  goToLogin(): void {
+    this.router.navigate([UrlPages.AUTH]);
+  }
+
+  goToDashBoard(): void {
+    this.router.navigate(['x/layout']);
+  }
 }

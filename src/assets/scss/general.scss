@@ -1,13 +1,45 @@
+* *::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+html,
 body {
-    font-family: "Roboto", sans-serif !important;
-    font-size: 14px; /* Porque es la medida que mas se usa entre los elementos del diseno */
+  box-sizing: border-box;
+  font-family: $primary-font !important;
+  font-size: 16px;
+}
+
+@media (min-width: $sm-width) {
+  html,
+  body {
+    font-family: $primary-font !important;
+    font-size: 18px;
   }
-  
-  @media (min-width: $tablet-width) {
-    html,
-    body {
-      font-family: "Roboto", sans-serif !important;
-      font-size: 23px; /* Porque es la medida que mas se usa entre los elementos del diseno */
-    }
+}
+
+@media (min-width: $xl-width) {
+  html,
+  body {
+    font-family: $primary-font !important;
+    font-size: 20px;
   }
-  
+}
+
+.d-flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo {
+  width: 391.026px;
+  height: 110.909px;
+}
+
+.logo-simple {
+  width: 79.02px;
+  height: 81.118px;
+}

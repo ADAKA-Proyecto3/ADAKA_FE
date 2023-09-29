@@ -5,15 +5,21 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SpinnerModule } from './components/spinner/spinner.module';
-import { NavbarComponent } from './components/navbar/navbar.component';
+import { AuthModule } from './auth/auth.module';
+import { NavbarModule } from './components/navbar/navbar.module';
+
+
 
 @NgModule({
-  declarations: [ AppComponent, NavbarComponent  ],
+  declarations: [ AppComponent  ],
   imports: [
     BrowserModule,
+    AuthModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    SpinnerModule
+    SpinnerModule,
+    NavbarModule,
+    
   ],
   providers: [],
   bootstrap: [AppComponent]

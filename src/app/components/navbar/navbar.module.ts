@@ -1,12 +1,24 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NavbarComponent } from './navbar.component';
+import {MatIconModule} from '@angular/material/icon';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatButtonModule} from '@angular/material/button';
+import {MatListModule} from '@angular/material/list';
+import { RouterModule } from '@angular/router';
+import { NgStyle, NgFor } from '@angular/common';
+import { HomeModule } from 'src/app/pages/home/home.module';
+
+
 
 
 
 @NgModule({
-  declarations: [],
-  imports: [
-    CommonModule
-  ]
+  declarations: [NavbarComponent],
+  imports: [ MatIconModule, MatButtonModule, MatToolbarModule, MatSidenavModule, MatListModule, RouterModule, NgStyle, NgFor],
+  exports: [NavbarComponent]
 })
-export class NavbarModule { }
+export class NavbarModule {
+
+  
+ }

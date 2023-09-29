@@ -1,1 +1,22 @@
-$tablet-width: 550px;
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+$primary-font: 'Roboto', sans-serif;
+
+//Colors
+$white: #fff;
+$white-gray: #f2f4f7;
+$white-dark: #F2E7DC;
+$sky-blue-light: #C9DFF2;
+$sky-blue: #79C4F2;
+$sky-blue-dark:  #05c7f2;
+$sky-blue-darker: #049DD9;
+$blue:#042959;
+$black: #000;
+
+
+
+$sm-width: 576px;
+$md-width: 768px;
+$lg-width: 992px;
+$xl-width: 1200px;
+$xxl-width: 1400px;
