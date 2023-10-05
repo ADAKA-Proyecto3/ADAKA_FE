@@ -7,7 +7,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SpinnerModule } from './components/spinner/spinner.module';
 import { AuthModule } from './auth/auth.module';
 import { NavbarModule } from './components/navbar/navbar.module';
-
+import { MatInputModule } from '@angular/material/input';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
 
 
 @NgModule({
@@ -19,6 +21,9 @@ import { NavbarModule } from './components/navbar/navbar.module';
     BrowserAnimationsModule,
     SpinnerModule,
     NavbarModule,
+    MatInputModule,
+    MatCardModule,
+    MatButtonModule,
     
   ],
   providers: [],
