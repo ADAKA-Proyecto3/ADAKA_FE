@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { User } from 'src/app/auth/interfaces/user.interface';
+import { AuthService } from 'src/app/auth/services/auth.service';
 
 @Component({
   selector: 'app-layout-page',
@@ -11,13 +14,27 @@ export class LayoutPage {
     {
       label: 'Users',
       icon: 'people',
-      url:'/x/layout/users'
+      url:'/dashboard/layout/users'
     },
     {
       label: 'Devices',
       icon: 'devices',
-      url:'/x/layout/devices'
+      url:'/dashboard/layout/devices'
     },
     
   ];
+
+  constructor(
+    private authService: AuthService,
+    private router: Router
+    ) { }
+
+  get currentUser(): User | undefined {
+    return this.authService.currentUser;
+  }
+
+  onLogout(): void {
+    this.authService.logout();
+    this.router.navigate(['/auth/login']);
+  }
 }

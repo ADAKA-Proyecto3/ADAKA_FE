@@ -1,7 +1,7 @@
 <div class="vh-100 d-flex align-items-center">
   <div class="container">
     <div class="row">
-      <a (click)="returnToHome" class="mb-5 sky-blue-darker-text titulo-3 btn_back"><i class="fa-solid fa-arrow-left"></i> Regresar a Inicio</a>
+      <a (click)="returnToHome()" class="mb-5 sky-blue-darker-text titulo-3 btn_back"><i class="fa-solid fa-arrow-left"></i> Regresar a Inicio</a>
     </div>
 
     <div class="row h-681px">
@@ -12,19 +12,22 @@
           <div class="d-flex flex-column">
             <div class="box-width-20">
 
-              <form class="example-form" [formGroup]="loginForm">
+              <form class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 
-                <mat-form-field appearance="outline" class="example-full-width">
+                <mat-form-field appearance="outline" class="field-full-width">
 
                   <mat-label>Email</mat-label>
                   <input type="email" matInput formControlName="email" placeholder="jon@email.com">
                   <mat-error *ngIf="myError('email','required')">
                     Correo electrónico es  <strong>requerido</strong>
                   </mat-error>
+                  <mat-error *ngIf="myError('email','email')">
+                    Correo electrónico <strong>inválido</strong>
+                  </mat-error>
 
                 </mat-form-field>
 
-                <mat-form-field appearance="outline" class="example-full-width pt-3">
+                <mat-form-field appearance="outline" class="field-full-width pt-3">
 
                   <mat-label>Contraseña</mat-label>
                   <input type="password" matInput formControlName="password" placeholder="*********">
@@ -36,15 +39,22 @@
                 </mat-form-field>
 
 
-                <button mat-raised-button class="btn_login mt-3 sky-blue-darker-bg white-text">
+                <button 
+                mat-raised-button 
+                class="btn_login mt-3 sky-blue-darker-bg white-text"
+                
+                >
                   <mat-icon iconPositionEnd>chevron_right</mat-icon>
                   INICIAR SESIÓN
 
                 </button>
 
-                <div class="pt-4">
+                <div class="pt-4 d-flex justify-content-between">
                   <a class="anchore-1 text-decoration-none sky-blue-darker-text cursor-pointer">
                     Recuperar contraseña
+                  </a>
+                  <a (click)="goToRegister()" class="anchore-1 text-decoration-none sky-blue-darker-text cursor-pointer">
+                    Registrarse
                   </a>
                 </div>
               </form>

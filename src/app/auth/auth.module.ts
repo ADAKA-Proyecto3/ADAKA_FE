@@ -15,6 +15,8 @@ import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon'; 
+import { HttpClientModule } from '@angular/common/http';
+
 
 
 @NgModule({
@@ -35,7 +37,9 @@ import {MatIconModule} from '@angular/material/icon';
     MatFormFieldModule,
     MatButtonModule,
     MatIconModule,
+    HttpClientModule
    
-  ]
+  ],
+
 })
 export class AuthModule { }

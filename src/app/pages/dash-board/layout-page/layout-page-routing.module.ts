@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LayoutPage } from './layout-page';
+import { UrlPages } from 'src/app/common/enums/url-pages.enum';
 
 const routes: Routes = [
   {
-    path: 'layout',
+    path: '',
     component: LayoutPage,
     children: [
       {

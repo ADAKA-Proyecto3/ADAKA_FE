@@ -1,1 +1,66 @@
-<p>register-page works!</p>
+<div class="container text-center align-content-center justify-content-between">
+    
+
+    <div class="d-flex flex-column">
+        <form class="login-form" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+
+            <mat-form-field appearance="outline" class="field-full-width">
+                <mat-label>Nombre</mat-label>
+                <input type="text" matInput formControlName="name" placeholder="Ingrese su nombre">
+                <mat-error *ngIf="error('name','required')">
+                    Nombre es <strong>requerido</strong>
+                </mat-error>
+                <mat-error *ngIf="error('name','maxLength')">
+                    Nombre debe tener <strong>máximo 30 caracteres</strong>
+                </mat-error>
+            </mat-form-field>
+
+
+            <mat-form-field appearance="outline" class="field-full-width">
+                <mat-label>Número de teléfono</mat-label>
+                <input type="text" matInput formControlName="phoneNumber">
+                <mat-error *ngIf="error('phoneNumber','required')">
+                    Número de teléfono es <strong>requerido</strong>
+                </mat-error>
+            </mat-form-field>
+
+
+            <mat-form-field appearance="outline" class="field-full-width">
+
+                <mat-label>Correo electrónico</mat-label>
+                <input type="email" matInput formControlName="email" placeholder="jon@email.com">
+                <mat-error *ngIf="error('email','required')">
+                    Correo electrónico es <strong>requerido</strong>
+                </mat-error>
+                <mat-error *ngIf="error('email','email')">
+                    Correo electrónico <strong>inválido</strong>
+                </mat-error>
+
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="field-full-width pt-3">
+                <mat-label>Contraseña</mat-label>
+                <input type="password" matInput formControlName="password" placeholder="*********">
+                <mat-error *ngIf="error('password','required')">
+                    La contraseña es <strong>requerida</strong>
+                </mat-error>
+            </mat-form-field>
+
+
+            <button mat-raised-button class="btn_login mt-3 sky-blue-darker-bg white-text">
+                <mat-icon iconPositionEnd>chevron_right</mat-icon>
+                CONTINUAR
+
+            </button>
+
+            <!-- <div class="pt-4 d-flex justify-content-between">
+                <a (click)="onContinue(50)" class="anchore-1 text-decoration-none sky-blue-darker-text cursor-pointer">
+                    Continuar
+                </a>
+                <a (click)="goToRegister()" class="anchore-1 text-decoration-none sky-blue-darker-text cursor-pointer">
+        Registrarse
+      </a>
+            </div> -->
+        </form>
+    </div>
+</div>

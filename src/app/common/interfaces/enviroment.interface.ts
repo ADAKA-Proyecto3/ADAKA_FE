@@ -1,3 +1,3 @@
-interface Environment {
+export interface Environment {
     enviroment: "dev" | "prod";
 }
