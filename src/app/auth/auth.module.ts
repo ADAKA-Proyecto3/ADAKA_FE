@@ -11,11 +11,15 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 
-import {MatInputModule} from '@angular/material/input';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatButtonModule} from '@angular/material/button';
-import {MatIconModule} from '@angular/material/icon'; 
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon'; 
+import { MatDialogModule } from '@angular/material/dialog';
 import { HttpClientModule } from '@angular/common/http';
+import { AuthCustomDialogComponent } from './components/auth-dialog/auth-custom-dialog.component';
+import { MatListModule } from '@angular/material/list';
+
 
 
 
@@ -25,6 +29,7 @@ import { HttpClientModule } from '@angular/common/http';
     RegisterPage,
     PasswordRecoveryPage,
     LoginPage,
+    AuthCustomDialogComponent
     
    
   ],
@@ -37,7 +42,9 @@ import { HttpClientModule } from '@angular/common/http';
     MatFormFieldModule,
     MatButtonModule,
     MatIconModule,
-    HttpClientModule
+    MatDialogModule,
+    HttpClientModule,
+    MatListModule
    
   ],
 

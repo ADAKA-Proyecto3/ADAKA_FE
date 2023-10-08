@@ -2,54 +2,54 @@
 ///Font Colors
 
 .white-text {
-  color: #fff !important;
+  color: $white !important;
 }
 .white-dark-text {
-  color: #F2E7DC;
+  color: $white-dark;
 }
 .sky-blue-light-text {
-  color: #C9DFF2;
+  color: $sky-blue-light;
 }
 .sky-blue-text {
-  color: #79C4F2;
+  color: $sky-blue;
 }
 .sky-blue-dark-text {
-  color: #05c7f2;
+  color: $sky-blue-dark;
 }
 .sky-blue-darker-text {
-  color: #049DD9;
+  color: $sky-blue-darker;
 }
 .blue-text {
-  color: #042959;
+  color: $blue;
 }
 .black-text {
-  color: #000 ;
+  color: $black;
 }
 
 ///Background Colors
 .white-bg {
-  background-color: #fff;
+  background-color: $white ;
 }
 .white-dark-bg {
-  background-color: #F2E7DC;
+  background-color: $white-dark;
 }
 .sky-blue-light-bg {
-  background-color: #C9DFF2 !important;
+  background-color: $sky-blue-light!important;
 }
 .sky-blue-bg {
-  background-color: #79C4F2;
+  background-color: $sky-blue;
 }
 .sky-blue-dark-bg {
-  background-color: #05c7f2;
+  background-color: $sky-blue-dark;
 }
 .sky-blue-darker-bg {
-  background-color: #049DD9 !important;
+  background-color: $sky-blue-darker!important;
 }
 .blue-bg {
-  background-color: #042959;
+  background-color: $blue !important;
 }
 .black-bg {
-  background-color: #000;
+  background-color: $black;
 }
 .bg-white-gray {
   background-color: $white-gray;
