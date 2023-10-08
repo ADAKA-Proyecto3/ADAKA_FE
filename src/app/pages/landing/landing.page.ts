@@ -54,7 +54,7 @@ export class LandingPage {
       subtitle: 'Coordinador de desarrollo',
       content_1: 'Teléfono: 8537-1754  ',
       content_2: 'E-mail: ksegurag@ucenfotec.ac.cr',
-      image: 'assets/images/kristel_temp.jpeg',
+      image: 'assets/images/kristel_foto.jpeg',
       
     }
    
