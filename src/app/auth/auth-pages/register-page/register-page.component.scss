@@ -1,0 +1,58 @@
+.login-form {
+
+}
+
+
+.top-decoration{
+  //clip-path: circle(63.3% at 28% 21%);
+  clip-path: polygon(0% 0%, 61% 0, 77% 47%, 47% 78%, 0 72%);
+
+  width: 10.75rem;
+  height: 10.375rem;
+}
+
+.form-container{
+  border-radius: 5px;
+  width: 80%;
+  //padding: 3.125rem ;
+}
+
+.field-full-width {
+  width: 60%;
+  padding-top: 15px;
+}
+
+.btn_login {
+  //min-width: 400px;
+  //max-width: 450px;
+  width: 60%;
+  padding: 25px;
+}
+
+.pay-pal-btn {
+  width: 60%;
+}
+
+.btn_back {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.logo {
+  width: 7.3125rem;
+  height: 3.6rem;
+}
+
+@keyframes rotate {
+  100% {
+    background-position: 15% 50%;
+  }
+}
+
+.back-ground{
+  background-image: url('/assets/backgrounds/cloudy_bg.svg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100vh;
+  animation: rotate 15s infinite alternate linear;
+}

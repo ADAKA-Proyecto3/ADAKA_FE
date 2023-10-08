@@ -1,0 +1,90 @@
+<div class="back-ground">
+
+
+
+    <div class="d-flex justify-content-between">
+
+        <div class="top-decoration sky-blue-darker-bg"></div>
+        <div class="titulo-1 mt-5">Registro de usuario</div>
+        <div class=" ">
+            <img class="img-fluid logo" src="/assets//logos/ZhenAir.png" />
+        </div>
+    </div>
+
+    <div class="container text-center d-flex  justify-content-center">
+
+
+
+        <div class="form-container white-bg pb-5" [class.mat-elevation-z8]="true">
+
+            <form class="login-form" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+
+                <mat-form-field appearance="outline" class="field-full-width pt-5">
+                    <mat-label>Nombre</mat-label>
+                    <input type="text" matInput formControlName="name" placeholder="Ingrese su nombre">
+                    <mat-error *ngIf="error('name','required')">
+                        Nombre es <strong>requerido</strong>
+                    </mat-error>
+                    <mat-error *ngIf="error('name','maxLength')">
+                        Nombre debe tener <strong>máximo 30 caracteres</strong>
+                    </mat-error>
+                </mat-form-field>
+
+
+                <mat-form-field appearance="outline" class="field-full-width">
+                    <mat-label>Número de teléfono</mat-label>
+                    <input type="text" matInput formControlName="phoneNumber">
+                    <mat-error *ngIf="error('phoneNumber','required')">
+                        Número de teléfono es <strong>requerido</strong>
+                    </mat-error>
+                </mat-form-field>
+
+
+                <mat-form-field appearance="outline" class="field-full-width">
+
+                    <mat-label>Correo electrónico</mat-label>
+                    <input type="email" matInput formControlName="email" placeholder="jon@email.com">
+                    <mat-error *ngIf="error('email','required')">
+                        Correo electrónico es <strong>requerido</strong>
+                    </mat-error>
+                    <mat-error *ngIf="error('email','email')">
+                        Correo electrónico <strong>inválido</strong>
+                    </mat-error>
+
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="field-full-width pt-3">
+                    <mat-label>Contraseña</mat-label>
+                    <input type="password" matInput formControlName="password" placeholder="*********">
+                    <mat-error *ngIf="error('password','required')">
+                        La contraseña es <strong>requerida</strong>
+                    </mat-error>
+                </mat-form-field>
+
+
+                <button mat-raised-button class="btn_login mt-3 sky-blue-darker-bg white-text">
+                    <mat-icon iconPositionEnd>chevron_right</mat-icon>
+                    CONTINUAR SUSCRIPCIÓN
+
+                </button>
+
+                <div class="d-flex justify-content-center">
+                    <div #paypal class="pay-pal-btn d-flex justify-content-center"></div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <!-- <div *ngIf="!paidFor">
+        <h1>Buy this Couch - ${{ product.price }} OBO</h1>
+    </div>
+
+    <div *ngIf=paidFor>
+        <h1>Yay, you bought a sweet couch!</h1>
+    </div> -->
+
+
+
+
+</div>
