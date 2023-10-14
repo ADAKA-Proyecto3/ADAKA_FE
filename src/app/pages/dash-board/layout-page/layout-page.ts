@@ -14,12 +14,12 @@ export class LayoutPage {
     {
       label: 'Users',
       icon: 'people',
-      url:'/dashboard/layout/users'
+      url:'/dashboard/users'
     },
     {
       label: 'Devices',
       icon: 'devices',
-      url:'/dashboard/layout/devices'
+      url:'/dashboard/devices'
     },
     
   ];
