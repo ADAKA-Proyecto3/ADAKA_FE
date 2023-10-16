@@ -12,12 +12,22 @@ export class LayoutPage {
 
   public sideBarItems = [
     {
-      label: 'Users',
+      label: 'Usuarios',
       icon: 'people',
       url:'/dashboard/users'
     },
     {
-      label: 'Devices',
+      label: 'Centros',
+      icon: 'apartment',
+      url:'/dashboard/devices'
+    },
+    {
+      label: 'Salas',
+      icon: 'bedroom_child',
+      url:'/dashboard/devices'
+    },
+    {
+      label: 'Dispositivos',
       icon: 'devices',
       url:'/dashboard/devices'
     },

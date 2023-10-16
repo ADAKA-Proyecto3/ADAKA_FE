@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { User } from 'src/app/auth/interfaces/user.interface';
@@ -11,41 +11,30 @@ import { AppState } from 'src/app/store/app.state';
   selector: 'app-home',
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
-
 })
 export class HomePage implements OnInit {
+  windowWidth: number = window.innerWidth;
 
-  //!
-// users: User[] = [];
+  @HostListener('window:resize', ['$event'])
+  onResize(event: Event) {
+    this.windowWidth = (event.target as Window).innerWidth;
+  }
 
   constructor(
     private readonly router: Router,
-    private readonly loadingService: LoadingService,
-
-    //!
-    //private store: Store<AppState>
+    private readonly loadingService: LoadingService
   ) {}
 
-   ngOnInit(): void {
-    //!
-    // this.store.dispatch ( loadUsers() );
-    // this.store.select('users').subscribe( ({users, status}) => {
-    //   this.users = users;
-    //   console.log("users", users);
-    //   console.log("status", status);
-    // });
-
-
-    this.initializeProperties();
-    //this.loadingService.showLoadingModal();
+  ngOnInit(): void {
+   // this.initializeProperties();
   }
 
-  async initializeProperties() {
-   this.loadingService.showLoadingModal();
-    setTimeout(() => {
-      this.loadingService.dismiss();
-    }, 3000);
-  }
+  // async initializeProperties() {
+  //   this.loadingService.showLoadingModal();
+  //   setTimeout(() => {
+  //     this.loadingService.dismiss();
+  //   }, 3000);
+  // }
 
   goToLanding(): void {
     this.router.navigate([UrlPages.LANDING]);
@@ -53,6 +42,10 @@ export class HomePage implements OnInit {
 
   goToLogin(): void {
     this.router.navigate([UrlPages.AUTH]);
+  }
+
+  goToRegister(): void {
+    this.router.navigate([`${UrlPages.AUTH}/${UrlPages.REGISTER}`]);
   }
 
   goToDashBoard(): void {

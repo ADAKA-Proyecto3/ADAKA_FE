@@ -41,14 +41,6 @@ export class UserHttpService {
     });
   }
 
-
-
- 
-
-
-    
-   
-
   getUsers() {
     this.loader.showLoadingModal();
     return this.httpClient.get(`${this.url}/all`)

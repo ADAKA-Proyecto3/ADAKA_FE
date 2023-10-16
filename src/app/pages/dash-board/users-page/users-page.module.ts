@@ -11,6 +11,7 @@ import { getSpanishPaginatorIntl } from 'src/app/common/locale/mat-paginator/spa
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { UserFormModule } from '../components/user-form-component/user-form.module';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 
 
@@ -27,7 +28,8 @@ import { UserFormModule } from '../components/user-form-component/user-form.modu
     MatPaginatorModule,
     MatButtonModule,
     MatIconModule,
-    UserFormModule
+    UserFormModule,
+    MatTooltipModule
 
   ],
   providers: [{ provide: MatPaginatorIntl, useValue: getSpanishPaginatorIntl() }],
