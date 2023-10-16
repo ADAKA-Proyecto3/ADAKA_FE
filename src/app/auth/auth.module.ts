@@ -19,6 +19,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthCustomDialogComponent } from './components/auth-dialog/auth-custom-dialog.component';
 import { MatListModule } from '@angular/material/list';
+import { RegisterPageController } from './auth-pages/register-page/register-page.controller';
 
 
 
@@ -47,6 +48,8 @@ import { MatListModule } from '@angular/material/list';
     MatListModule
    
   ],
+
+  providers: [ RegisterPageController ],
 
 })
 export class AuthModule { }
