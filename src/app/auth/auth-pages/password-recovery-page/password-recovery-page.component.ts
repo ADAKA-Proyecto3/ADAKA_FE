@@ -26,7 +26,7 @@ export class PasswordRecoveryPage implements OnInit {
 
   sendRecoveryCode() {
     if (this.recoveryForm.valid) {
-      console.log("Aqui se envia la otp")
+      console.log("Aqui se envia la otp.")
     }
   }
 }
