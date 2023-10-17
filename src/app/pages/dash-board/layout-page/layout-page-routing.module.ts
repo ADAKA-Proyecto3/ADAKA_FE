@@ -23,6 +23,13 @@ const routes: Routes = [
           ),
       },
       {
+        path: 'rooms',
+        loadChildren: () =>
+          import('../rooms-page/rooms-page.module').then(
+            (m) => m.RoomsPageModule
+          ),
+      },
+      {
         path: '',
         redirectTo: 'devices',
         pathMatch: 'full',

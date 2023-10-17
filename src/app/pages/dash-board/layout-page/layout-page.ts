@@ -24,7 +24,7 @@ export class LayoutPage {
     {
       label: 'Salas',
       icon: 'bedroom_child',
-      url:'/dashboard/devices'
+      url:'/dashboard/rooms'
     },
     {
       label: 'Dispositivos',
