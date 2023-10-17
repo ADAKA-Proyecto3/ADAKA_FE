@@ -10,7 +10,7 @@ import {
   addSubUserFailure,
   addSubUserSuccess,
 } from '../actions/user.actions';
-import { User } from 'src/app/auth/interfaces/user.interface';
+import { User } from 'src/app/models/user.interface';
 import { ActionStatus } from 'src/app/common/enums/action-status.enum';
 
 export interface UserState {

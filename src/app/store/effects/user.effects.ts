@@ -14,12 +14,10 @@ import {
   addSubUserSuccess,
   addSubUserFailure,
 } from '../actions/user.actions';
-
 import { of, from } from 'rxjs';
 import { switchMap, map, catchError, mergeMap } from 'rxjs/operators';
-import { Store } from '@ngrx/store';
+import { UserHttpService } from 'src/app/services/http-service/user-http.service';
 
-import { UserHttpService } from 'src/app/services/http-service/user-http-service';
 
 @Injectable()
 export class UserEffects {
