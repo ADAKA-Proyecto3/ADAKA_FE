@@ -2,7 +2,7 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, SortDirection } from '@angular/material/sort';
-import { User } from 'src/app/auth/interfaces/user.interface';
+import { User } from 'src/app/models/user.interface';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/app.state';
 import {

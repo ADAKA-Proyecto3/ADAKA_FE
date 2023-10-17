@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
-import { UserHttpService } from "src/app/services/http-service/user-http-service";
+import { UserHttpService } from "src/app/services/http-service/user-http.service";
 import { LoadingService } from "src/app/services/loading-service/loading.service";
-import { User } from "../../interfaces/user.interface";
+import { User } from "../../../models/user.interface";
 import { DebugerService } from "src/app/services/debug-service/debug.service";
 
 @Injectable()

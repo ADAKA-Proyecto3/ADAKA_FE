@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 import { AuthCustomDialogComponent } from '../../components/auth-dialog/auth-custom-dialog.component';
 import { UrlPages } from 'src/app/common/enums/url-pages.enum';
 import { RegisterPageController } from './register-page.controller';
-import { User } from '../../interfaces/user.interface';
+import { User } from '../../../models/user.interface';
 
 @Component({
   selector: 'app-register-page',

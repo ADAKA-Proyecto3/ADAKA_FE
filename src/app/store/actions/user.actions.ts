@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { User } from 'src/app/auth/interfaces/user.interface';
+import { User } from 'src/app/models/user.interface';
 
 export const addSubUser = createAction(
   '[User Page] Add User',

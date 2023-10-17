@@ -1,12 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { User } from 'src/app/auth/interfaces/user.interface';
+import { User } from 'src/app/models/user.interface';
 import { Config } from 'src/app/config/config';
 import { DebugerService } from '../debug-service/debug.service';
-import { Store } from '@ngrx/store';
-import { AppState } from 'src/app/store/app.state';
-import { map, Observable } from 'rxjs';
-import { removeUser } from '../../store/actions/user.actions';
+import { map } from 'rxjs';
 import { LoadingService } from '../loading-service/loading.service';
 
 @Injectable({
@@ -18,7 +15,6 @@ export class UserHttpService {
   constructor(
     private readonly httpClient: HttpClient,
     private loader: LoadingService
-    //private store: Store<AppState>
     ) {}
 
   saveUser(user:User): Promise<void> {

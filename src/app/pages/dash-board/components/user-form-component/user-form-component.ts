@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { User } from 'src/app/auth/interfaces/user.interface';
+import { User } from 'src/app/models/user.interface';
 import { DebugerService } from 'src/app/services/debug-service/debug.service';
 
 interface SelectOption {
