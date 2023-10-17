@@ -7,11 +7,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SpinnerModule } from './components/spinner/spinner.module';
 import { AuthModule } from './auth/auth.module';
 import { NavbarModule } from './components/navbar/navbar.module';
-
-
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [ AppComponent  ],
+  declarations: [ AppComponent],
   imports: [
     BrowserModule,
     AuthModule,
@@ -19,6 +18,8 @@ import { NavbarModule } from './components/navbar/navbar.module';
     BrowserAnimationsModule,
     SpinnerModule,
     NavbarModule,
+    FormsModule,
+    ReactiveFormsModule,
     
   ],
   providers: [],

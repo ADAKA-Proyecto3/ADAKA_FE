@@ -1,0 +1,59 @@
+<div class="container text-center align-content-center justify-content-between">
+    <div class="d-flex flex-column">
+      
+
+      <form class="medicalRegistrationForm" [formGroup]="medicalRegistrationForm" (ngSubmit)="onSubmit()">
+        <h1 class="titulo-1">Registro de centro médico</h1>
+        <mat-form-field appearance="outline" class="field-full-width">
+          <mat-label>Nombre</mat-label>
+          <input type="text" matInput formControlName="name" placeholder="Ingrese su nombre">
+          <mat-error *ngIf="Error('name','required')">
+            Nombre es <strong>requerido</strong>
+          </mat-error>
+          <mat-error *ngIf="Error('name','maxLength')">
+            Nombre debe tener <strong>máximo 30 caracteres</strong>
+          </mat-error>
+        </mat-form-field>
+  
+        <mat-form-field appearance="outline" class="field-full-width">
+          <mat-label>Estado</mat-label>
+          <mat-select formControlName="estado" placeholder="Seleccione el estado">
+            <mat-option *ngFor="let e of estados" [value]="e">{{ e }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="Error('estado','required')">
+            Estado es <strong>requerido</strong>
+          </mat-error>
+        </mat-form-field>
+  
+        <mat-form-field appearance="outline" class="field-full-width">
+          <mat-label>Número de teléfono</mat-label>
+          <input type="text" matInput formControlName="phoneNumber" placeholder="Ingrese su número de teléfono">
+          <mat-error *ngIf="Error('phoneNumber','required')">
+            Número de teléfono es <strong>requerido</strong>
+          </mat-error>
+        </mat-form-field>
+  
+        <mat-form-field appearance="outline" class="field-full-width">
+          <mat-label>Dirección</mat-label>
+          <input type="text" matInput formControlName="direccion" placeholder="Ingrese su dirección en senhas">
+          <mat-error *ngIf="Error('direccion','required')">
+            Dirección es <strong>requerida</strong>
+          </mat-error>
+        </mat-form-field>
+  
+        <mat-form-field appearance="outline" class="field-full-width">
+          <mat-label>Coordenadas</mat-label>
+          <input type="text" matInput formControlName="coordenadas" placeholder="Ingrese sus coordenadas">
+          <mat-error *ngIf="Error('coordenadas','required')">
+            Coordenadas son <strong>requeridas</strong>
+          </mat-error>
+        </mat-form-field>
+  
+        <button mat-raised-button class="btn_register mt-3 sky-blue-darker-bg white-text">
+          <mat-icon iconPositionEnd>chevron_right</mat-icon>
+          CONTINUAR
+        </button>
+      </form>
+    </div>
+  </div>
+  

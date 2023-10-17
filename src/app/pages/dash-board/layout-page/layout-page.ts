@@ -21,6 +21,12 @@ export class LayoutPage {
       icon: 'devices',
       url:'/dashboard/layout/devices'
     },
+    {
+      label: 'Medical Center',
+      icon: 'medical_services',
+      url:'/dashboard/layout/medical_center'
+    },
+    
     
   ];
 

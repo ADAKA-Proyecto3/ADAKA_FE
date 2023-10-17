@@ -23,6 +23,13 @@ const routes: Routes = [
           ),
       },
       {
+        path: 'medical_center',
+        loadChildren: () =>
+          import('../medical-center-page/medical-center-page.module').then(
+            (m) => m.MedicalCenterPageModule
+          ),
+      },
+      {
         path: '',
         redirectTo: 'devices',
         pathMatch: 'full',

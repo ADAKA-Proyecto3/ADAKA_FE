@@ -38,4 +38,5 @@ export class HomePage implements OnInit {
   goToDashBoard(): void {
     this.router.navigate([UrlPages.DASHBOARD]);
   }
+
 }

@@ -27,6 +27,7 @@ const routes: Routes = [
     canActivate: [authGuard],
     loadChildren: () => import('./pages/dash-board/layout-page/layout-page.module').then(m => m.LayoutPageModule)
   }
+ 
 ];
 
 @NgModule({

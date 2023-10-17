@@ -1,0 +1,42 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; 
+  }
+  
+  .medicalRegistrationForm {
+    max-width: 400px; 
+    width: 100%;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border-radius: 8px; 
+  }
+  
+  .field-full-width {
+    width: 100%;
+    margin-bottom: 20px; 
+  }
+  
+  .btn_register {
+    width: 100%;
+    margin-top: 10px; 
+  }
+  
+
+  .mat-select {
+    width: 100%;
+  }
+  
+
+  .mat-error {
+    color: #f00;
+    font-size: 14px;
+    margin-top: 4px; 
+  }
+  
+  h1 {
+    margin-top: 15px;
+    margin-bottom: 35px;
+  }
