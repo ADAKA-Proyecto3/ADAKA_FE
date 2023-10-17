@@ -43,6 +43,11 @@ export class LoginPage implements OnInit {
     this.router.navigateByUrl( `${UrlPages.AUTH}/${UrlPages.REGISTER}`);
   }
 
+  public goToPasswordRecovery(): void {
+    console.log('goToPasswordRecovery');
+    this.router.navigateByUrl( `${UrlPages.AUTH}/${UrlPages.PASSWORD_RECOVERY}`);
+  }
+
   public onSubmit() {
     //TODO: Implementar lógica de login
     if (this.loginForm.invalid) return;
