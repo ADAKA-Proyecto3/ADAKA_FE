@@ -1,21 +1,21 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { HomePage } from './home.page';
 import { HomeRoutingModule } from './home-routing.module';
-import { NavbarComponent } from 'src/app/components/navbar/navbar.component';
-import { NavbarModule } from 'src/app/components/navbar/navbar.module';
-
-
-
-
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatMenuModule } from '@angular/material/menu';
+import { NgIf } from '@angular/common';
 
 @NgModule({
-  declarations: [ HomePage, ],
+  declarations: [HomePage],
   imports: [
-    //CommonModule,
     HomeRoutingModule,
-    NavbarModule
-   
-  ]
+    MatIconModule,
+    MatButtonModule,
+    MatToolbarModule,
+    MatMenuModule,
+    NgIf,
+  ],
 })
-export class HomeModule { }
+export class HomeModule {}

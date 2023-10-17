@@ -1,24 +1,75 @@
+<mat-toolbar>
+  <img class="logo pt-3 pb-3" src="assets/logos/ZhenAir_Secondary.png" alt="ZhenAir logo">
+  <span class="example-spacer"></span>
+  <ng-container *ngIf="windowWidth <= 750">
+    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item>
+        <mat-icon color="warn" class="blink-1">adjust</mat-icon> Mapa en vivo
+      </button>
+      <button mat-menu-item class="example-icon favorite-icon">
+        <mat-icon>eco</mat-icon>
+        <span>Planes</span>
+      </button>
+      <button mat-menu-item class="sky-blue-darker-bg white-text" (click)="goToRegister()">
+        <mat-icon class="white-text">app_registration</mat-icon>
+        Suscribirme
+      </button>
+      <button mat-menu-item class="example-icon" (click)="goToLogin()">
+        <mat-icon>login</mat-icon>
+        Iniciar Sesión
+      </button>
+    </mat-menu>
+  </ng-container>
+  <!-- Display buttons on larger screens -->
+  <ng-container *ngIf="windowWidth > 750">
+    <button mat-button class="example-icon favorite-icon">
+      <mat-icon color="warn" class="blink-1">adjust</mat-icon> Mapa en vivo
+    </button>
+    <button mat-button class="example-icon favorite-icon ms-3">
+      Planes
+    </button>
+    <button mat-button class="sky-blue-darker-bg white-text ms-3" (click)="goToRegister()">
+      Suscribirme
+    </button>
+    <button mat-button class="example-icon ms-3" (click)="goToLogin()">
+      Iniciar Sesión
+    </button>
+  </ng-container>
+</mat-toolbar>
+
+<div class="home_top_banner">
+  <div class="home_top_banner_textContainer">
+    <h1 class="home_top_banner_textContainer_header  titulo-1 text-white">Eleva la calidad de vida con soluciones modernas</h1>
+
+    <p class="home_top_banner_textContainer_body" >
+      Descubre una forma innovadora y sencilla de disfrutar de un aire limpio con Zhen Air.  ¡Únete a nosotros en el
+      camino hacia un futuro más limpio y revitalizante!
+
+    </p>
+  </div>
+
+</div>
+
+
 
 
 <div class="container w-100 align-content-center text-center pt-5">
 
 
+  <div class="pt-2">
+
+    <h1>Home Page</h1>
+
+  </div>
+  <div class="pt-2">
+
     <div class="pt-2">
-
-        <h1>Home Page</h1>
-
+      <button (click)="goToDashBoard()">Muestra - despues de login</button>
     </div>
-    <div class="pt-2">
-        <div>
-            <button (click)="goToLanding()">Ir a Landing Page</button>
-        </div>
-        <div class="pt-2">
-            <button (click)="goToLogin()">Login</button>
-        </div>
-        <div class="pt-2">
-            <button (click)="goToDashBoard()">Muestra - despues de login</button>
-        </div>
 
-    </div>
+  </div>
 
 </div>

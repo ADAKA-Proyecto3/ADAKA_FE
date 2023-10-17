@@ -1,11 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import {
   AbstractControl,
   FormControl,
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { AuthCustomDialogComponent } from '../../components/auth-dialog/auth-custom-dialog.component';
+import { UrlPages } from 'src/app/common/enums/url-pages.enum';
+import { RegisterPageController } from './register-page.controller';
+import { User } from '../../interfaces/user.interface';
 
 @Component({
   selector: 'app-register-page',
@@ -14,30 +19,67 @@ import { Router } from '@angular/router';
 })
 export class RegisterPage implements OnInit {
   public registerForm: FormGroup = {} as FormGroup;
+  paidFor = false;
+  constructor(
+    private readonly registerPageController: RegisterPageController,
+    private readonly router: Router,
+    public dialog: MatDialog
+  ) {}
 
-  constructor(private readonly router: Router) {}
-
-  handler:any = null;
- 
- 
- 
-  
   ngOnInit(): void {
-
-    //this.loadStripe();
-
     this.registerForm = new FormGroup({
       name: new FormControl('', [
         Validators.required,
         Validators.maxLength(30),
       ]),
-      phoneNumber: new FormControl('', [Validators.required]),
+      phone: new FormControl('', [Validators.required]),
       email: new FormControl('', [Validators.required]),
       password: new FormControl('', [
         Validators.required,
-        this.passwordValidator,
+        // this.passwordValidator,
       ]),
     });
+  }
+
+   openDialog() {
+    const dialogRef = this.dialog.open(AuthCustomDialogComponent, {
+      //width: '60%',
+    });
+
+     dialogRef.afterClosed().subscribe( async (result) => {
+      if (result && result.paidFor) {
+        this.paidFor = result.paidFor;
+        await  this.submitRegistration();
+        //this.paidFor===true ? this.router.navigateByUrl( `${UrlPages.AUTH}/${UrlPages.LOGIN}`) : null;
+      }
+    });
+  }
+
+  private async submitRegistration() {
+    if (this.paidFor === true) {
+
+      const user: User = {
+        name: this.registerForm.value.name,
+        phone: this.registerForm.value.phone,
+        email: this.registerForm.value.email,
+        password: this.registerForm.value.password,
+        role: 'ADMIN',
+        status: 'ACTIVE',
+      } 
+
+      const userRegistration = await this.registerPageController.registerUser(user);
+
+      //this.router.navigateByUrl( `${UrlPages.AUTH}/${UrlPages.LOGIN}`);
+    }
+  }
+
+  public onContinue() {}
+
+  public onSubmit() {
+    if (this.registerForm.invalid) {
+      return;
+    }
+    this.openDialog();
   }
 
   public error = (controlName: string, errorName: string) => {
@@ -53,55 +95,11 @@ export class RegisterPage implements OnInit {
     const hasUpperCase = /[A-Z]/.test(password);
 
     if (hasNumber && hasSpecial && hasUpperCase && password.length >= 8) {
-      return null; // All criteria met, return null
+      return null;
     }
 
-    return { invalidPassword: true }; // Return a key-value pair to indicate validation failure
+    return { invalidPassword: true };
   }
 
-  // public onContinue(amount: number) {
-  //   var handler = (<any>window).StripeCheckout.configure({
-  //     key: 'pk_test_51Nxi9DCocwmaNldetlAyJLzPVIzTQHfLkIZg0S8BMwnDScH1ZGx5AlTY2OZcsMYdGIJrLllrvlM2YKGPm7eJfKcj00Q7bWBxMF',
-  //     locale: 'es',
-  //     token: function (token: any) {
-  //       // You can access the token ID with `token.id`.
-  //       // Get the token ID to your server-side code for use.
-  //       console.log(token);
-  //       alert('Token Created!!');
-  //     },
-  //   });
-
-  //   handler.open({
-  //     name: 'ZHENAIR',
-  //     description: 'Suscripción mensual',
-  //     amount: amount * 100,
-  //   });
-  // }
-
-  onSubmit() {}
-
-  // loadStripe() {
-  //   if (!window.document.getElementById('stripe-script')) {
-  //     var s = window.document.createElement('script');
-  //     s.id = 'stripe-script';
-  //     s.type = 'text/javascript';
-  //     s.src = 'https://checkout.stripe.com/checkout.js';
-  //     s.onload = () => {
-  //       this.handler = (<any>window).StripeCheckout.configure({
-  //         key: 'pk_test_51HxRkiCumzEESdU2Z1FzfCVAJyiVHyHifo0GeCMAyzHPFme6v6ahYeYbQPpD9BvXbAacO2yFQ8ETlKjo4pkHSHSh00qKzqUVK9',
-  //         locale: 'auto',
-  //         token: function (token: any) {
-  //           // You can access the token ID with `token.id`.
-  //           // Get the token ID to your server-side code for use.
-  //           console.log(token);
-  //           alert('Payment Success!!');
-  //         },
-  //       });
-  //     };
-
-  //     window.document.body.appendChild(s);
-  //   }
-  // }
-
-
+  
 }

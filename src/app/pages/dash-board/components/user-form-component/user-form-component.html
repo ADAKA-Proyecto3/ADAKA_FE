@@ -1,0 +1,93 @@
+<h1 class="titulo-2 container text-center pt-3">
+    {{ editing ? 'Editar usuario' : 'Registrar usuario' }}
+</h1>
+<div class="container white-bg pb-5 d-flex justify-content-center">
+
+
+
+    <form class="d-flex flex-column w-75" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+
+        <mat-form-field appearance="outline" class="pt-3">
+            <mat-label>Nombre</mat-label>
+            <input type="text" matInput formControlName="name" value={{user?.name}}>
+            <mat-error *ngIf="error('name','required')">
+                Nombre es <strong>requerido</strong>
+            </mat-error>
+            <mat-error *ngIf="error('name','maxLength')">
+                Nombre debe tener <strong>máximo 30 caracteres</strong>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="pt-3">
+            <mat-label>Role</mat-label>
+            <mat-select formControlName="role">
+                <mat-option *ngFor="let role of roles" [value]="role.value">
+                    {{role.viewValue}}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="error('role','required')">
+                Role de usuario es <strong>requerido</strong>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="pt-3">
+            <mat-label>Número de teléfono</mat-label>
+            <input type="text" matInput formControlName="phone">
+            <mat-error *ngIf="error('phone','required')">
+                Número de teléfono es <strong>requerido</strong>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="pt-3">
+
+            <mat-label>Correo electrónico</mat-label>
+            <input type="email" matInput formControlName="email" placeholder="jon@email.com">
+            <mat-error *ngIf="error('email','required')">
+                Correo electrónico es <strong>requerido</strong>
+            </mat-error>
+            <mat-error *ngIf="error('email','email')">
+                Correo electrónico <strong>inválido</strong>
+            </mat-error>
+
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="pt-3">
+            <mat-label>Estado</mat-label>
+            <mat-select formControlName="status">
+                <mat-option *ngFor="let state of status" [value]="state.value">
+                    {{state.viewValue}}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="error('status','required')">
+                Estado de usuario es <strong>requerido</strong>
+            </mat-error>
+        </mat-form-field>
+
+        <!-- <mat-form-field appearance="outline" class="field-full-width pt-3">
+            <mat-label>Contraseña</mat-label>
+            <input type="password" matInput formControlName="password" placeholder="*********"> 
+            <mat-error *ngIf="error('password','required')">
+                La contraseña es <strong>requerida</strong>
+            </mat-error>
+        </mat-form-field> -->
+        <div class="d-flex justify-content-between">
+
+            <button type="button" mat-raised-button color="warn" class="btn_login mt-3" (click)="closeDialog()">
+                <mat-icon iconPositionEnd>close</mat-icon>
+                CANCELAR
+
+            </button>
+
+            <button mat-raised-button class="btn_login mt-3 sky-blue-darker-bg white-text">
+                <mat-icon iconPositionEnd>chevron_right</mat-icon>
+                CONFIRMAR
+
+            </button>
+        </div>
+
+        <div class="d-flex justify-content-center">
+            <div #paypal class="pay-pal-btn d-flex justify-content-center"></div>
+        </div>
+
+    </form>
+</div>
