@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { User } from 'src/app/models/user.interface';
 import { AuthService } from 'src/app/auth/services/auth.service';
+import { UrlPages } from 'src/app/common/enums/url-pages.enum';
 
 @Component({
   selector: 'app-layout-page',
@@ -14,22 +15,22 @@ export class LayoutPage {
     {
       label: 'Usuarios',
       icon: 'people',
-      url:'/dashboard/users'
+      url:`/${UrlPages.DASHBOARD}/${UrlPages.USERS}`
     },
     {
       label: 'Centros',
       icon: 'apartment',
-      url:'/dashboard/devices'
+      url:`/${UrlPages.DASHBOARD}/${UrlPages.MEDICAL_CENTERS}`
     },
     {
       label: 'Salas',
       icon: 'bedroom_child',
-      url:'/dashboard/rooms'
+      url:`/${UrlPages.DASHBOARD}/${UrlPages.ROOMS}`
     },
     {
       label: 'Dispositivos',
       icon: 'devices',
-      url:'/dashboard/devices'
+      url:`/${UrlPages.DASHBOARD}/${UrlPages.DEVICES}`
     },
     
   ];
@@ -45,6 +46,6 @@ export class LayoutPage {
 
   onLogout(): void {
     this.authService.logout();
-    this.router.navigate(['/auth/login']);
+    this.router.navigate([`/${UrlPages.AUTH}/${UrlPages.LOGIN}`]);
   }
 }

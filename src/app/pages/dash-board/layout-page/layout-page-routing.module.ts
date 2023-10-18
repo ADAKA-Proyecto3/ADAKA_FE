@@ -9,36 +9,43 @@ const routes: Routes = [
     component: LayoutPage,
     children: [
       {
-        path: 'devices',
+        path: UrlPages.DEVICES,
         loadChildren: () =>
           import('../devices-page/devices-page.module').then(
             (m) => m.DevicesPageModule
           ),
       },
       {
-        path: 'users',
+        path: UrlPages.USERS,
         loadChildren: () =>
           import('../users-page/users-page.module').then(
             (m) => m.UsersPageModule
           ),
       },
       {
-        path: 'rooms',
+        path: UrlPages.ROOMS,
         loadChildren: () =>
           import('../rooms-page/rooms-page.module').then(
             (m) => m.RoomsPageModule
           ),
       },
       {
-        path: '',
-        redirectTo: 'devices',
+        path: UrlPages.MAIN,
+        loadChildren: () =>
+          import('../main-page/main-page.module').then(
+            (m) => m.MainPageModule
+          ),
+      },
+      {
+        path: '**',
+        redirectTo: UrlPages.MAIN,
         pathMatch: 'full',
       },
     ],
   },
-  {
+{
     path: '',
-    redirectTo: 'devices',
+    redirectTo: UrlPages.MAIN,
     pathMatch: 'full',
   },
 ];

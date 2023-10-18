@@ -13,16 +13,16 @@ import { AppState } from 'src/app/store/app.state';
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage implements OnInit {
-  windowWidth: number = window.innerWidth;
+  // windowWidth: number = window.innerWidth;
 
-  @HostListener('window:resize', ['$event'])
-  onResize(event: Event) {
-    this.windowWidth = (event.target as Window).innerWidth;
-  }
+  // @HostListener('window:resize', ['$event'])
+  // onResize(event: Event) {
+  //   this.windowWidth = (event.target as Window).innerWidth;
+  // }
 
   constructor(
     private readonly router: Router,
-    private readonly loadingService: LoadingService
+   // private readonly loadingService: LoadingService
   ) {}
 
   ngOnInit(): void {
@@ -36,19 +36,23 @@ export class HomePage implements OnInit {
   //   }, 3000);
   // }
 
-  goToLanding(): void {
-    this.router.navigate([UrlPages.LANDING]);
-  }
+  // goToLanding(): void {
+  //   this.router.navigate([UrlPages.LANDING]);
+  // }
 
-  goToLogin(): void {
-    this.router.navigate([UrlPages.AUTH]);
-  }
+  // goToLogin(): void {
+  //   this.router.navigate([UrlPages.AUTH]);
+  // }
 
-  goToRegister(): void {
-    this.router.navigate([`${UrlPages.AUTH}/${UrlPages.REGISTER}`]);
-  }
+  // goToRegister(): void {
+  //   this.router.navigate([`${UrlPages.AUTH}/${UrlPages.REGISTER}`]);
+  // }
 
   goToDashBoard(): void {
     this.router.navigate([UrlPages.DASHBOARD]);
   }
+
+  // goToPlans(): void {
+  //   this.router.navigate([UrlPages.PLANS]);
+  // }
 }

@@ -6,4 +6,10 @@ export enum UrlPages {
     PASSWORD_RECOVERY = 'password-recovery',
     LANDING = 'landing',
     DASHBOARD = 'dashboard',
+    PLANS = 'plans',
+    DEVICES = 'devices',
+    USERS = 'users',
+    ROOMS = 'rooms',
+    MAIN = 'main',
+    MEDICAL_CENTERS = 'medical-centers',
 }
