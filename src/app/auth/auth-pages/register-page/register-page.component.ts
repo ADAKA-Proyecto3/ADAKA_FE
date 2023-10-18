@@ -101,5 +101,9 @@ export class RegisterPage implements OnInit {
     return { invalidPassword: true };
   }
 
+  returnToLogin() {
+    this.router.navigateByUrl( `${UrlPages.AUTH}/${UrlPages.LOGIN}`);
+  }
+
   
 }
