@@ -20,7 +20,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { AuthCustomDialogComponent } from './components/auth-dialog/auth-custom-dialog.component';
 import { MatListModule } from '@angular/material/list';
 import { RegisterPageController } from './auth-pages/register-page/register-page.controller';
-
+import {MatStepperModule} from '@angular/material/stepper';
+import { MatSelectModule } from '@angular/material/select';
 
 
 
@@ -45,7 +46,9 @@ import { RegisterPageController } from './auth-pages/register-page/register-page
     MatIconModule,
     MatDialogModule,
     HttpClientModule,
-    MatListModule
+    MatListModule,
+    MatStepperModule,
+    MatSelectModule
    
   ],
 

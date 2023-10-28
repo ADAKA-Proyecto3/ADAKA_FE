@@ -38,12 +38,12 @@ export class UserHttpService {
   }
 
   getUsers() {
-    this.loader.showLoadingModal();
+    //this.loader.showLoadingModal();
     return this.httpClient.get(`${this.url}/all`)
     .pipe(
       map(resp => {
         console.log("resp", resp);
-        this.loader.dismiss();
+       // this.loader.dismiss();
         return resp as User[];
       })
     );

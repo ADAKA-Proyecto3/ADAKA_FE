@@ -6,7 +6,7 @@
         <mat-icon>more_vert</mat-icon>
       </button>
       <mat-menu #menu="matMenu">
-        <button mat-menu-item>
+        <button mat-menu-item (click)="goToLiveMap()">
           <mat-icon color="warn" class="blink-1">adjust</mat-icon> Mapa en vivo
         </button>
         <button mat-menu-item class="example-icon favorite-icon">
@@ -25,7 +25,7 @@
     </ng-container>
     <!-- Display buttons on larger screens -->
     <ng-container *ngIf="windowWidth > 750">
-      <button mat-button class="example-icon favorite-icon">
+      <button mat-button class="example-icon favorite-icon" (click)="goToLiveMap()">
         <mat-icon color="warn" class="blink-1">adjust</mat-icon> Mapa en vivo
       </button>
       <button mat-button class="example-icon favorite-icon ms-3" (click)="goToPlans()">

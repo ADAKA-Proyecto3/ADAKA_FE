@@ -29,4 +29,8 @@ export class PasswordRecoveryPage implements OnInit {
       console.log("Aqui se envia la otp.")
     }
   }
+
+  public error = (controlName: string, errorName: string) => {
+    return this.recoveryForm.controls[controlName].hasError(errorName);
+  };
 }

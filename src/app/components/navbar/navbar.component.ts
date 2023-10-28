@@ -17,15 +17,8 @@ export class NavbarComponent {
     this.windowWidth = (event.target as Window).innerWidth;
   }
   
-  // public sideBarItems=[
-  //   {label:'Listado', icon:'label', url:'./list'},
-  //   {label:'Añadir', icon:'add', url:'./new-hero'},
-  //   {label:'Buscar', icon:'search', url:'./search'},
-  // ]
-
   constructor(
     private readonly router: Router,
-   // private readonly loadingService: LoadingService
   ) {}
   
   goToHome(): void {
@@ -46,5 +39,9 @@ export class NavbarComponent {
 
   goToPlans(): void {
     this.router.navigate([UrlPages.PLANS]);
+  }
+
+  goToLiveMap(): void {
+    this.router.navigate([UrlPages.MAP]);
   }
 }

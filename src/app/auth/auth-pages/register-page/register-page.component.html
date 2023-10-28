@@ -12,20 +12,161 @@
     </div>
 
     <div class="container w-75 pb-5">
-        <a (click)="returnToLogin()" class="mb-5 sky-blue-darker-text titulo-3 btn_back"><i class="fa-solid fa-arrow-left"></i> Regresar a iniciar sesión</a>
-      </div>
+        <a 
+        (click)="returnToLogin()" 
+        class="mb-5 sky-blue-darker-text titulo-3 btn_back"
+        >
+            <i class="fa-solid fa-arrow-left"></i> 
+            Regresar a iniciar sesión
+        </a>
+    </div>
 
     <div class="container text-center d-flex  justify-content-center">
-
-       
-
-
-
         <div class="form-container white-bg pb-5" [class.mat-elevation-z8]="true">
 
-            <form class="login-form" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+            <mat-stepper [linear]="isLinear" #stepper>
+                <mat-step [stepControl]="registerForm">
+                    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+                        <ng-template matStepLabel>Ingrese sus datos</ng-template>
 
-                <mat-form-field appearance="outline" class="field-full-width pt-5">
+                        <mat-form-field appearance="outline" class="field-full-width pt-5">
+                            <mat-label>Nombre</mat-label>
+                            <input type="text" matInput formControlName="name" placeholder="Ingrese su nombre">
+                            <mat-error *ngIf="error('name','required')">
+                                Nombre es <strong>requerido</strong>
+                            </mat-error>
+                            <!-- <mat-error *ngIf="error('name','maxLength')">
+                                Nombre debe tener <strong>máximo 30 caracteres</strong>
+                            </mat-error> -->
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="field-full-width">
+                            <mat-label>Número de teléfono</mat-label>
+                            <input type="text" matInput formControlName="phone">
+                            <!-- <mat-error *ngIf="error('phone','required')">
+                                Número de teléfono es <strong>requerido</strong>
+                            </mat-error> -->
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="field-full-width">
+                            <mat-label>Correo electrónico</mat-label>
+                            <input type="email" matInput formControlName="email" placeholder="jon@email.com">
+                            <!-- <mat-error *ngIf="error('email','required')">
+                                Correo electrónico es <strong>requerido</strong>
+                            </mat-error>
+                            <mat-error *ngIf="error('email','email')">
+                                Correo electrónico <strong>inválido</strong>
+                            </mat-error> -->
+                        </mat-form-field>
+
+
+                        <mat-form-field appearance="outline" class="field-full-width pt-3">
+                            <mat-label>Contraseña</mat-label>
+                            <input [type]="hide ? 'password' : 'text'" matInput formControlName="password">
+                            <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                              </button>
+                            <!-- <mat-error *ngIf="error('password','required')">
+                                La contraseña es <strong>requerida</strong>
+                            </mat-error> -->
+                        </mat-form-field>
+
+                        <div>
+                            <button mat-raised-button matStepperNext class="sky-blue-darker-bg white-text">SIGUIENTE</button>
+                        </div>
+                    </form>
+                </mat-step>
+
+
+                <mat-step [stepControl]="secondFormGroup" label="Dirección de envío de dispositivos">
+                    <form [formGroup]="secondFormGroup">
+                        
+                        <mat-form-field appearance="outline" class="field-full-width pt-3">
+                            <mat-label>Provincia</mat-label>
+                            <mat-select formControlName="provincia" (selectionChange)="getCantones()">
+                                <mat-option value="" disabled selected>Seleccione una provincia</mat-option>
+                                <mat-option *ngFor="let provincia of provincias" [value]="provincia.value">
+                                    {{provincia.viewValue}}
+                                </mat-option>
+                            </mat-select>
+                            <!-- <mat-error *ngIf="error('plan','required')">
+                                Role de usuario es <strong>requerido</strong>
+                            </mat-error> -->
+                        </mat-form-field>
+
+
+                        <mat-form-field appearance="outline" class="field-full-width pt-3">
+                            <mat-label>Canton</mat-label>
+                            <mat-select formControlName="canton" (selectionChange)="getDistritos()">
+                                <mat-option value="" disabled selected>Seleccione un canton</mat-option>
+                                <mat-option *ngFor="let canton of cantonOptions" [value]="canton.value">
+                                    {{canton.viewValue}}
+                                </mat-option>
+                            </mat-select>
+                            <!-- <mat-error *ngIf="error('plan','required')">
+                                Role de usuario es <strong>requerido</strong>
+                            </mat-error> -->
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="field-full-width pt-3">
+                            <mat-label>Distrito</mat-label>
+                            <mat-select formControlName="distrito">
+                                <mat-option value="" disabled selected>Seleccione un distrito</mat-option>
+                                <mat-option *ngFor="let distrito of distritoOptions" [value]="distrito.value">
+                                    {{distrito.viewValue}}
+                                </mat-option>
+                            </mat-select>
+                            <!-- <mat-error *ngIf="error('plan','required')">
+                                Role de usuario es <strong>requerido</strong>
+                            </mat-error> -->
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="field-full-width pt-3">
+                            <mat-label>Dirección por señas</mat-label>
+                            <textarea matInput formControlName="address" cdkTextareaAutosize cdkAutosizeMinRows="3"
+                                cdkAutosizeMaxRows="7">
+                            </textarea>
+                            <!-- <mat-error *ngIf="error('password','required')">
+                                La dirección es <strong>requerida</strong>
+                            </mat-error> -->
+                        </mat-form-field>
+
+                        <div class="d-flex justify-content-evenly pt-4">
+                            <button mat-raised-button matStepperPrevious color="warn">ANTERIOR</button>
+                            <button mat-raised-button matStepperNext class="sky-blue-darker-bg white-text">SIGUIENTE</button>
+                        </div>
+
+                    </form>
+                </mat-step>
+
+                <mat-step [stepControl]="thirdFormGroup" label="Selecione un plan">
+                    <form [formGroup]="thirdFormGroup">
+                        <mat-form-field appearance="outline" class="field-full-width pt-3">
+                            <mat-label>Plan</mat-label>
+                            <mat-select formControlName="plan">
+                                <mat-option *ngFor="let plan of plans" [value]="plan.value">
+                                    {{plan.viewValue}}
+                                </mat-option>
+                            </mat-select>
+                            <!-- <mat-error *ngIf="error('plan','required')">
+                                Role de usuario es <strong>requerido</strong>
+                            </mat-error> -->
+                        </mat-form-field>
+                        <div class="d-flex justify-content-evenly pt-4">
+                            <button mat-raised-button matStepperPrevious color="warn">ANTERIOR</button>
+                            <button mat-raised-button matStepperNext class="sky-blue-darker-bg white-text">REALIZAR PAGO</button>
+                        </div>
+                    </form>
+                </mat-step>
+
+
+
+
+            </mat-stepper>
+
+            <!-- <form class="login-form" [formGroup]="registerForm" (ngSubmit)="onSubmit()"> -->
+
+                <!-- <mat-form-field appearance="outline" class="field-full-width pt-5">
                     <mat-label>Nombre</mat-label>
                     <input type="text" matInput formControlName="name" placeholder="Ingrese su nombre">
                     <mat-error *ngIf="error('name','required')">
@@ -65,20 +206,20 @@
                     <mat-error *ngIf="error('password','required')">
                         La contraseña es <strong>requerida</strong>
                     </mat-error>
-                </mat-form-field>
+                </mat-form-field> -->
 
 
-                <button mat-raised-button class="btn_login mt-3 sky-blue-darker-bg white-text">
+                <!-- <button mat-raised-button class="btn_login mt-3 sky-blue-darker-bg white-text">
                     <mat-icon iconPositionEnd>chevron_right</mat-icon>
                     CONTINUAR SUSCRIPCIÓN
 
-                </button>
+                </button> -->
 
                 <div class="d-flex justify-content-center">
                     <div #paypal class="pay-pal-btn d-flex justify-content-center"></div>
                 </div>
-
-            </form>
+<!-- 
+            </form> -->
         </div>
     </div>
 
