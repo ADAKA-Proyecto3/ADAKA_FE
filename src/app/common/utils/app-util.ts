@@ -1,4 +1,5 @@
 import { HttpHeaders } from '@angular/common/http';
+
 import Swal from 'sweetalert2';
 
 type NotificationType = 'success' | 'error' | 'warning' | 'info' | 'question';
@@ -38,17 +39,16 @@ export class Utils {
     });
   }
 
-
-  public static getHttpHeaders(){
+  public static getHttpHeaders() {
     const authToken = sessionStorage.getItem('token');
 
-   const httpOptions = {
-        headers: new HttpHeaders({
-          'Authorization': `${authToken}` ,
-          'Content-Type': 'application/json'
-        })
-      }; 
+    const httpOptions = {
+      headers: new HttpHeaders({
+        Authorization: `${authToken}`,
+        'Content-Type': 'application/json',
+      }),
+    };
 
-     return httpOptions; 
+    return httpOptions;
   }
 }

@@ -12,7 +12,7 @@ export class DialogService {
 
   constructor(private dialog: MatDialog) { }
 
-  async showToast(message: string) {
+  async showToast(message: string, useTimeOut = true) {
     if (this.toastDialog?.getState() === MatDialogState.OPEN) {
       this.dismiss();
     }
@@ -24,10 +24,13 @@ export class DialogService {
       position: { top: '1%' },
     });
 
-    setTimeout(() => {
-      this.dismiss();
+    if (useTimeOut) {
+      setTimeout(() => {
+        this.dismiss();
+      }
+        , 3000);
     }
-      , 3000);
+    
   }
 
 

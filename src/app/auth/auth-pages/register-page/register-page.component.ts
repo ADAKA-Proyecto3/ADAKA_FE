@@ -9,7 +9,6 @@ import {
 import { Router } from '@angular/router';
 import { UrlPages } from 'src/app/common/enums/url-pages.enum';
 import { RegisterPageController } from './register-page.controller';
-import { User } from '../../../models/user.interface';
 import { SelectOption } from 'src/app/common/interfaces/option.interface';
 import { CRHttpService } from 'src/app/services/http-service/costa_rica-http.service';
 import { PlanPricing } from 'src/app/common/enums/plan-pricing.enum';
@@ -17,6 +16,7 @@ import { DebugerService } from 'src/app/services/debug-service/debug.service';
 import { PaymentResult } from 'src/app/common/enums/payment-result.enum';
 import { Suscription } from 'src/app/models/suscription.interface';
 import { DialogService } from 'src/app/services/dialog-service/dialog.service';
+import { AdminRegistration } from 'src/app/common/interfaces/admin-registration';
 
 declare var paypal: any;
 
@@ -42,8 +42,8 @@ export class RegisterPage implements OnInit {
     { value: '7', viewValue: 'Limon' },
   ];
 
-  cantonOptions: SelectOption[] | undefined;
-  distritoOptions: SelectOption[] | undefined;
+  cantonOptions: SelectOption[] = [];
+  distritoOptions: SelectOption[] = [];
 
   isLinear = true;
   hide = true;
@@ -63,22 +63,16 @@ export class RegisterPage implements OnInit {
   private isPaypalButtonRendered = false;
   paidFor = false;
 
-
-
   constructor(
     private readonly registerPageController: RegisterPageController,
     private readonly router: Router,
     private readonly crHttpService: CRHttpService,
     private _formBuilder: FormBuilder,
 
-    //*!
     private dialogService: DialogService
   ) {}
 
   ngOnInit(): void {
-
-    
-
     this.adminDataForm = new FormGroup({
       name: new FormControl('', [
         Validators.required,
@@ -88,7 +82,7 @@ export class RegisterPage implements OnInit {
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [
         Validators.required,
-        this.validatePassword, 
+        this.validatePassword,
       ]),
     });
   }
@@ -247,9 +241,9 @@ export class RegisterPage implements OnInit {
                 paymentAmount: order.purchase_units[0].amount.value,
                 paymentCurrency: order.purchase_units[0].amount.currency_code,
               };
-
+              DebugerService.log('Register Page:  submitRegistration' );
               this.submitRegistration(suscription);
-              console.log(order);
+              
             }
           },
           onError: (err: any) => {
@@ -275,7 +269,6 @@ export class RegisterPage implements OnInit {
   }
 
   private async submitRegistration(suscription: Suscription) {
-    console.log(suscription);
 
     if (
       this.addressForm.value.provincia &&
@@ -284,44 +277,56 @@ export class RegisterPage implements OnInit {
       this.addressForm.value.address
     ) {
       suscription.shippingAddress = {
-        provincia: this.addressForm.value.provincia,
-        canton: this.addressForm.value.canton,
-        distrito: this.addressForm.value.distrito,
+        provincia: this.getOptionViewValue(
+          this.provincias,
+          this.addressForm.value.provincia
+        ),
+        canton: this.getOptionViewValue(
+          this.cantonOptions,
+          this.addressForm.value.canton
+        ),
+        distrito: this.getOptionViewValue(
+          this.distritoOptions,
+          this.addressForm.value.distrito
+        ),
         address: this.addressForm.value.address,
       };
 
-      const user: User = {
+      const adminRegistration: AdminRegistration = {
         name: this.adminDataForm.value.name,
         phone: this.adminDataForm.value.phone,
         email: this.adminDataForm.value.email,
         password: this.adminDataForm.value.password,
-        // const userRegistration = await this.registerPageController.registerUser(
-        //   user
-        // );
-        //this.router.navigateByUrl( `${UrlPages.AUTH}/${UrlPages.LOGIN}`);
-      };
-
-      const suscriptionObject ={
-        name: this.adminDataForm.value.name,
-        phone: this.adminDataForm.value.phone,
-        email: this.adminDataForm.value.email,
-        password: this.adminDataForm.value.password,
-        paymentAmount: suscription.paymentAmount,
-        paymentCurrency: suscription.paymentCurrency,
         paymentId: suscription.paymentId,
         planName: suscription.planName,
-        shippingAddress: suscription.shippingAddress.provincia + ' ' + suscription.shippingAddress.canton + ' ' + suscription.shippingAddress.distrito + ' ' + suscription.shippingAddress.address
+        paymentAmount: suscription.paymentAmount,
+        paymentCurrency: suscription.paymentCurrency,
+        shippingAddress:
+          suscription.shippingAddress.provincia +
+          ',' +
+          suscription.shippingAddress.canton +
+          ',' +
+          suscription.shippingAddress.distrito +
+          ',' +
+          suscription.shippingAddress.address,
+      };
+      DebugerService.log('Register Page:  Call registerUser' );
+      const registrationResult = await this.registerPageController.registerUser(
+        adminRegistration
+      );
+      
+      // if (registrationResult === 'OK') {
+      //   this.dialogService
+      //     .showToast('Usuario registrado exitosamente')
+      //     .then(() => {
+      //       this.router.navigateByUrl(`${UrlPages.AUTH}/${UrlPages.LOGIN}`);
+      //     });
+      // }
+    } 
+  }
 
-      }
-
-      console.log(suscriptionObject);
-      await this.registerPageController.registerUser(suscriptionObject);
-
-      //console.log(user);
-      //console.log(suscription);
-      this.dialogService.showToast('Usuario registrado exitosamente');
-    } else {
-      // Handle the case where one or more values are not defined
-    }
+  private getOptionViewValue(options: SelectOption[], value: string): string {
+    const selectedOption = options.find((option) => option.value === value);
+    return selectedOption ? selectedOption.viewValue : '';
   }
 }

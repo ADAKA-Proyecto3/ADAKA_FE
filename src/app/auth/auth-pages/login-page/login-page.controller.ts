@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import { LoadingService } from 'src/app/services/loading-service/loading.service';
 import { AuthService } from '../../services/auth.service';
 import { DebugerService } from 'src/app/services/debug-service/debug.service';
-import Swal from 'sweetalert2';
-import { Utils } from 'src/app/common/utils/notification-util';
+import { Utils } from 'src/app/common/utils/app-util';
 
 type LoginRequest = {
   email: string;

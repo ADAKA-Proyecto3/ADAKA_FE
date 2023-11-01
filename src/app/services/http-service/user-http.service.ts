@@ -5,7 +5,7 @@ import { Config } from 'src/app/config/config';
 import { DebugerService } from '../debug-service/debug.service';
 import { map } from 'rxjs';
 import { LoadingService } from '../loading-service/loading.service';
-import { Utils } from 'src/app/common/utils/notification-util';
+import { Utils } from 'src/app/common/utils/app-util';
 
 @Injectable({
   providedIn: 'root',
@@ -19,14 +19,14 @@ export class UserHttpService {
     private loader: LoadingService
   ) {}
 
-  registerAdmin(suscription: any): Promise<void> {
+  registerAdmin(suscription: any): Promise<any> {
     return new Promise((resolve, reject) => {
       this.httpClient.post(`${this.registerAdminUrl}`, suscription).subscribe({
         next: (response) => {
           if (response) {
-            resolve();
+            resolve(response);
           } else {
-            reject();
+            reject(response);
           }
         },
         error: (error) => {
