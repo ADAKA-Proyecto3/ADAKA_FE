@@ -22,6 +22,9 @@ import { MatListModule } from '@angular/material/list';
 import { RegisterPageController } from './auth-pages/register-page/register-page.controller';
 import {MatStepperModule} from '@angular/material/stepper';
 import { MatSelectModule } from '@angular/material/select';
+import { MatCardModule } from '@angular/material/card';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { loginPageController } from './auth-pages/login-page/login-page.controller';
 
 
 
@@ -48,11 +51,15 @@ import { MatSelectModule } from '@angular/material/select';
     HttpClientModule,
     MatListModule,
     MatStepperModule,
-    MatSelectModule
+    MatSelectModule,
+    MatCardModule,
+    MatButtonModule,
+    MatListModule,
+    MatSlideToggleModule,
    
   ],
 
-  providers: [ RegisterPageController ],
+  providers: [ RegisterPageController, loginPageController ],
 
 })
 export class AuthModule { }

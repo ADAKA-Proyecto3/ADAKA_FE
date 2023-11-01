@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { PlanPricing } from 'src/app/common/enums/plan-pricing.enum';
 
 @Component({
   selector: 'app-plans',
@@ -7,9 +8,9 @@ import { Component } from '@angular/core';
 })
 export class PlansPage {
   isChecked = true;
-  basicPlan = 500;
-  proPlan = 1500;
-  enterpricePlan = 4500;
-  months= 12;
+  basicPlan = PlanPricing.BASIC_PLAN;
+  proPlan = PlanPricing.PRO_PLAN;
+  enterpricePlan = PlanPricing.ENTERPRISE_PLAN;
+  months= PlanPricing.MONTHS;
 
 }

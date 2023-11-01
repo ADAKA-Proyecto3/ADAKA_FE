@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import {
-  FormBuilder,
   FormControl,
   FormGroup,
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UrlPages } from 'src/app/common/enums/url-pages.enum';
-import { AuthService } from '../../services/auth.service';
+import { loginPageController } from './login-page.controller';
+import { DebugerService } from 'src/app/services/debug-service/debug.service';
+
 
 @Component({
   selector: 'app-loginpage',
@@ -19,7 +20,7 @@ export class LoginPage implements OnInit {
   public loginForm: FormGroup = {} as FormGroup;
   constructor(
     private readonly router: Router,
-    private authService : AuthService
+    private loginPageController: loginPageController,
     ) {}
 
   public ngOnInit() {
@@ -48,12 +49,22 @@ export class LoginPage implements OnInit {
     this.router.navigateByUrl( `${UrlPages.AUTH}/${UrlPages.PASSWORD_RECOVERY}`);
   }
 
-  public onSubmit() {
+  public async onSubmit() {
     //TODO: Implementar lógica de login
     if (this.loginForm.invalid) return;
 
-    if (this.authService.login(this.loginForm.value.email, this.loginForm.value.password)) {
-      
+    // const loginRequest: any ={
+    //   email: this.loginForm.value.email,
+    //   password: this.loginForm.value.password,
+    // }
+
+    //console.log('requesting login');
+
+    const loginRequestResult =  await this.loginPageController.requestLogin(this.loginForm.value.email, this.loginForm.value.password);
+
+    DebugerService.log('loginRequestResult: ' + loginRequestResult);
+  
+    if (loginRequestResult) {    
       this.router.navigate([UrlPages.DASHBOARD]);
     }
 
@@ -62,9 +73,9 @@ export class LoginPage implements OnInit {
     //   this.router.navigate([UrlPages.HOME]);
     // } );
 
-    console.log({
-      formValid: this.loginForm.valid,
-      formValue: this.loginForm.value,
-    });
+    // console.log({
+    //   formValid: this.loginForm.valid,
+    //   formValue: this.loginForm.value,
+    // });
   }
 }
