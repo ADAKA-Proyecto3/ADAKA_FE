@@ -7,7 +7,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { RouterModule } from '@angular/router';
 import { NgStyle, NgFor, NgIf } from '@angular/common';
-import { HomeModule } from 'src/app/pages/home/home.module';
 import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({

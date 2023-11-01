@@ -12,9 +12,7 @@ import { appReducers } from './store/app.state';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsArray } from './store/effects';
 import { MatSelectModule } from '@angular/material/select';
-
-
-
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 
 
 @NgModule({
@@ -30,6 +28,7 @@ import { MatSelectModule } from '@angular/material/select';
     StoreModule.forRoot( appReducers ),
     EffectsModule.forRoot( EffectsArray ),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
+    SweetAlert2Module.forRoot(),
     
   ],
   providers: [],
