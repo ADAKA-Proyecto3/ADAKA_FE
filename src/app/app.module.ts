@@ -12,7 +12,7 @@ import { appReducers } from './store/app.state';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsArray } from './store/effects';
 import { MatSelectModule } from '@angular/material/select';
-import { MatIconModule } from '@angular/material/icon';
+
 
 
 
@@ -30,7 +30,7 @@ import { MatIconModule } from '@angular/material/icon';
     StoreModule.forRoot( appReducers ),
     EffectsModule.forRoot( EffectsArray ),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
-    MatIconModule
+
   ],
   providers: [],
   bootstrap: [AppComponent]

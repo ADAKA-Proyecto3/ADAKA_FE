@@ -4,11 +4,9 @@ export interface MedicalCenter {
 id?: number;
 name: string;
 status: string;
-address: string;
+direction: string;
 email: string;
-coordenates: {
-    latitude: number;
-    longitude: number;
-};
+latitude: number;
+longitude: number;
 rooms?: Room[];
 }

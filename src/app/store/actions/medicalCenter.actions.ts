@@ -1,6 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { MedicalCenter } from 'src/app/models/medical-center.interface';
-import { Response } from 'src/app/models/Response.interface';
+
 export const addMedicalCenter = createAction(
   '[Medical Center Page] Add Medical Center',
   props<{ id: number; content: MedicalCenter }>()

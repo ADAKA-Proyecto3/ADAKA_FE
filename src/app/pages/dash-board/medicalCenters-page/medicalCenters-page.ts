@@ -19,30 +19,35 @@ export class MedicalCentersPage implements AfterViewInit, OnInit {
 
   constructor(
     private store: Store<AppState>,
-    private dialog: MatDialog) {}
+    private dialog: MatDialog
+    ) {}
 
   displayedColumns: string[] = [
     'name',
     'email',
     'status',
-    'addres',
-    'coordenades',
+    'direction',
+    'latitude',
+    'longitude',
     'actions',
   ];
   dataSource = new MatTableDataSource<MedicalCenter>();
-   idAdmin: number = 1;
+  idAdmin: number = 1;
+
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   ngOnInit(): void {
+    console.log('entra init');
     this.store.dispatch(loadMedicalCenter({id: this.idAdmin}));
     console.log('onInit');
   }
 
   ngAfterViewInit(): void {
     this.store.select('medicalCenters').subscribe(({ medicalCenters, status }) => {
+      console.log(medicalCenters);
       this.dataSource.data = medicalCenters;
       console.log('aterview INIT');
     });
@@ -78,6 +83,7 @@ export class MedicalCentersPage implements AfterViewInit, OnInit {
 
   // Dialog | Modal Control
   openMedicalCenterEditDialog(medicalCenter: MedicalCenter): void {
+    console.log("Entrro");
     const dialogRef = this.dialog.open(MedicalCenterFormComponent, {
       width: '60%',
       data: medicalCenter,

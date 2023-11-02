@@ -9,11 +9,10 @@ import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginato
 import { getSpanishPaginatorIntl } from 'src/app/common/locale/mat-paginator/spanish-paginator-intl';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { UserFormModule } from '../components/user-form-component/user-form.module';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { MedicalCentersPage } from './medicalCenters-page';
 import { MedicalCentersPageRoutingModule } from './medicalCenters-page-routing.module';
-import { RoomFormModule } from '../components/room-form-component/room-form.module';
+import { MedicalCenterFormModule } from '../components/medicalCenter-form-component/medicalCenter-form.module';
 
 
 
@@ -30,7 +29,7 @@ import { RoomFormModule } from '../components/room-form-component/room-form.modu
     MatPaginatorModule,
     MatButtonModule,
     MatIconModule,
-    RoomFormModule,
+    MedicalCenterFormModule,
     MatTooltipModule
 
   ],

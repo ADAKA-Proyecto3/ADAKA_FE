@@ -10,7 +10,7 @@
         <mat-form-field appearance="outline" class="pt-3">
             <mat-label>Nombre</mat-label>
             <input type="text" matInput formControlName="name" value={{medicalCenter?.name}}>
-            <mat-error *ngIf="error('name','required')">
+            <mat-error (*ngIf)="error('name','required')">
                 Nombre es <strong>requerido</strong>
             </mat-error>
             <mat-error *ngIf="error('name','maxLength')">
@@ -19,23 +19,24 @@
         </mat-form-field>
 
       <mat-form-field appearance="outline" class="pt-3">
-        <mat-label>Localización</mat-label>
-        <input type="text" matInput formControlName="address" value={{medicalCenter?.address}}>
-        <mat-error *ngIf="error('address','required')">
-          Nombre es <strong>requerido</strong>
+        <mat-label>Direccion</mat-label>
+        <input type="text" matInput formControlName="direction" value={{medicalCenter?.direction}}>
+        <mat-error *ngIf="error('direction','required')">
+          La dirección es <strong>requerido</strong>
         </mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="pt-3">
-        <mat-label>Coordenadas</mat-label>
         <mat-label>Latitud</mat-label>
-        <input type="number" matInput formControlName="latitude" value={{medicalCenter?.coordenades.latitude}}>
+        <input type="number" matInput formControlName="latitude" value={{medicalCenter?.latitude}}>
         <mat-error *ngIf="error('latitude','required')">
           La latitud es <strong>requerida</strong>
         </mat-error>
+      </mat-form-field>
 
+      <mat-form-field appearance="outline" class="pt-3">
         <mat-label>Longitud</mat-label>
-        <input type="number" matInput formControlName="longitude" value={{medicalCenter?.coordenades.longitude}}>
+        <input type="number" matInput formControlName="longitude" value={{medicalCenter?.longitude}}>
         <mat-error *ngIf="error('longitude','required')">
           La Longitud es <strong>requerida</strong>
         </mat-error>
@@ -62,7 +63,7 @@
                 </mat-option>
             </mat-select>
             <mat-error *ngIf="error('status','required')">
-                Estado de usuario es <strong>requerido</strong>
+                Estado de centro médico es <strong>requerido</strong>
             </mat-error>
         </mat-form-field>
 

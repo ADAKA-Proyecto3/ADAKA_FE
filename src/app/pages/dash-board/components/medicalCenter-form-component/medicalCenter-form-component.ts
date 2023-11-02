@@ -41,7 +41,7 @@ export class MedicalCenterFormComponent implements OnInit {
       ]),
       email: new FormControl('', [Validators.required]),
       status: new FormControl('', [Validators.required]),
-      address: new FormControl('', [Validators.required]),
+      direction: new FormControl('', [Validators.required]),
       latitude: new FormControl('', [Validators.required]),
       longitude: new FormControl('', [Validators.required]),
     });
@@ -51,11 +51,11 @@ export class MedicalCenterFormComponent implements OnInit {
 
       this.registerForm.patchValue({
         name: this.medicalCenter.name || '',
-        address: this.medicalCenter.address || '',
+        direction: this.medicalCenter.direction || '',
         email: this.medicalCenter.email || '',
         status: this.medicalCenter.status || '',
-        latitude: this.medicalCenter.coordenates.latitude || '',
-        longitude: this.medicalCenter.coordenates.longitude || ''
+        latitude: this.medicalCenter.latitude || '',
+        longitude: this.medicalCenter.longitude || ''
       });
     }
   }
@@ -69,10 +69,11 @@ export class MedicalCenterFormComponent implements OnInit {
 
     const medicalCenter: MedicalCenter = {
       name: this.registerForm.value.name,
-      address: this.registerForm.value.role,
+      direction: this.registerForm.value.direction,
       email: this.registerForm.value.email,
       status: this.registerForm.value.status,
-      coordenates: {latitude: this.registerForm.value.latitude, longitude: this.registerForm.value.longitude},
+      latitude: this.registerForm.value.latitude, 
+      longitude: this.registerForm.value.longitude
     };
 
     if (this.editing) {

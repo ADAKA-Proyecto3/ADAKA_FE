@@ -9,23 +9,20 @@ import {
   updateMedicalCenterFailure,
 } from '../actions/medicalCenter.actions';
 import { MedicalCenter } from 'src/app/models/medical-center.interface';
-import { Response } from 'src/app/models/Response.interface';
 import { ActionStatus } from 'src/app/common/enums/action-status.enum';
-import {loadUsersFailure, updateUserSucess} from "../actions/user.actions";
 
 export interface MedicalCenterState {
   medicalCenters: MedicalCenter[];
   error: any;
   status: ActionStatus;
 }
-
 export const initialState: MedicalCenterState ={
   medicalCenters: [],
   error: '',
   status: ActionStatus.PENDING,
 };
-
 export const medicalCenterReducer = createReducer(
+  
   initialState,
 
 
@@ -75,7 +72,7 @@ export const medicalCenterReducer = createReducer(
     status: ActionStatus.SUCCESS,
   })),
 
-  on(loadUsersFailure, (state, { error }) => ({
+  on(loadMedicalCenterFailure, (state, { error }) => ({
     ...state,
     error: error,
     status: ActionStatus.ERROR,
