@@ -4,6 +4,7 @@ import { Config } from 'src/app/config/config';
 import { map } from 'rxjs';
 import { LoadingService } from '../loading-service/loading.service';
 import { Room } from 'src/app/models/rooms.interface';
+import { Response } from 'src/app/models/response.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -19,24 +20,25 @@ export class RoomHttpService {
 
   
 
-  getRooms() {
+  getRooms(id: number) {
     this.loader.showLoadingModal();
-    return this.httpClient.get(`${this.url}/all`)
+    return this.httpClient.get<Response<Room>>(`${this.url}/all/${id}`)
     .pipe(
       map(resp => {
         console.log("resp", resp);
         this.loader.dismiss();
-        return resp as Room[];
+        return resp.data as Room[];
       })
     );
   }
+  
 
   deleteRoom( id: number){
-    return this.httpClient.delete(`${this.url}/${id}`)
+    return this.httpClient.delete(`${this.url}/delete/${id}`)
   }
 
-  resgiterRoom(room: Room) {
-    return this.httpClient.post(`${this.url}/`, room);
+  resgiterRoom(id: number, room: Room) {
+    return this.httpClient.post(`${this.url}/${id}`, room);
   }
 
 

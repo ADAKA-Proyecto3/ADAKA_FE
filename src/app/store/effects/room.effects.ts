@@ -19,12 +19,15 @@ export class RoomEffects {
   loadRooms$ = createEffect(() =>
     this.actions$.pipe(
       ofType(loadRooms),
-      switchMap(() =>
-        
-        from(this.roomService.getRooms()).pipe(
-         
-          map((rooms) => loadRoomsSuccess({ rooms: rooms })),
-         
+      switchMap((action) =>
+
+        // Call the get method, convert it to an observable
+        from(this.roomService.getRooms(action.id)).pipe(
+          // Take the returned value and return a new success action containing the todos
+          map((room) =>
+            loadRoomsSuccess({ rooms : room })
+          ),
+          // Or... if it errors return a new failure action containing the error
           catchError((error) => of(loadRoomsFailure({ error })))
         )
       )
@@ -61,11 +64,13 @@ export class RoomEffects {
     this.actions$.pipe(
       ofType(addRoom),
       mergeMap((action) =>
-        this.roomService.resgiterRoom(action.content).pipe(
-          map(() => addRoomSuccess({ content: action.content })),
+        this.roomService.resgiterRoom(action.id, action.content).pipe(
+          map(() => addRoomSuccess({ id: action.id, content: action.content })),
           catchError((error) => of(addRoomFailure({ error })))
         )
       )
     )
   );
+
+
 }

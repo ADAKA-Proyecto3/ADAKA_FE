@@ -25,8 +25,8 @@ export class RoomFormComponent implements OnInit {
     { value: 'NURSE', viewValue: 'Enfermero' },
   ];
 
-  status: SelectOption[] = [
-    { value: 'ACTIVE', viewValue: 'Activo' },
+  medicalCenter: SelectOption[] = [
+    { value: 'Medical Center', viewValue: 'Activo' },
     { value: 'INACTIVE', viewValue: 'Inactivo' },
   ];
 
@@ -76,23 +76,21 @@ export class RoomFormComponent implements OnInit {
     if (this.registerForm.invalid) {
       return;
     }
-
+  
     const room: Room = {
       name: this.registerForm.value.name,
-      length: this.registerForm.value.role,
-      width: this.registerForm.value.phone,
-      height: this.registerForm.value.email,
+      length: this.registerForm.value.length,
+      width: this.registerForm.value.width,
+      height: this.registerForm.value.height,
       status: this.registerForm.value.status,
     };
-
-    if (this.editing) {
-      this.matDialogRef.close( {id: this.room?.id, room: room} );
-    }else{
-      DebugerService.log('NO EDITING');
-      this.matDialogRef.close({room: room});
-    }
-
   
+    if (this.editing) {
+      this.matDialogRef.close({ id: this.room?.id, room: room });
+    } else {
+      DebugerService.log('NO EDITING');
+      this.matDialogRef.close({ room: room });
+    }
   }
 
   closeDialog() {

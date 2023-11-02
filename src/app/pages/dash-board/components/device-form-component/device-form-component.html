@@ -1,0 +1,39 @@
+<h1 class="titulo-2 container text-center pt-3">
+    {{ editing ? 'Editar dispositivo' : 'Registrar dispositivo' }}
+</h1>
+<div class="container white-bg pb-5 d-flex justify-content-center">
+
+    <form class="d-flex flex-column w-75" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+
+          <mat-form-field>
+            <input matInput placeholder="ID del Dispositivo">
+          </mat-form-field>
+
+            <mat-form-field>
+              <mat-label>Nombre del Modelo</mat-label>
+              <mat-select>
+                <mat-option value="1">Modelo 1</mat-option>
+              </mat-select>
+            </mat-form-field>
+          
+            <mat-form-field>
+                <input matInput placeholder="Fecha de Instalación" formControlName="installationDate">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          
+            <mat-form-field>
+              <mat-label>Sala</mat-label>
+              <mat-select>
+                <mat-option value="1">  </mat-option>
+
+              </mat-select>
+            </mat-form-field>
+
+        <div class="d-flex justify-content-between">
+            <button mat-raised-button class="btn_login mt-3 sky-blue-darker-bg white-text" mat-button type="submit">Guardar</button>
+        </div>
+
+
+    </form>
+</div>
