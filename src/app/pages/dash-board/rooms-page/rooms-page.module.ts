@@ -9,7 +9,6 @@ import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginato
 import { getSpanishPaginatorIntl } from 'src/app/common/locale/mat-paginator/spanish-paginator-intl';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { UserFormModule } from '../components/user-form-component/user-form.module';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { RoomsPage } from './rooms-page';
 import { RoomsPageRoutingModule } from './rooms-page-routing.module';

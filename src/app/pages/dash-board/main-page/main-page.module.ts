@@ -5,8 +5,8 @@ import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { MatTableModule} from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
-import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
-import { getSpanishPaginatorIntl } from 'src/app/common/locale/mat-paginator/spanish-paginator-intl';
+import { MatPaginatorModule } from '@angular/material/paginator';
+
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { UserFormModule } from '../components/user-form-component/user-form.module';

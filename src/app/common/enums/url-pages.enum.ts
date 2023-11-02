@@ -12,4 +12,5 @@ export enum UrlPages {
     ROOMS = 'rooms',
     MAIN = 'main',
     MEDICAL_CENTERS = 'medical-centers',
+    MAP = 'live-map',
 }

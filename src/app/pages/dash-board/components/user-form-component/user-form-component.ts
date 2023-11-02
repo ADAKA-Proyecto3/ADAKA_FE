@@ -1,13 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { SelectOption } from 'src/app/common/interfaces/option.interface';
 import { User } from 'src/app/models/user.interface';
 import { DebugerService } from 'src/app/services/debug-service/debug.service';
 
-interface SelectOption {
-  value: string;
-  viewValue: string;
-}
+
 
 @Component({
   selector: 'app-user-form-component',

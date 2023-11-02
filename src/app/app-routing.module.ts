@@ -27,6 +27,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/plans/plans.module').then(m => m.PlansModule)
   },
   {
+    path: UrlPages.MAP,
+    loadChildren: () => import('./pages/map/map.page.module').then(m => m.MapModule)
+  },
+  {
     path: UrlPages.DASHBOARD,
     canActivate: [authGuard],
     loadChildren: () => import('./pages/dash-board/layout-page/layout-page.module').then(m => m.LayoutPageModule)
