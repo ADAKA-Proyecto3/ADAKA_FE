@@ -31,7 +31,7 @@ export class Utils {
     Swal.fire({
       icon: icon,
       title: title,
-      text: 'Usuario o contraseña incorrectos',
+      text: text,
       showCancelButton: showCancelButton,
       showConfirmButton: showConfirmButton,
       confirmButtonColor: '#0096d2',

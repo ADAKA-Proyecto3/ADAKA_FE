@@ -6,6 +6,7 @@ import { Config } from 'src/app/config/config';
 import { DebugerService } from '../debug-service/debug.service';
 import { Observable, catchError, map, throwError } from 'rxjs';
 import { LoadingService } from '../loading-service/loading.service';
+import { Utils } from 'src/app/common/utils/app-util';
 
 @Injectable({
   providedIn: 'root',
@@ -42,14 +43,15 @@ export class MedicalCenterHttpService {
 
   resgiterMedicalCenter(id: number, medicalCenter: MedicalCenter) {
     const urlWithId = `${this.url}/${id}`;
-    return this.httpClient.post(urlWithId, medicalCenter);
+    return this.httpClient.post(urlWithId, medicalCenter,Utils.getHttpHeaders());
   }
 
 
   getMedicalCenters(id: number) {
     this.loader.showLoadingModal();
     const urlWithId = `${this.url}/all/${id}`;
-    return this.httpClient.get<Response<MedicalCenter>>(urlWithId).pipe(
+    console.log(urlWithId);
+    return this.httpClient.get<Response<MedicalCenter>>(urlWithId,Utils.getHttpHeaders()).pipe(
       map((resp) => {
         console.log('resp', resp);
         this.loader.dismiss();
@@ -62,14 +64,20 @@ export class MedicalCenterHttpService {
     const urlWithId = `${this.url}/delete/${id}`;
   
     return this.httpClient
-      .delete(urlWithId)
+      .delete(urlWithId, Utils.getHttpHeaders())
       .pipe(
         catchError((error) => {
           console.error('Error en la petición:', error.error.title);
-  
-          // Puedes lanzar una excepción o devolver un valor por defecto en caso de error
-          // Por ejemplo, puedes lanzar un error personalizado
-          return throwError('Ha ocurrido un error al eliminar el centro médico.');
+
+          Utils.showNotification({
+            icon: 'error', // El icono puede ser 'success', 'error', 'warning', 'info' u otros
+            title: 'Advertencia',
+            text: error.error.title,
+            showCancelButton: false, // Opcional, true o false
+            showConfirmButton: false, // Opcional, true o false
+          });
+
+         throw error;
         }),
         map((resp: any) => {
           this.loader.dismiss();

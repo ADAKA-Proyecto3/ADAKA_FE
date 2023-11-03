@@ -40,18 +40,14 @@ export class MedicalCentersPage implements AfterViewInit, OnInit {
   }
 
   ngOnInit(): void {
-    console.log('entra init');
     this.store.dispatch(loadMedicalCenter({id: this.idAdmin}));
-    console.log('onInit');
   }
 
   ngAfterViewInit(): void {
-    this.store.select('medicalCenters').subscribe(({ medicalCenters, status }) => {
-      console.log(medicalCenters);
+    this.store.select('medicalCenters').subscribe(({ medicalCenters }) => {
+      console.log(medicalCenters)
       this.dataSource.data = medicalCenters;
-      console.log('aterview INIT');
     });
-
     this.dataSource.paginator = this.paginator;
   }
 
