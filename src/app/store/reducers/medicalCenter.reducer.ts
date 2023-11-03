@@ -9,6 +9,7 @@ import {
   updateMedicalCenterFailure,
   addMedicalCenterSuccess,
   addMedicalCenterFailure,
+  removeMedicalCenter,
 } from '../actions/medicalCenter.actions';
 import { MedicalCenter } from 'src/app/models/medical-center.interface';
 import { ActionStatus } from 'src/app/common/enums/action-status.enum';
@@ -62,6 +63,13 @@ export const medicalCenterReducer = createReducer(
       status: ActionStatus.ERROR,
     };
   }),
+
+
+  on(removeMedicalCenter, (state) => ({
+    ...state,
+    status: ActionStatus.LOADING,
+  })),
+
 
   on(removeMedicalCenterSuccess, (state, { id }) => ({
     ...state,

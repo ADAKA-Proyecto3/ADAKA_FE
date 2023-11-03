@@ -67,16 +67,6 @@ export class MedicalCenterHttpService {
       .delete(urlWithId, Utils.getHttpHeaders())
       .pipe(
         catchError((error) => {
-          console.error('Error en la petición:', error.error.title);
-
-          Utils.showNotification({
-            icon: 'error', // El icono puede ser 'success', 'error', 'warning', 'info' u otros
-            title: 'Advertencia',
-            text: error.error.title,
-            showCancelButton: false, // Opcional, true o false
-            showConfirmButton: false, // Opcional, true o false
-          });
-
          throw error;
         }),
         map((resp: any) => {

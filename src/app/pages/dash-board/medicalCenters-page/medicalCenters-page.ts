@@ -1,13 +1,27 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from "@angular/core";
-import {MatPaginator} from "@angular/material/paginator";
-import {Store} from "@ngrx/store";
-import {AppState} from "../../../store/app.state";
-import {MatDialog} from "@angular/material/dialog";
-import {MatTableDataSource} from "@angular/material/table";
-import {MedicalCenter} from "../../../models/medical-center.interface";
-import {addMedicalCenter, loadMedicalCenter, removeMedicalCenter, updateMedicalCenter} from "../../../store/actions/medicalCenter.actions";
-import {MedicalCenterFormComponent} from "../components/medicalCenter-form-component/medicalCenter-form-component";
-import {DebugerService} from "../../../services/debug-service/debug.service";
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
+import { Store, select } from '@ngrx/store';
+import { AppState } from '../../../store/app.state';
+import { MatDialog } from '@angular/material/dialog';
+import { MatTableDataSource } from '@angular/material/table';
+import { MedicalCenter } from '../../../models/medical-center.interface';
+import {
+  addMedicalCenter,
+  loadMedicalCenter,
+  removeMedicalCenter,
+  updateMedicalCenter,
+} from '../../../store/actions/medicalCenter.actions';
+import { MedicalCenterFormComponent } from '../components/medicalCenter-form-component/medicalCenter-form-component';
+import { DebugerService } from '../../../services/debug-service/debug.service';
+import {
+  medicalCenterStatusAndError,
+  selectMedicalCentersState,
+} from 'src/app/store/selectors/medicalCenter.selector';
+import { ActionStatus } from 'src/app/common/enums/action-status.enum';
+import { DialogService } from 'src/app/services/dialog-service/dialog.service';
+import { Utils } from 'src/app/common/utils/app-util';
+import { AuthService } from 'src/app/auth/services/auth.service';
+import { filter, take } from 'rxjs';
 
 @Component({
   selector: 'app-medicalCenter-page',
@@ -19,8 +33,10 @@ export class MedicalCentersPage implements AfterViewInit, OnInit {
 
   constructor(
     private store: Store<AppState>,
-    private dialog: MatDialog
-    ) {}
+    private dialog: MatDialog,
+    private readonly dialogService: DialogService,
+    private readonly aut: AuthService
+  ) {}
 
   displayedColumns: string[] = [
     'name',
@@ -32,7 +48,7 @@ export class MedicalCentersPage implements AfterViewInit, OnInit {
     'actions',
   ];
   dataSource = new MatTableDataSource<MedicalCenter>();
-  idAdmin: number = 1;
+  idAdmin: any = 0;
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -40,29 +56,37 @@ export class MedicalCentersPage implements AfterViewInit, OnInit {
   }
 
   ngOnInit(): void {
-    this.store.dispatch(loadMedicalCenter({id: this.idAdmin}));
+    if (this.idAdmin === 0) {
+      this.aut.checkSignedInUser();
+    }
+    this.loadUser();
   }
 
   ngAfterViewInit(): void {
     this.store.select('medicalCenters').subscribe(({ medicalCenters }) => {
-      console.log(medicalCenters)
+      console.log(medicalCenters);
       this.dataSource.data = medicalCenters;
     });
     this.dataSource.paginator = this.paginator;
   }
 
   //CRUD
-  registerMedicalCenter(id: number,medicalCenter: MedicalCenter) {
-    this.store.dispatch(addMedicalCenter({ id: id,content: medicalCenter }));
+  registerMedicalCenter(id: number, medicalCenter: MedicalCenter) {
+    this.store.dispatch(addMedicalCenter({ id: id, content: medicalCenter }));
   }
 
   editMedicalCenter(id: number, medicalCenter: MedicalCenter) {
-    this.store.dispatch(updateMedicalCenter({ id: id, content: medicalCenter }));
+    this.store.dispatch(
+      updateMedicalCenter({ id: id, content: medicalCenter })
+    );
   }
 
   deleteMedicalCenter(medicalCenter: MedicalCenter) {
     const medicalId = medicalCenter.id!;
+
     this.store.dispatch(removeMedicalCenter({ id: medicalId }));
+
+    this.checkStatusRequest('Eliminado correctamente', 'Error al eliminar');
   }
 
   deactivateMedicalCenter(medicalCenter: MedicalCenter) {
@@ -79,7 +103,7 @@ export class MedicalCentersPage implements AfterViewInit, OnInit {
 
   // Dialog | Modal Control
   openMedicalCenterEditDialog(medicalCenter: MedicalCenter): void {
-    console.log("Entrro");
+    console.log('Entrro');
     const dialogRef = this.dialog.open(MedicalCenterFormComponent, {
       width: '60%',
       data: medicalCenter,
@@ -101,8 +125,49 @@ export class MedicalCentersPage implements AfterViewInit, OnInit {
       DebugerService.log('MEDICAL CENTER REGISTRATION DIALOG CLOSED');
       console.log(result);
       if (result && result.medicalCenter) {
-        this.registerMedicalCenter(this.idAdmin,result.medicalCenter);
+        this.registerMedicalCenter(this.idAdmin, result.medicalCenter);
       }
     });
+  }
+
+  private checkStatusRequest(successMessage: string, errorMessage: string) {
+    this.store.pipe(select(medicalCenterStatusAndError)).subscribe((data) => {
+      DebugerService.log('RequestStatus: ' + data.status);
+      console.log(data.error)
+      if (data.status === ActionStatus.SUCCESS) {
+        this.dialogService.showToast(successMessage);
+      } else if (data.status === ActionStatus.ERROR) {
+        Utils.showNotification({
+          icon: 'error',
+          text: data.error.error.title,
+          showConfirmButton: true,
+        });
+      }
+    });
+  }
+
+  private loadUser() {
+    let userLoaded = false;
+
+    this.store
+      .select('user')
+      .pipe(
+        filter(
+          (activeUser) =>
+            !!activeUser.activeUser && activeUser.activeUser.id !== undefined
+        ),
+        take(1)
+      )
+      .subscribe((activeUser) => {
+        console.log(activeUser);
+        this.idAdmin = activeUser.activeUser.id;
+        console.log(this.idAdmin);
+        userLoaded = true; // Marcar que el usuario se ha cargado correctamente
+      });
+
+    // Luego, verifica si el usuario se ha cargado antes de dispatch
+    if (userLoaded) {
+      this.store.dispatch(loadMedicalCenter({ id: this.idAdmin }));
+    }
   }
 }
