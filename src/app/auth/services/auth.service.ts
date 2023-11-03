@@ -3,17 +3,20 @@ import { Injectable } from '@angular/core';
 import { Config } from 'src/app/config/config';
 import { User } from '../../models/user.interface';
 import { Observable, of, tap } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/store/app.state';
+import { loadActiveUser } from 'src/app/store/actions/activeUser.actions';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private baseUrl = Config.BASE_URL;
-  private user?: User;
-  constructor(private httpClient: HttpClient) {}
 
-  get currentUser(): User | undefined {
-    if (!this.user) return undefined;
-    return structuredClone(this.user);
-  }
+  private baseUrl = Config.BASE_URL;
+
+  constructor(
+    private readonly httpClient: HttpClient,
+    private readonly store: Store<AppState>
+  ) {}
+
 
   async login(loginRequest: any): Promise<any> {
     return new Promise((resolve, reject) => {
@@ -43,8 +46,14 @@ export class AuthService {
   }
 
   logout(): void {
-    this.user = undefined;
     localStorage.clear();
     sessionStorage.clear();
+  }
+
+  checkSignedInUser(): void {
+    const loginInfo = sessionStorage.getItem('login');
+    const userEmail = loginInfo ? JSON.parse(loginInfo).user : '';
+
+    this.store.dispatch(loadActiveUser({ email: userEmail }));
   }
 }

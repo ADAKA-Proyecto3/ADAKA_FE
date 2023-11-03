@@ -3,6 +3,9 @@ import { LoadingService } from 'src/app/services/loading-service/loading.service
 import { AuthService } from '../../services/auth.service';
 import { DebugerService } from 'src/app/services/debug-service/debug.service';
 import { Utils } from 'src/app/common/utils/app-util';
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/store/app.state';
+import { loadActiveUser } from 'src/app/store/actions/activeUser.actions';
 
 type LoginRequest = {
   email: string;
@@ -31,7 +34,6 @@ export class loginPageController {
       const accessToken = result.token;
 
       if (accessToken) {
-        
         const claims = JSON.parse(atob(accessToken.split('.')[1]));
 
         sessionStorage.setItem('token', `Bearer ${accessToken}`);
@@ -43,6 +45,8 @@ export class loginPageController {
             user: claims.username,
           })
         );
+        this.authService.checkSignedInUser();
+        // this.store.dispatch(loadActiveUser({ email: claims.username }));
 
         return true;
       } else {

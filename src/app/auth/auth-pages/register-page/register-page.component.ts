@@ -315,13 +315,6 @@ export class RegisterPage implements OnInit {
         adminRegistration
       );
       
-      // if (registrationResult === 'OK') {
-      //   this.dialogService
-      //     .showToast('Usuario registrado exitosamente')
-      //     .then(() => {
-      //       this.router.navigateByUrl(`${UrlPages.AUTH}/${UrlPages.LOGIN}`);
-      //     });
-      // }
     } 
   }
 

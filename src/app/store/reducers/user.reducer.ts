@@ -9,6 +9,9 @@ import {
   updateUserFailure,
   addSubUserFailure,
   addSubUserSuccess,
+  removeUser,
+  updateUser,
+  addSubUser,
 } from '../actions/user.actions';
 import { User } from 'src/app/models/user.interface';
 import { ActionStatus } from 'src/app/common/enums/action-status.enum';
@@ -28,6 +31,12 @@ export const initialState: UserState = {
 export const userReducer = createReducer(
   initialState,
 
+
+  on(addSubUser, (state) => ({
+    ...state,
+    status: ActionStatus.LOADING,
+  })),
+
   on(addSubUserSuccess, (state, { content }) => ({
     ...state,
     users: [...state.users, content],
@@ -42,8 +51,14 @@ export const userReducer = createReducer(
     };
   }),
 
+  on(updateUser, (state) => ({
+    ...state,
+    status: ActionStatus.LOADING,
+  })),
+
   on(updateUserSucess, (state, { id, content }) => ({
     ...state,
+    status: ActionStatus.SUCCESS,
     users: state.users.map((user) => {
       if (user.id === id) {
         return {
@@ -62,6 +77,11 @@ export const userReducer = createReducer(
       status: ActionStatus.ERROR,
     };
   }),
+
+  on(removeUser, (state)=>({
+    ...state,
+    status: ActionStatus.LOADING,
+  })),
 
   on(removeUserSuccess, (state, { id }) => ({
     ...state,
