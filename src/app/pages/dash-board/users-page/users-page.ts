@@ -3,7 +3,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, SortDirection } from '@angular/material/sort';
 import { User } from 'src/app/models/user.interface';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from 'src/app/store/app.state';
 import {
   addSubUser,
@@ -14,6 +14,14 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { UserFormComponent } from '../components/user-form-component/user-form-component';
 import { DebugerService } from 'src/app/services/debug-service/debug.service';
+import {
+  selectUserStatus,
+  selectUsers,
+} from 'src/app/store/selectors/user.selector';
+import { DialogService } from 'src/app/services/dialog-service/dialog.service';
+import { Utils } from 'src/app/common/utils/app-util';
+import Swal from 'sweetalert2';
+import { ActionStatus } from 'src/app/common/enums/action-status.enum';
 
 @Component({
   selector: 'app-users-page',
@@ -24,11 +32,15 @@ export class UsersPage implements AfterViewInit, OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(
-    private store: Store<AppState>, 
-    private dialog: MatDialog) {}
+    private store: Store<AppState>,
+    private dialog: MatDialog,
+    private readonly dialogService: DialogService
+  ) {}
+
+  result: string = '';
 
   displayedColumns: string[] = [
-    'id',
+    //'id',
     'name',
     'role',
     'phone',
@@ -45,13 +57,12 @@ export class UsersPage implements AfterViewInit, OnInit {
 
   ngOnInit(): void {
     this.store.dispatch(loadUsers());
-    console.log('onInit');
+    //console.log('onInit');
   }
 
   ngAfterViewInit(): void {
     this.store.select('users').subscribe(({ users, status }) => {
       this.dataSource.data = users;
-      console.log('aterview INIT');
     });
 
     this.dataSource.paginator = this.paginator;
@@ -60,15 +71,37 @@ export class UsersPage implements AfterViewInit, OnInit {
   //CRUD
   registerUser(user: User) {
     this.store.dispatch(addSubUser({ content: user }));
+    this.checkStatusRequest('Usuario registrado con éxito', 'Ha sucedido un error, por favor intente de nuevo');
   }
 
   editUser(id: number, user: User) {
     this.store.dispatch(updateUser({ id: id, content: user }));
+    this.checkStatusRequest('Usuario actualizado con éxito', 'Ha sucedido un error, por favor intente de nuevo');
+  }
+
+  getDeleteUserConfirmation(user: User) {
+    Swal.fire({
+      title: `¿Está seguro de eliminar al usuario:  ${user.name}?`,
+      text: 'Esta acción no se puede revertir',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#0096d2',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.deleteUser(user);
+      }
+    });
   }
 
   deleteUser(user: User) {
     const userId = user.id!;
     this.store.dispatch(removeUser({ id: userId }));
+    this.checkStatusRequest('Usuario eliminado con éxito', 'Ha sucedido un error, por favor intente de nuevo');
+
+   
   }
 
   deactivateUserUser(user: User) {
@@ -81,6 +114,7 @@ export class UsersPage implements AfterViewInit, OnInit {
         },
       })
     );
+    this.checkStatusRequest('Usuario desactivado con éxito', 'Ha sucedido un error, por favor intente de nuevo');
   }
 
   // Dialog | Modal Control
@@ -107,6 +141,24 @@ export class UsersPage implements AfterViewInit, OnInit {
       console.log(result);
       if (result && result.user) {
         this.registerUser(result.user);
+      }
+    });
+  }
+
+
+  private checkStatusRequest( successMessage: string, errorMessage: string){
+
+    this.store.pipe(select(selectUserStatus)).subscribe((status) => {
+      DebugerService.log('RequestStatus: ' + status);
+      
+      if (status === ActionStatus.SUCCESS) {
+        this.dialogService.showToast(successMessage);
+      } else if (status === ActionStatus.ERROR) {
+        Utils.showNotification({
+          icon: 'error',
+          text: errorMessage,
+          showConfirmButton: true,
+        });
       }
     });
   }

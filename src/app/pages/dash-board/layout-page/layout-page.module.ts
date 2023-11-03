@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { RouterModule } from '@angular/router';
 import { NgStyle, NgFor } from '@angular/common';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [LayoutPage],
@@ -21,6 +22,7 @@ import { NgStyle, NgFor } from '@angular/common';
     MatSidenavModule,
     MatListModule,
     RouterModule,
+    MatTooltipModule,
     NgStyle,
     NgFor,
   ],

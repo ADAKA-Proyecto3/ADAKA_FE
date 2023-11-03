@@ -1,7 +1,6 @@
 import { ActionReducerMap } from "@ngrx/store";
 import { UserState, userReducer } from "./reducers/user.reducer";
 import { RoomState, roomReducer } from "./reducers/room.reducer";
-import { MedicalCenterState, medicalCenterReducer } from "./reducers/medicalCenter.reducer";
 
 
 export interface AppState {
@@ -9,6 +8,7 @@ export interface AppState {
   users: UserState;
   rooms: RoomState;
   medicalCenters: MedicalCenterState;
+  user: ActiveUserState;
 }
 
 
@@ -17,4 +17,7 @@ export const appReducers: ActionReducerMap<AppState> = {
   users: userReducer,
   rooms: roomReducer,
   medicalCenters: medicalCenterReducer,
+  user: activeUserReducer,
+
 };
+

@@ -5,7 +5,7 @@ import Swal from 'sweetalert2';
 type NotificationType = 'success' | 'error' | 'warning' | 'info' | 'question';
 
 interface NotificationOptions {
-  title: string;
+  title?: string;
   showTitle?: boolean;
   text: string;
   confirmButtonText?: string;
