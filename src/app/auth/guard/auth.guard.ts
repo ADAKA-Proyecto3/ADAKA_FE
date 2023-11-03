@@ -8,7 +8,7 @@ export const authGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
 
   const isAuth = authService.checkAuthentication();
-  DebugerService.log('isAuth: ' +  isAuth);
+  DebugerService.log('isAuth: '+  isAuth);
 
   return isAuth;
 };

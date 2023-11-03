@@ -5,7 +5,7 @@ import Swal from 'sweetalert2';
 type NotificationType = 'success' | 'error' | 'warning' | 'info' | 'question';
 
 interface NotificationOptions {
-  title: string;
+  title?: string;
   showTitle?: boolean;
   text: string;
   confirmButtonText?: string;
@@ -31,7 +31,7 @@ export class Utils {
     Swal.fire({
       icon: icon,
       title: title,
-      text: 'Usuario o contraseña incorrectos',
+      text: text,
       showCancelButton: showCancelButton,
       showConfirmButton: showConfirmButton,
       confirmButtonColor: '#0096d2',

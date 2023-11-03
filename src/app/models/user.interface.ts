@@ -1,3 +1,6 @@
+import { MedicalCenter } from "./medical-center.interface";
+import { Suscription } from "./suscription.interface";
+
 export interface User {
     id?: number;
     name: string;
@@ -6,4 +9,7 @@ export interface User {
     phone: string;
     email: string;
     password?: string | null;
+    medicalCenters?: MedicalCenter[];
+    subscription?: Suscription;
+
 }

@@ -6,6 +6,7 @@ import { DebugerService } from '../debug-service/debug.service';
 import { map } from 'rxjs';
 import { LoadingService } from '../loading-service/loading.service';
 import { Utils } from 'src/app/common/utils/app-util';
+import { DialogService } from '../dialog-service/dialog.service';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +17,8 @@ export class UserHttpService {
 
   constructor(
     private readonly httpClient: HttpClient,
-    private loader: LoadingService
+    private readonly loader: LoadingService,
+    private readonly dialog: DialogService
   ) {}
 
   registerAdmin(suscription: any): Promise<any> {
@@ -75,11 +77,21 @@ export class UserHttpService {
 
   editUser(id: number, user: User) {
     return this.httpClient
-      .put(`${this.url}/${id}`, user, Utils.getHttpHeaders())
+      .put(`${this.url}/${id}/update`, user, Utils.getHttpHeaders())
       .pipe(
         map((resp) => {
           this.loader.dismiss();
           console.log('resp', resp);
+          return resp as User;
+        })
+      );
+  }
+
+  getActiveUser(email: string): any {
+    return this.httpClient
+      .get(`${this.url}/email/${email}`, Utils.getHttpHeaders())
+      .pipe(
+        map((resp) => {
           return resp as User;
         })
       );

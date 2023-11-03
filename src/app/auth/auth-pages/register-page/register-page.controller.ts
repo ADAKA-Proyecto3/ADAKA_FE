@@ -6,6 +6,8 @@ import { AuthService } from '../../services/auth.service';
 import { DialogService } from 'src/app/services/dialog-service/dialog.service';
 import { PageRouterService } from 'src/app/services/page-router-service/page-router.service';
 import { UrlPages } from 'src/app/common/enums/url-pages.enum';
+import { Utils } from 'src/app/common/utils/app-util';
+
 
 @Injectable()
 export class RegisterPageController {
@@ -31,6 +33,11 @@ export class RegisterPageController {
         }, 3000);
       }
     } catch (error) {
+      Utils.showNotification({
+        icon: 'error',
+        title: 'Error',
+        text: 'Ha ocurrido un error al registrar la suscripción',
+      });
       console.error(error);
     } finally {
       this.loadingService.dismiss();
