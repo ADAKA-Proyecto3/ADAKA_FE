@@ -8,7 +8,6 @@ import { addRoom, loadRooms, removeRoom, updateRoom } from 'src/app/store/action
 import { AppState } from 'src/app/store/app.state';
 import { RoomFormComponent } from '../components/room-form-component/room-form-component';
 import { DebugerService } from 'src/app/services/debug-service/debug.service';
-import { MedicalCenter } from 'src/app/models/medical-center.interface';
 import { User } from 'src/app/models/user.interface';
 import Swal from 'sweetalert2';
 import { roomStatusAndError } from 'src/app/store/selectors/room.selector';
