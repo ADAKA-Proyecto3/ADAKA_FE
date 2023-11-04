@@ -18,7 +18,6 @@ import { of, from } from 'rxjs';
 import { switchMap, map, catchError, mergeMap } from 'rxjs/operators';
 import { UserHttpService } from 'src/app/services/http-service/user-http.service';
 
-
 @Injectable()
 export class UserEffects {
   constructor(
