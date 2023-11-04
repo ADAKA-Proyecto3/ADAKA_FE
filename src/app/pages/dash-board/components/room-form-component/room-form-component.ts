@@ -1,10 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Store } from '@ngrx/store';
 import { MedicalCenter } from 'src/app/models/medical-center.interface';
 import { Room } from 'src/app/models/rooms.interface';
-import { User } from 'src/app/models/user.interface';
 import { DebugerService } from 'src/app/services/debug-service/debug.service';
+import { AppState } from 'src/app/store/app.state';
 
 interface SelectOption {
   value: string;
@@ -18,7 +19,6 @@ interface SelectOption {
 })
 export class RoomFormComponent implements OnInit {
   public registerForm: FormGroup = {} as FormGroup;
-
   medicalCenterList: MedicalCenter[] = [
     {
       id: 1,
@@ -54,33 +54,32 @@ export class RoomFormComponent implements OnInit {
   }
   ];
 
-  selectedValue: string = '';
-
-  roles: SelectOption[] = [
-    { value: 'ADMIN', viewValue: 'Admin' },
-    { value: 'NURSE', viewValue: 'Enfermero' },
-  ];
-
-  medicalCenter: SelectOption[] = [
-    { value: 'Medical Center', viewValue: 'Activo' },
-    { value: 'INACTIVE', viewValue: 'Inactivo' },
-  ];
-
   editing = false;
+  dataSource: any;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public room: Room | undefined,
-    private matDialogRef: MatDialogRef<RoomFormComponent>
+    private matDialogRef: MatDialogRef<RoomFormComponent>,
+    private readonly store: Store<AppState>
   ) {
     matDialogRef.disableClose = true;
   }
 
   ngOnInit(): void {
-    this.initilizeProperties();
+    this.initializeProperties();
+    
   }
+  ngAfterViewInit(): void {
 
-
-  initilizeProperties() {
+    this.store.select((state) => state.)
+    .subscribe((medicalCenters) => {
+   // hace algo aqui
+      }); => {
+      console.log(medicalCenters);
+      this.medicalCenterList = medicalCenters;});
+  }
+  
+  initializeProperties() {
     this.registerForm = new FormGroup({
       name: new FormControl('', [
         Validators.required,
@@ -89,7 +88,7 @@ export class RoomFormComponent implements OnInit {
       length: new FormControl('', [Validators.required]),
       width: new FormControl('', [Validators.required]),
       height: new FormControl('', [Validators.required]),
-      status: new FormControl('', [Validators.required]),
+      medicalCenter: new FormControl('', [Validators.required]),
     });
 
     if (this.room) {
@@ -103,24 +102,21 @@ export class RoomFormComponent implements OnInit {
         medicalCenter: this.room.medicalCenter || '',
       });
     }
-
-
   }
- 
 
   onSubmit() {
     if (this.registerForm.invalid) {
       return;
     }
-  
+
     const room: Room = {
       name: this.registerForm.value.name,
       length: this.registerForm.value.length,
       width: this.registerForm.value.width,
       height: this.registerForm.value.height,
       medicalCenter: this.registerForm.value.medicalCenter,
-    }
-  
+    };
+
     if (this.editing) {
       this.matDialogRef.close({ id: this.room?.id, room: room });
     } else {
@@ -133,8 +129,7 @@ export class RoomFormComponent implements OnInit {
     this.matDialogRef.close();
   }
 
-
-  public error = (controlName: string, errorName: string) => {
-    return this.registerForm.controls[controlName].hasError(errorName);
-  };
+  error(controlName: string, errorName: string) {
+    return this.registerForm.get(controlName)?.hasError(errorName);
+  }
 }

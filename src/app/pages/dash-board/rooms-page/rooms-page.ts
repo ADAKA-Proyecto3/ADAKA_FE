@@ -48,9 +48,7 @@ export class RoomsPage implements AfterViewInit, OnInit{
     }
     this.store.dispatch(loadMedicalCenters({id: user.id}))*/
     this.store.dispatch(loadRooms({id: this.id_centro_medico}));
-    /*this.store.select('medicalCenters').subscribe(({medicalCenters, status})){
-      this.medicalCenters =  medicalCenters;
-    }*/
+
   }
 
   /*public async getMedicalCenter() {
@@ -73,7 +71,7 @@ export class RoomsPage implements AfterViewInit, OnInit{
   }*/
 
   ngAfterViewInit(): void {
-    this.store.select('rooms').subscribe(({ rooms, status }) => {
+    this.store.select('rooms').subscribe(({ rooms }) => {
     this.dataSource.data = rooms;
       
     });
@@ -87,7 +85,7 @@ export class RoomsPage implements AfterViewInit, OnInit{
   }
 
   editRoom(id: number, room: Room) {
-    //this.store.dispatch(updateRoom({ id: id, content: room }));
+    this.store.dispatch(updateRoom({ id: id, content: room }));
   }
 
   deleteRoom(room: Room) {

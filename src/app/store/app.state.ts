@@ -6,6 +6,7 @@ import { ActiveUserState, activeUserReducer } from "./reducers/activeUser.reduce
 
 
 export interface AppState {
+  [x: string]: any;
 //Import all your reducers here
   users: UserState;
   rooms: RoomState;

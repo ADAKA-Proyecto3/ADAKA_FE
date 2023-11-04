@@ -5,6 +5,7 @@ import { map } from 'rxjs';
 import { LoadingService } from '../loading-service/loading.service';
 import { Room } from 'src/app/models/rooms.interface';
 import { Response } from 'src/app/models/response.interface';
+import { Utils } from 'src/app/common/utils/app-util';
 
 @Injectable({
   providedIn: 'root',
@@ -22,7 +23,7 @@ export class RoomHttpService {
 
   getRooms(id: number) {
     this.loader.showLoadingModal();
-    return this.httpClient.get<Response<Room>>(`${this.url}/all/${id}`)
+    return this.httpClient.get<Response<Room>>(`${this.url}/all/${id}`,Utils.getHttpHeaders())
     .pipe(
       map(resp => {
         console.log("resp", resp);
@@ -34,17 +35,17 @@ export class RoomHttpService {
   
 
   deleteRoom( id: number){
-    return this.httpClient.delete(`${this.url}/delete/${id}`)
+    return this.httpClient.delete(`${this.url}/delete/${id}`,Utils.getHttpHeaders())
   }
 
   resgiterRoom(id: number, room: Room) {
-    return this.httpClient.post(`${this.url}/${id}`, room);
+    return this.httpClient.post(`${this.url}/${id}`,room,Utils.getHttpHeaders());
   }
 
 
   editRoom(id: number, room: Room) {
     this.loader.showLoadingModal();
-    return this.httpClient.put(`${this.url}/${id}`, room)
+    return this.httpClient.put(`${this.url}/${id}`,room,Utils.getHttpHeaders())
     .pipe(
       map(resp => {
         this.loader.dismiss();
