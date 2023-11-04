@@ -12,12 +12,9 @@ import { appReducers } from './store/app.state';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsArray } from './store/effects';
 import { MatSelectModule } from '@angular/material/select';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core'; // Importa MatDateAdapter
-
-
-
-
 
 
 @NgModule({
@@ -33,8 +30,10 @@ import { MatNativeDateModule } from '@angular/material/core'; // Importa MatDate
     StoreModule.forRoot( appReducers ),
     EffectsModule.forRoot( EffectsArray ),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
+    SweetAlert2Module.forRoot(),
     MatNativeDateModule,
     MatDatepickerModule
+    
   ],
   providers: [],
   bootstrap: [AppComponent]

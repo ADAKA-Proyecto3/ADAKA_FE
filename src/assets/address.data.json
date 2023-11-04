@@ -1,0 +1,233 @@
+{
+    "provincias": [
+        {
+            "nombre": "San Jose",
+            "cantones": [
+                {
+                    "nombre": "San Jose",
+                    "distritos": [
+                        "Carmen",
+                        "Merced",
+                        "Hospital",
+                        "Catedral",
+                        "Zapote",
+                        "San Francisco de Dos Rios",
+                        "Uruca",
+                        "Mata Redonda",
+                        "Pavas",
+                        "Hatillo",
+                        "San Sebastian"
+                    ]
+                },
+                {
+                    "nombre": "Escazu",
+                    "distritos": [
+                        "Escazu",
+                        "San Antonio",
+                        "San Rafael"
+                    ]
+                },
+                {
+                    "nombre": "Desamparados",
+                    "distritos": [
+                        "Desamparados",
+                        "San Miguel",
+                        "San Juan de Dios",
+                        "San Rafael Arriba",
+                        "San Antonio",
+                        "Frailes",
+                        "Patarrá",
+                        "San Cristobal",
+                        "Rosario",
+                        "Damas",
+                        "San Rafael Abajo",
+                        "Gravilias",
+                        "Los Guido"
+                    ]
+                },
+                {
+                    "nombre": "Puriscal",
+                    "distritos": [
+                        "Santiago",
+                        "Mercedes Sur",
+                        "Barbacoas",
+                        "Grifo Alto",
+                        "San Rafael",
+                        "Candelaria",
+                        "Desamparaditos",
+                        "San Antonio",
+                        "Chires"
+                    ]
+                },
+                {
+                    "nombre": "Tarrazu",
+                    "distritos": [
+                        "San Marcos",
+                        "San Lorenzo",
+                        "San Carlos"
+                    ]
+                },
+                {
+                    "nombre": "Aserri",
+                    "distritos": [
+                        "Tarbaca",
+                        "Aserri",
+                        "Vuelta de Jorco",
+                        "San Gabriel",
+                        "La Legua",
+                        "Monterrey",
+                        "Salitrillos"
+                    ]
+                },
+                {
+                    "nombre": "Mora",
+                    "distritos": [
+                        "Colón",
+                        "Guayabo",
+                        "Tabarcia",
+                        "Piedras Negras",
+                        "Picagres",
+                        "Jaris",
+                        "Quitirrisi"
+                    ]
+                },
+                {
+                    "nombre": "Goicoechea",
+                    "distritos": [
+                        "Guadalupe",
+                        "San Francisco",
+                        "Calle Blancos",
+                        "Mata de Platano",
+                        "Ipis",
+                        "Rancho Redondo",
+                        "Purral"
+                    ]
+                },
+                {
+                    "nombre": "Santa Ana",
+                    "distritos": [
+                        "Santa Ana",
+                        "Salitral",
+                        "Pozos",
+                        "Uruca",
+                        "Piedades",
+                        "Brasil"
+                    ]
+                },
+                {
+                    "nombre": "Alajuelita",
+                    "distritos": [
+                        "Alajuelita",
+                        "San Josecito",
+                        "San Antonio",
+                        "Concepcion",
+                        "San Felipe"
+                    ]
+                },
+                {
+                    "nombre": "Coronado",
+                    "distritos": [
+                        "San Isidro",
+                        "San Rafael",
+                        "Dulce Nombre de Jesus",
+                        "Patalillo",
+                        "Cascajal"
+                    ]
+                },
+                {
+                    "nombre": "Acosta",
+                    "distritos": [
+                        "San Ignacio",
+                        "Guaitil",
+                        "Palmichal",
+                        "Cangrejal",
+                        "Sabanillas"
+                    ]
+                },
+                {
+                    "nombre": "Tibas",
+                    "distritos": [
+                        "San Juan",
+                        "Cinco Esquinas",
+                        "Anselmo Llorente",
+                        "Leon XIII",
+                        "Colima"
+                    ]
+                },
+                {
+                    "nombre": "Moravia",
+                    "distritos": [
+                        "San Vicente",
+                        "San Jeronimo",
+                        "La Trinidad"
+                    ]
+                },
+                {
+                    "nombre": "Montes de Oca",
+                    "distritos": [
+                        "San Pedro",
+                        "Sabanilla",
+                        "Mercedes",
+                        "San Rafael"
+                    ]
+                },
+                {
+                    "nombre": "Turrubares",
+                    "distritos": [
+                        "San Pablo",
+                        "San Pedro",
+                        "San Juan de Mata",
+                        "San Luis",
+                        "Carara"
+                    ]
+                },
+                {
+                    "nombre": "Dota",
+                    "distritos": [
+                        "Santa Maria",
+                        "Jardin",
+                        "Copey"
+                    ]
+                },
+                {
+                    "nombre": "Curridabat",
+                    "distritos": [
+                        "Curridabat",
+                        "Granadilla",
+                        "Sanchez",
+                        "Tirrases"
+                    ]
+                },
+                {
+                    "nombre": "Perez Zeledon",
+                    "distritos": [
+                        "San Isidro de El General",
+                        "General",
+                        "Daniel Flores",
+                        "Rivas",
+                        "San Pedro",
+                        "Platanares",
+                        "Pejibaye",
+                        "Cajon",
+                        "Baru",
+                        "Rio Nuevo",
+                        "Paramo"
+                    ]
+                },
+                {
+                    "nombre": "Leon Cortes",
+                    "distritos": [
+                        "San Pablo",
+                        "San Andres",
+                        "Llano Bonito",
+                        "San Isidro",
+                        "Santa Cruz",
+                        "San Antonio"
+                    ]
+                }
+            ]
+        }
+
+     
+    ]
+}

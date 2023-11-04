@@ -1,7 +1,5 @@
 <div class="back-ground">
 
-
-
     <div class="d-flex justify-content-between">
 
         <div class="top-decoration sky-blue-darker-bg"></div>
@@ -12,85 +10,271 @@
     </div>
 
     <div class="container w-75 pb-5">
-        <a (click)="returnToLogin()" class="mb-5 sky-blue-darker-text titulo-3 btn_back"><i class="fa-solid fa-arrow-left"></i> Regresar a iniciar sesión</a>
-      </div>
+        <a (click)="returnToLogin()" class="mb-5 sky-blue-darker-text titulo-3 btn_back">
+            <i class="fa-solid fa-arrow-left"></i>
+            Regresar a iniciar sesión
+        </a>
+    </div>
 
     <div class="container text-center d-flex  justify-content-center">
-
-       
-
-
-
         <div class="form-container white-bg pb-5" [class.mat-elevation-z8]="true">
 
-            <form class="login-form" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+            <mat-stepper [linear]="isLinear" #stepper>
+                <mat-step [stepControl]="adminDataForm">
 
-                <mat-form-field appearance="outline" class="field-full-width pt-5">
-                    <mat-label>Nombre</mat-label>
-                    <input type="text" matInput formControlName="name" placeholder="Ingrese su nombre">
-                    <mat-error *ngIf="error('name','required')">
-                        Nombre es <strong>requerido</strong>
-                    </mat-error>
-                    <mat-error *ngIf="error('name','maxLength')">
-                        Nombre debe tener <strong>máximo 30 caracteres</strong>
-                    </mat-error>
-                </mat-form-field>
+                    <!-- First Form -->
+                    <form [formGroup]="adminDataForm">
+                        <ng-template matStepLabel>Ingrese sus datos</ng-template>
 
+                        <mat-form-field appearance="outline" class="field-full-width pt-5">
 
-                <mat-form-field appearance="outline" class="field-full-width">
-                    <mat-label>Número de teléfono</mat-label>
-                    <input type="text" matInput formControlName="phone">
-                    <mat-error *ngIf="error('phone','required')">
-                        Número de teléfono es <strong>requerido</strong>
-                    </mat-error>
-                </mat-form-field>
+                            <mat-label>Nombre</mat-label>
+                            <input type="text" matInput formControlName="name" placeholder="Ingrese su nombre">
 
+                            <mat-error *ngIf="name?.errors?.['required']">
+                                Nombre es <strong>requerido</strong>
+                            </mat-error>
+                            <mat-error *ngIf="name?.errors?.['maxlength']">
+                                Nombre debe tener <strong>máximo 30 caracteres</strong>
+                            </mat-error>
 
-                <mat-form-field appearance="outline" class="field-full-width">
+                        </mat-form-field>
 
-                    <mat-label>Correo electrónico</mat-label>
-                    <input type="email" matInput formControlName="email" placeholder="jon@email.com">
-                    <mat-error *ngIf="error('email','required')">
-                        Correo electrónico es <strong>requerido</strong>
-                    </mat-error>
-                    <mat-error *ngIf="error('email','email')">
-                        Correo electrónico <strong>inválido</strong>
-                    </mat-error>
+                        <mat-form-field appearance="outline" class="field-full-width">
+                            <mat-label>Número de teléfono</mat-label>
+                            <input type="text" matInput formControlName="phone">
+                            <mat-error *ngIf="phone?.errors?.['required']">
+                                Número de teléfono es <strong>requerido</strong>
+                            </mat-error>
 
-                </mat-form-field>
+                        </mat-form-field>
 
-                <mat-form-field appearance="outline" class="field-full-width pt-3">
-                    <mat-label>Contraseña</mat-label>
-                    <input type="password" matInput formControlName="password" placeholder="*********">
-                    <mat-error *ngIf="error('password','required')">
-                        La contraseña es <strong>requerida</strong>
-                    </mat-error>
-                </mat-form-field>
+                        <mat-form-field appearance="outline" class="field-full-width">
+                            <mat-label>Correo electrónico</mat-label>
+                            <input type="email" matInput formControlName="email" placeholder="jon@email.com">
+                            <mat-error *ngIf="email?.errors?.['required']">
+                                Correo electrónico es <strong>requerido</strong>
+                            </mat-error>
+                            <mat-error *ngIf="email?.errors?.['email']">
+                                Correo electrónico <strong>inválido</strong>
+                            </mat-error>
+                        </mat-form-field>
 
 
-                <button mat-raised-button class="btn_login mt-3 sky-blue-darker-bg white-text">
-                    <mat-icon iconPositionEnd>chevron_right</mat-icon>
-                    CONTINUAR SUSCRIPCIÓN
+                        <mat-form-field appearance="outline" class="field-full-width pt-3">
+                            <mat-label>Contraseña</mat-label>
+                            <input [type]="hide ? 'password' : 'text'" matInput formControlName="password"
+                                PasswordValidator>
+                            <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+                                [attr.aria-pressed]="hide">
+                                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                            </button>
+                            <mat-error *ngIf="adminDataForm.get('password')?.hasError('passwordInvalid') ">
+                                La contraseña debe contener al menos 8 caracteres, un número, un carácter especial y una
+                                letra mayúscula.
+                            </mat-error>
+                        </mat-form-field>
 
-                </button>
+                        <div>
+                            <button mat-raised-button matStepperNext
+                                class="sky-blue-darker-bg white-text mt-5"> <mat-icon iconPositionEnd>chevron_right</mat-icon>SIGUIENTE</button>
+                        </div>
+                    </form>
+                </mat-step>
 
-                <div class="d-flex justify-content-center">
-                    <div #paypal class="pay-pal-btn d-flex justify-content-center"></div>
-                </div>
 
-            </form>
+                <mat-step [stepControl]="addressForm" label="Dirección de envío de dispositivos">
+
+                    <!-- Second Form -->
+                    <form [formGroup]="addressForm">
+
+                        <mat-form-field appearance="outline" class="field-full-width pt-3">
+                            <mat-label>Provincia</mat-label>
+                            <mat-select formControlName="provincia" (selectionChange)="getCantones()">
+                                <mat-option value="" disabled selected>Seleccione una provincia</mat-option>
+                                <mat-option *ngFor="let provincia of provincias" [value]="provincia.value">
+                                    {{provincia.viewValue}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="provincia?.errors?.['required']">
+                                Provincia es <strong>requerida</strong>
+                            </mat-error>
+
+                        </mat-form-field>
+
+
+                        <mat-form-field appearance="outline" class="field-full-width pt-3">
+                            <mat-label>Cantón</mat-label>
+                            <mat-select formControlName="canton" (selectionChange)="getDistritos()">
+                                <mat-option value="" disabled selected>Seleccione un cantón</mat-option>
+                                <mat-option *ngFor="let canton of cantonOptions" [value]="canton.value">
+                                    {{canton.viewValue}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="canton?.errors?.['required']">
+                                Cantón es <strong>requerido</strong>
+                            </mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="field-full-width pt-3">
+                            <mat-label>Distrito</mat-label>
+                            <mat-select formControlName="distrito">
+                                <mat-option value="" disabled selected>Seleccione un distrito</mat-option>
+                                <mat-option *ngFor="let distrito of distritoOptions" [value]="distrito.value">
+                                    {{distrito.viewValue}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="distrito?.errors?.['required']">
+                                Distrito es <strong>requerido</strong>
+                            </mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="field-full-width pt-3">
+                            <mat-label>Dirección por señas</mat-label>
+                            <textarea matInput formControlName="address" cdkTextareaAutosize cdkAutosizeMinRows="3"
+                                cdkAutosizeMaxRows="7">
+                            </textarea>
+                            <mat-error *ngIf="address?.errors?.['required']">
+                                Dirección por señas es <strong>requerida</strong>
+                            </mat-error>
+                        </mat-form-field>
+
+                        <div class="d-flex justify-content-evenly pt-4">
+                            <button mat-raised-button matStepperPrevious color="warn"> <mat-icon >chevron_left</mat-icon>ANTERIOR</button>
+                            <button mat-raised-button matStepperNext
+                                class="sky-blue-darker-bg white-text"><mat-icon iconPositionEnd>chevron_right</mat-icon> SIGUIENTE</button>
+                        </div>
+
+                    </form>
+                </mat-step>
+
+                <mat-step [stepControl]="planSelectionForm" label="Selecione un plan">
+
+                    <!-- Third form -->
+                    <form [formGroup]="planSelectionForm">
+                        <mat-form-field appearance="outline" class="field-full-width pt-3">
+                            <mat-label>Plan</mat-label>
+                            <mat-select formControlName="plan" (selectionChange)="togglePlanSelection()">
+                                <mat-option *ngFor="let plan of plans" [value]="plan.value">
+                                    {{plan.viewValue}}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="plan?.errors?.['required']">
+                                Plan es <strong>requerido</strong>
+                            </mat-error>
+
+                        </mat-form-field>
+
+                        <div class="d-flex justify-content-center mt-4">
+
+                            <mat-card class="example-card w-50" *ngIf="planSelected === 'BASIC' ">
+                                <div class="top-decoration-basic"></div>
+                                <mat-card-header class="card-head">
+
+                                    <mat-card-title class="price-title">Basic</mat-card-title>
+                                    <mat-card-title class="price pt-4"><span>$</span> {{ (isChecked ? basicPlan :
+                                        basicPlan/months)| number:'1.0-0' }} <span class="price-frecuency">/por
+                                            año</span></mat-card-title>
+                                    <mat-card-subtitle class="card-sub pt-4">
+                                        Ideal para organizaciones medianas y emprendimientos en crecimiento.
+                                    </mat-card-subtitle>
+                                </mat-card-header>
+
+                                <mat-card-content class="pt-2 card-content-container">
+                                    <p class="card-content"> Incluye lo siguiente: </p>
+                                    <mat-list>
+                                        <mat-list-item><mat-icon matListItemIcon>check</mat-icon> 1 centro
+                                            médico</mat-list-item>
+                                        <mat-list-item><mat-icon matListItemIcon>check</mat-icon> 45
+                                            usuarios</mat-list-item>
+                                        <mat-list-item><mat-icon matListItemIcon>check</mat-icon> 6
+                                            salas</mat-list-item>
+                                        <mat-list-item><mat-icon matListItemIcon>check</mat-icon> 6 dispositivos
+                                            ZhenAir</mat-list-item>
+                                    </mat-list>
+                                </mat-card-content>
+
+                            </mat-card>
+
+                            <mat-card class="example-card w-50" *ngIf="planSelected === 'PRO' ">
+                                <div class="top-decoration-pro"></div>
+
+                                <mat-card-header class="card-head">
+
+                                    <mat-card-title class="price-title">Pro</mat-card-title>
+                                    <mat-card-title class="price pt-4"><span>$</span> {{ (isChecked ? proPlan :
+                                        proPlan/months)| number:'1.0-0' }} <span class="price-frecuency">/por
+                                            año</span></mat-card-title>
+                                    <mat-card-subtitle class="card-sub pt-4">
+                                        Dirigido a empresas en crecimiento que buscan funcionalidades avanzadas.
+                                    </mat-card-subtitle>
+                                </mat-card-header>
+
+                                <mat-card-content class="pt-2 card-content-container">
+                                    <p class="card-content "> Incluye lo siguiente: </p>
+                                    <mat-list>
+                                        <mat-list-item><mat-icon matListItemIcon>check</mat-icon> 5 centros
+                                            médicos</mat-list-item>
+                                        <mat-list-item><mat-icon matListItemIcon>check</mat-icon> 150
+                                            usuarios</mat-list-item>
+                                        <mat-list-item><mat-icon matListItemIcon>check</mat-icon> 10
+                                            salas</mat-list-item>
+                                        <mat-list-item><mat-icon matListItemIcon>check</mat-icon> 10 dispositivos
+                                            ZhenAir</mat-list-item>
+                                    </mat-list>
+                                </mat-card-content>
+
+                            </mat-card>
+
+                            <mat-card class="example-card w-50 " *ngIf="planSelected === 'ENTERPRISE'">
+                                <div class="top-decoration-enterprice"></div>
+                                <mat-card-header class="card-head">
+
+                                    <mat-card-title class="price-title">Enterprise</mat-card-title>
+                                    <mat-card-title class="price pt-4"><span>$</span> {{ (isChecked ? enterpricePlan :
+                                        enterpricePlan/months)| number:'1.0-0' }} <span class="price-frecuency">/por
+                                            año</span></mat-card-title>
+                                    <mat-card-subtitle class="card-sub pt-4">
+                                        Diseñado para grandes corporaciones y empresas globales.
+                                    </mat-card-subtitle>
+                                </mat-card-header>
+
+
+                                <mat-card-content class="pt-2 card-content-container">
+                                    <p class="card-content "> Incluye lo siguiente: </p>
+                                    <mat-list>
+                                        <mat-list-item><mat-icon matListItemIcon>check</mat-icon> 10 centros
+                                            médicos</mat-list-item>
+                                        <mat-list-item><mat-icon matListItemIcon>check</mat-icon> 400
+                                            usuarios</mat-list-item>
+                                        <mat-list-item><mat-icon matListItemIcon>check</mat-icon> 20
+                                            salas</mat-list-item>
+                                        <mat-list-item><mat-icon matListItemIcon>check</mat-icon> 20 dispositivos
+                                            ZhenAir</mat-list-item>
+                                    </mat-list>
+                                </mat-card-content>
+
+                            </mat-card>
+
+                        </div>
+
+                        <div class="d-flex justify-content-evenly pt-4">
+                            <div #paypal class="pay-pal-btn d-flex justify-content-center"></div>
+                     <!-- <button mat-raised-button matStepperNext class="sky-blue-darker-bg white-text" (click)="openDialog()">CONTINUAR CON PAGO</button> -->
+                        </div>
+                        <div class="d-flex justify-content-evenly pt-4">
+                            <button mat-raised-button matStepperPrevious color="warn"><mat-icon>chevron_left</mat-icon> ANTERIOR</button>
+                            <button type="button" mat-raised-button  class="bg-white-gray" (click)="returnToLogin()" ><mat-icon>close</mat-icon> CANCELAR</button>
+                        </div>
+                    </form>
+                </mat-step>
+
+            </mat-stepper>
+
+            <div class="d-flex justify-content-center">
+                <div #paypal class="pay-pal-btn d-flex justify-content-center"></div>
+            </div>         
         </div>
     </div>
-
-    <!-- <div *ngIf="!paidFor">
-        <h1>Buy this Couch - ${{ product.price }} OBO</h1>
-    </div>
-
-    <div *ngIf=paidFor>
-        <h1>Yay, you bought a sweet couch!</h1>
-    </div> -->
-
-
-
 
 </div>
