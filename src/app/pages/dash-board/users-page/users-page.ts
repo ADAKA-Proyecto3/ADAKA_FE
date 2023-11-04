@@ -38,6 +38,7 @@ export class UsersPage implements AfterViewInit, OnInit {
   ) {}
 
   result: string = '';
+  activeUser: any;
 
   displayedColumns: string[] = [
     //'id',
@@ -56,8 +57,13 @@ export class UsersPage implements AfterViewInit, OnInit {
   }
 
   ngOnInit(): void {
-    this.store.dispatch(loadUsers());
-    //console.log('onInit');
+    this.store
+    .select((state) => state.user.activeUser.id)
+    .subscribe((id) => {
+      this.activeUser = id;   
+      this.store.dispatch(loadUsers({ id: this.activeUser }));    
+    });
+ 
   }
 
   ngAfterViewInit(): void {
@@ -69,12 +75,13 @@ export class UsersPage implements AfterViewInit, OnInit {
   }
 
   //CRUD
-  registerUser(user: User) {
-    this.store.dispatch(addSubUser({ content: user }));
+  registerUser(user: User, parentId: number, medicalCenterId: number) {
+    this.store.dispatch(addSubUser({ content: user, parentId: parentId, medicalCenterId:medicalCenterId  })); // content: user }));
     this.checkStatusRequest('Usuario registrado con éxito', 'Ha sucedido un error, por favor intente de nuevo');
   }
 
   editUser(id: number, user: User) {
+    console.log('editUser: ' + JSON.stringify(user))
     this.store.dispatch(updateUser({ id: id, content: user }));
     this.checkStatusRequest('Usuario actualizado con éxito', 'Ha sucedido un error, por favor intente de nuevo');
   }
@@ -119,6 +126,7 @@ export class UsersPage implements AfterViewInit, OnInit {
 
   // Dialog | Modal Control
   openUserEditDialog(user: User): void {
+    console.log( user );
     const dialogRef = this.dialog.open(UserFormComponent, {
       width: '60%',
       data: user,
@@ -140,7 +148,10 @@ export class UsersPage implements AfterViewInit, OnInit {
       DebugerService.log('USER REGISTRATION DIALOG CLOSED');
       console.log(result);
       if (result && result.user) {
-        this.registerUser(result.user);
+        console.log('user: ' + JSON.stringify( result.user))
+        console.log('parentId: ' + result.parentId)
+        console.log('parentId: ' + result.medicalCenterId)
+        this.registerUser(result.user, result.parentId, result.medicalCenterId);
       }
     });
   }

@@ -59,8 +59,8 @@ export class UserHttpService {
     });
   }
 
-  getUsers() {
-    return this.httpClient.get(`${this.url}/all`, Utils.getHttpHeaders()).pipe(
+  getUsers(id: number) {
+    return this.httpClient.get(`${this.url}/all/${id}`, Utils.getHttpHeaders()).pipe(
       map((resp) => {
         return resp as User[];
       })
@@ -71,8 +71,8 @@ export class UserHttpService {
     return this.httpClient.delete(`${this.url}/${id}`, Utils.getHttpHeaders());
   }
 
-  resgiterSubUser(user: User) {
-    return this.httpClient.post(`${this.url}/`, user, Utils.getHttpHeaders());
+  resgiterSubUser(user: User, parentId:number, medicalCenterId:number) {
+    return this.httpClient.post(`${this.url}/${parentId}/${medicalCenterId}`, user, Utils.getHttpHeaders());
   }
 
   editUser(id: number, user: User) {

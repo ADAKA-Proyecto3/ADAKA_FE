@@ -52,6 +52,18 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="pt-3">
+            <mat-label>Centro Médico</mat-label>
+            <mat-select formControlName="medicalCenter">
+                <mat-option *ngFor="let mc of medicalCenterOptions" [value]="mc.value">
+                    {{mc.viewValue}}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="error('status','required')">
+                Centro médico es <strong>requerido</strong>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="pt-3">
             <mat-label>Estado</mat-label>
             <mat-select formControlName="status">
                 <mat-option *ngFor="let state of status" [value]="state.value">
