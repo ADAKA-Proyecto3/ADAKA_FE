@@ -2,7 +2,7 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { Room } from 'src/app/models/rooms.interface';
 import { addRoom, loadRooms, removeRoom, updateRoom } from 'src/app/store/actions/room.actions';
 import { AppState } from 'src/app/store/app.state';
@@ -10,6 +10,11 @@ import { RoomFormComponent } from '../components/room-form-component/room-form-c
 import { DebugerService } from 'src/app/services/debug-service/debug.service';
 import { MedicalCenter } from 'src/app/models/medical-center.interface';
 import { User } from 'src/app/models/user.interface';
+import Swal from 'sweetalert2';
+import { roomStatusAndError } from 'src/app/store/selectors/room.selector';
+import { ActionStatus } from 'src/app/common/enums/action-status.enum';
+import { Utils } from 'src/app/common/utils/app-util';
+import { DialogService } from 'src/app/services/dialog-service/dialog.service';
 
 @Component({
   templateUrl: './rooms-page.html',
@@ -20,8 +25,10 @@ export class RoomsPage implements AfterViewInit, OnInit{
 
   constructor(
     private store: Store<AppState>, 
-    private dialog: MatDialog) {}
-
+    private dialog: MatDialog,
+    private readonly dialogService: DialogService
+    ) {}
+   
   displayedColumns: string[] = [
     'name',
     'length',
@@ -41,34 +48,9 @@ export class RoomsPage implements AfterViewInit, OnInit{
   id_centro_medico: number = 1;
 
   ngOnInit(): void {
-    /*this.store.select('activeUser').subscribe(({ user, status }) => {
-      this.user = user;
-        
-      });
-    }
-    this.store.dispatch(loadMedicalCenters({id: user.id}))*/
     this.store.dispatch(loadRooms({id: this.id_centro_medico}));
 
   }
-
-  /*public async getMedicalCenter() {
-    const medicalCenterId = this.addressForm.value.provincia;
-
-    if (!provinciaId) {
-      return;
-    }
-
-    const cantones = await this.HttpService.getCanton(provinciaId);
-    if (cantones) {
-      this.cantonOptions = Object.keys(cantones).map((key) => {
-        return {
-          value: key,
-          viewValue: cantones[key],
-        };
-      });
-    }
-    this.addressForm.controls.canton.setValue('');
-  }*/
 
   ngAfterViewInit(): void {
     this.store.select('rooms').subscribe(({ rooms }) => {
@@ -93,6 +75,7 @@ export class RoomsPage implements AfterViewInit, OnInit{
 
     const roomId = room.id!;
     this.store.dispatch(removeRoom({ id: roomId }));
+    this.checkStatusRequest("Eliminado correctamente")
   }
 
   deactivateRoom(room: Room) {
@@ -132,6 +115,40 @@ export class RoomsPage implements AfterViewInit, OnInit{
       if (result && result.room) {
         console.log(result)
         this.registerRoom(result.id, result.room);
+      }
+    });
+  }
+
+  getDeleteRoomConfirmation(room: Room) {
+    console.log("entro aqui a eliminar")
+    Swal.fire({
+      title: `¿Está seguro de eliminar la sala:  ${room.name}?`,
+      text: 'Esta acción no se puede revertir',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#0096d2',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.deleteRoom(room);
+      }
+    });
+  }
+
+  private checkStatusRequest(successMessage: string) {
+    this.store.pipe(select(roomStatusAndError)).subscribe((data) => {
+      DebugerService.log('RequestStatus: ' + data.status);
+      console.log(data.error)
+      if (data.status === ActionStatus.SUCCESS) {
+        this.dialogService.showToast(successMessage);
+      } else if (data.status === ActionStatus.ERROR) {
+        Utils.showNotification({
+          icon: 'error',
+          text: data.error.error.title,
+          showConfirmButton: true,
+        });
       }
     });
   }

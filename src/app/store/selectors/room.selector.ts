@@ -1,11 +1,20 @@
 import { createSelector } from '@ngrx/store';
 import { AppState } from '../app.state';
-import { UserState } from '../reducers/user.reducer';
+import { RoomState } from '../reducers/room.reducer';
 
 
-export const selectRooms = (state: AppState) => state.users;
+export const selectRooms = (state: AppState) => state.rooms;
+export const selectRoomsState= (state: AppState) => state.rooms;
 
 export const selectAllRooms = createSelector(
     selectRooms,
-  (state: UserState) => state.users
+  (state: RoomState) => state.rooms
+);
+
+export const roomStatusAndError = createSelector(
+  selectRoomsState,
+  (state: RoomState) => ({
+    status: state.status,
+    error: state.error
+  })
 );
