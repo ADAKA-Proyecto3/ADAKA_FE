@@ -39,13 +39,15 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="pt-3">
-            <mat-label>Centros Médicos</mat-label>
+            <mat-label>Centro Médico</mat-label>
             <mat-select formControlName="medicalCenter">
                 <mat-option value="" disabled>Selecciona un centro médico</mat-option>
-                <mat-option *ngFor="let center of medicalCenterList" [value]="center.id">{{ center.name }}</mat-option>
+                <mat-option *ngFor="let mc of medicalCenterOptions" [value]="mc.value">
+                    {{mc.viewValue}}
+                </mat-option>
             </mat-select>
-            <mat-error *ngIf="error('medicalCenter','required')">
-                El centro médico de la sala es <strong>requerido</strong>
+            <mat-error *ngIf="error('status','required')">
+                Centro médico es <strong>requerido</strong>
             </mat-error>
         </mat-form-field>
 

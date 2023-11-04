@@ -2,15 +2,12 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { MedicalCenter } from 'src/app/models/medical-center.interface';
+import { SelectOption } from 'src/app/common/interfaces/option.interface';
 import { Room } from 'src/app/models/rooms.interface';
 import { DebugerService } from 'src/app/services/debug-service/debug.service';
+import { loadMedicalCenter } from 'src/app/store/actions/medicalCenter.actions';
 import { AppState } from 'src/app/store/app.state';
 
-interface SelectOption {
-  value: string;
-  viewValue: string;
-}
 
 @Component({
   selector: 'app-room-form-component',
@@ -19,41 +16,9 @@ interface SelectOption {
 })
 export class RoomFormComponent implements OnInit {
   public registerForm: FormGroup = {} as FormGroup;
-  medicalCenterList: MedicalCenter[] = [
-    {
-      id: 1,
-      name: "Sample Medical Center",
-      status: "Open",
-      phone: "123-456-7890",
-      address: "123 Main Street",
-      coordenates: {
-        latitude: 40.7128,
-        longitude: -74.0060,
-      }
-    },{
-        id: 2,
-        name: "Sample Medical Center",
-        status: "Open",
-        phone: "123-456-7890",
-        address: "123 Main Street",
-        coordenates: {
-          latitude: 40.7128,
-          longitude: -74.0060,
-        }
-    },
-    {
-      id: 2,
-      name: "Sample Medical Center",
-      status: "Open",
-      phone: "123-456-7890",
-      address: "123 Main Street",
-      coordenates: {
-        latitude: 40.7128,
-        longitude: -74.0060,
-      }
-  }
-  ];
 
+  activeUser: any;
+  medicalCenterOptions: SelectOption[] = [];
   editing = false;
   dataSource: any;
 
@@ -67,16 +32,27 @@ export class RoomFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.initializeProperties();
-    
-  }
-  ngAfterViewInit(): void {
+    this.store
+      .select((state) => state.user.activeUser.id)
+      .subscribe((id) => {
+        this.activeUser = id;
 
-    this.store.select((state) => state.)
+        this.loadMedicalCenters(this.activeUser);
+
+
+      });
+  }
+
+  
+  loadMedicalCenters(userId: number) {
+    this.store.dispatch(loadMedicalCenter({ id: userId }));
+    this.store
+    .select((state) => state.medicalCenters.medicalCenters)
     .subscribe((medicalCenters) => {
-   // hace algo aqui
-      }); => {
-      console.log(medicalCenters);
-      this.medicalCenterList = medicalCenters;});
+      this.medicalCenterOptions = medicalCenters.map((mc) => {
+        return { value: mc.id!, viewValue: mc.name };
+      });
+    });
   }
   
   initializeProperties() {
@@ -114,14 +90,14 @@ export class RoomFormComponent implements OnInit {
       length: this.registerForm.value.length,
       width: this.registerForm.value.width,
       height: this.registerForm.value.height,
-      medicalCenter: this.registerForm.value.medicalCenter,
+
     };
 
     if (this.editing) {
       this.matDialogRef.close({ id: this.room?.id, room: room });
     } else {
       DebugerService.log('NO EDITING');
-      this.matDialogRef.close({ room: room });
+      this.matDialogRef.close({ id: this.registerForm.value.medicalCenter, room: room });
     }
   }
 

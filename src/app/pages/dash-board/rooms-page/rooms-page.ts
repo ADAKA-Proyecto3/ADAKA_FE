@@ -80,8 +80,8 @@ export class RoomsPage implements AfterViewInit, OnInit{
   }
 
   //CRUD
-  registerRoom(room: Room) {
-    this.store.dispatch(addRoom({ id: 1 , content: room }));
+  registerRoom(id: number, room: Room) {
+    this.store.dispatch(addRoom({ id: id , content: room }));
   }
 
   editRoom(id: number, room: Room) {
@@ -90,6 +90,7 @@ export class RoomsPage implements AfterViewInit, OnInit{
 
   deleteRoom(room: Room) {
     console.log('borrando room',room)
+
     const roomId = room.id!;
     this.store.dispatch(removeRoom({ id: roomId }));
   }
@@ -129,7 +130,8 @@ export class RoomsPage implements AfterViewInit, OnInit{
       DebugerService.log('ROOM REGISTRATION DIALOG CLOSED');
       console.log(result);
       if (result && result.room) {
-        this.registerRoom(result.room);
+        console.log(result)
+        this.registerRoom(result.id, result.room);
       }
     });
   }

@@ -41,11 +41,12 @@ export class RoomHttpService {
   resgiterRoom(id: number, room: Room) {
     return this.httpClient.post(`${this.url}/${id}`,room,Utils.getHttpHeaders());
   }
+  
 
 
   editRoom(id: number, room: Room) {
     this.loader.showLoadingModal();
-    return this.httpClient.put(`${this.url}/${id}`,room,Utils.getHttpHeaders())
+    return this.httpClient.put(`${this.url}/changeRoom/${id}`,room,Utils.getHttpHeaders())
     .pipe(
       map(resp => {
         this.loader.dismiss();
