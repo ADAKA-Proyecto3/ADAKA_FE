@@ -41,9 +41,25 @@ export class MedicalCenterHttpService {
     });
   }
 
-  resgiterMedicalCenter(id: number, medicalCenter: MedicalCenter) {
-    const urlWithId = `${this.url}/${id}`;
-    return this.httpClient.post(urlWithId, medicalCenter,Utils.getHttpHeaders());
+  registerMedicalCenter(id: number, medicalCenter: MedicalCenter) {
+    this.loader.showLoadingModal();
+    DebugerService.log("Entro al registro");
+    console.log(medicalCenter);
+  
+    return this.httpClient
+      .post(`${this.url}/${id}`, medicalCenter, Utils.getHttpHeaders())
+      .pipe(
+        map((resp: any) => {
+          this.loader.dismiss();
+          console.log('resp', resp);
+          
+          return resp.data[0];
+        }),
+        catchError((error) => {
+          console.error('Error en la petición:', error);
+          throw(error.error.title);
+        })
+      );
   }
 
 

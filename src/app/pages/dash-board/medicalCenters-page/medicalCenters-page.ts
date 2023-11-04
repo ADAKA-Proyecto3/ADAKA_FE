@@ -83,6 +83,7 @@ export class MedicalCentersPage implements AfterViewInit, OnInit {
   }
 
   deleteMedicalCenter(medicalCenter: MedicalCenter) {
+    console.log(medicalCenter)
     const medicalId = medicalCenter.id!;
     this.store.dispatch(removeMedicalCenter({ id: medicalId }));
 
