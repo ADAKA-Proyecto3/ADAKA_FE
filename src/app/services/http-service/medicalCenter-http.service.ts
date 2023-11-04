@@ -41,9 +41,25 @@ export class MedicalCenterHttpService {
     });
   }
 
-  resgiterMedicalCenter(id: number, medicalCenter: MedicalCenter) {
-    const urlWithId = `${this.url}/${id}`;
-    return this.httpClient.post(urlWithId, medicalCenter,Utils.getHttpHeaders());
+  registerMedicalCenter(id: number, medicalCenter: MedicalCenter) {
+    this.loader.showLoadingModal();
+    DebugerService.log("Entro al registro");
+    console.log(medicalCenter);
+  
+    return this.httpClient
+      .post(`${this.url}/${id}`, medicalCenter, Utils.getHttpHeaders())
+      .pipe(
+        map((resp: any) => {
+          this.loader.dismiss();
+          console.log('resp', resp);
+          
+          return resp.data[0];
+        }),
+        catchError((error) => {
+          console.error('Error en la petición:', error);
+          throw(error.error.title);
+        })
+      );
   }
 
 
@@ -85,38 +101,51 @@ export class MedicalCenterHttpService {
 
   editMedicalCenter(id: number, medicalCenter: MedicalCenter) {
     this.loader.showLoadingModal();
+    DebugerService.log("Entro al editar");
+    console.log(medicalCenter);
     return this.httpClient
-      .put(`${this.url}/changeMedical/${id}`, medicalCenter)
+      .put(`${this.url}/changeMedical/${id}`, medicalCenter, Utils.getHttpHeaders())
       .pipe(
         map((resp: any) => {
           this.loader.dismiss();
           console.log('resp', resp);
-
+  
           const response: Response<MedicalCenter> = {
-            title: 'Updated Medical Center', // Puedes ajustar el título según tus necesidades
-            data: resp.data, // Suponiendo que 'data' contiene el centro médico
+            title: resp.title,
+            data: resp.data, 
           };
 
           return response;
+        }),
+        catchError((error) => {
+          console.log(error);
+          throw(error);
         })
       );
   }
 
-  /*editStatusMedicalCenter(id: number, medicalCenter: MedicalCenter) {
+  editStatusMedicalCenter(id: number, status: string) {
     this.loader.showLoadingModal();
-    return this.httpClient.put(`${this.url}/changeMedicalStatus/${id}`, medicalCenter)
+    DebugerService.log("Entro al editar");
+    console.log(status);
+    return this.httpClient
+      .put(`${this.url}/changeMedical/${id}/${status}`, Utils.getHttpHeaders())
       .pipe(
-        map((resp: Response<MedicalCenter>) => {
-          if (resp.title === "Algo válido") {
-            // La validación del título es exitosa
-            console.log("resp", resp);
-            this.loader.dismiss();
-            return resp.data; // Devuelve la propiedad 'data' de la respuesta
-          } else {
-            // El título no es válido, puedes manejar el error o lanzar una excepción
-            throw new Error(resp.title);
-          }
+        map((resp: any) => {
+          this.loader.dismiss();
+          console.log('resp', resp);
+  
+          const response: Response<MedicalCenter> = {
+            title: resp.title,
+            data: resp.data, 
+          };
+
+          return response;
+        }),
+        catchError((error) => {
+          console.log(error);
+          throw(error);
         })
       );
-  }*/
+  }
 }

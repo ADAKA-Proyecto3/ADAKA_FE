@@ -15,13 +15,13 @@ import { MedicalCenterFormComponent } from '../components/medicalCenter-form-com
 import { DebugerService } from '../../../services/debug-service/debug.service';
 import {
   medicalCenterStatusAndError,
-  selectMedicalCentersState,
 } from 'src/app/store/selectors/medicalCenter.selector';
 import { ActionStatus } from 'src/app/common/enums/action-status.enum';
 import { DialogService } from 'src/app/services/dialog-service/dialog.service';
 import { Utils } from 'src/app/common/utils/app-util';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { filter, take } from 'rxjs';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-medicalCenter-page',
@@ -30,6 +30,7 @@ import { filter, take } from 'rxjs';
 })
 export class MedicalCentersPage implements AfterViewInit, OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+
 
   constructor(
     private store: Store<AppState>,
@@ -82,11 +83,11 @@ export class MedicalCentersPage implements AfterViewInit, OnInit {
   }
 
   deleteMedicalCenter(medicalCenter: MedicalCenter) {
+    console.log(medicalCenter)
     const medicalId = medicalCenter.id!;
-
     this.store.dispatch(removeMedicalCenter({ id: medicalId }));
 
-    this.checkStatusRequest('Eliminado correctamente', 'Error al eliminar');
+    this.checkStatusRequest('Eliminado correctamente');
   }
 
   deactivateMedicalCenter(medicalCenter: MedicalCenter) {
@@ -103,7 +104,6 @@ export class MedicalCentersPage implements AfterViewInit, OnInit {
 
   // Dialog | Modal Control
   openMedicalCenterEditDialog(medicalCenter: MedicalCenter): void {
-    console.log('Entrro');
     const dialogRef = this.dialog.open(MedicalCenterFormComponent, {
       width: '60%',
       data: medicalCenter,
@@ -130,7 +130,25 @@ export class MedicalCentersPage implements AfterViewInit, OnInit {
     });
   }
 
-  private checkStatusRequest(successMessage: string, errorMessage: string) {
+  getDeleteMedicalCenterConfirmation(medicalCenter: MedicalCenter) {
+    console.log("entro aqui a eliminar")
+    Swal.fire({
+      title: `¿Está seguro de eliminar el centro medico:  ${medicalCenter.name}?`,
+      text: 'Esta acción no se puede revertir',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#0096d2',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.deleteMedicalCenter(medicalCenter);
+      }
+    });
+  }
+
+  private checkStatusRequest(successMessage: string) {
     this.store.pipe(select(medicalCenterStatusAndError)).subscribe((data) => {
       DebugerService.log('RequestStatus: ' + data.status);
       console.log(data.error)
@@ -147,27 +165,21 @@ export class MedicalCentersPage implements AfterViewInit, OnInit {
   }
 
   private loadUser() {
-    let userLoaded = false;
-
     this.store
       .select('user')
       .pipe(
         filter(
           (activeUser) =>
-            !!activeUser.activeUser && activeUser.activeUser.id !== undefined
+          activeUser.status === "success"
         ),
         take(1)
       )
       .subscribe((activeUser) => {
-        console.log(activeUser);
         this.idAdmin = activeUser.activeUser.id;
-        console.log(this.idAdmin);
-        userLoaded = true; // Marcar que el usuario se ha cargado correctamente
-      });
+        this.store.dispatch(loadMedicalCenter({ id: this.idAdmin }));
 
-    // Luego, verifica si el usuario se ha cargado antes de dispatch
-    if (userLoaded) {
-      this.store.dispatch(loadMedicalCenter({ id: this.idAdmin }));
-    }
+      });
   }
+
+
 }

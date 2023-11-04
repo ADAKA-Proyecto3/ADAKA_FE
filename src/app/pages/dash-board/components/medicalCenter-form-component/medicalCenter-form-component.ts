@@ -72,8 +72,9 @@ export class MedicalCenterFormComponent implements OnInit {
       direction: this.registerForm.value.direction,
       email: this.registerForm.value.email,
       status: this.registerForm.value.status,
-      latitude: this.registerForm.value.latitude, 
-      longitude: this.registerForm.value.longitude
+      latitude: this.registerForm.value.latitude,
+      longitude: this.registerForm.value.longitude,
+ 
     };
 
     if (this.editing) {

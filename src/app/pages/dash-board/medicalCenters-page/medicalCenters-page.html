@@ -60,10 +60,10 @@
         <button  mat-icon-button color="primary" matTooltip="Editar"  (click)="openMedicalCenterEditDialog(element)">
           <mat-icon>edit</mat-icon>
         </button>
-        <button  mat-icon-button color="warn" matTooltip="Eliminar" (click)="deleteMedicalCenter(element)">
+        <button  mat-icon-button color="warn" matTooltip="Eliminar" (click)="getDeleteMedicalCenterConfirmation(element)">
           <mat-icon>delete</mat-icon>
         </button>
-        <button mat-icon-button color="accent" matTooltip="Desactivar" (click)="deactivateMedicalCenter(element)">
+        <button mat-icon-button color="accent" matTooltip="Desactivar" (click)="deactivateMedicalCenter(element)" >
           <mat-icon>hide_source</mat-icon>
         </button>
       </td>

@@ -78,8 +78,8 @@ export class MedicalCenterEffects {
   this.actions$.pipe(
     ofType(addMedicalCenter),
     mergeMap((action) =>
-      this.medicalService.resgiterMedicalCenter(action.id, action.content).pipe(
-        map(() => addMedicalCenterSuccess({ content: action.content })),
+      this.medicalService.registerMedicalCenter(action.id, action.content).pipe(
+        map((response) => addMedicalCenterSuccess({ content: response })),
         catchError((error) => of(addMedicalCenterFailure({ error })))
       )
     )
