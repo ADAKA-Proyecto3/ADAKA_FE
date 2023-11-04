@@ -9,7 +9,7 @@ export const addRoom = createAction(
 
 export const addRoomSuccess = createAction(
   '[Room Page] Add Room Success',
-  props<{ id: number; content: Room }>()
+  props<{ content: Room }>()
 );
 
 export const addRoomFailure = createAction(

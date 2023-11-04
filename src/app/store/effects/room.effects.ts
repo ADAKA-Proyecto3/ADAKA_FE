@@ -65,7 +65,7 @@ export class RoomEffects {
       ofType(addRoom),
       mergeMap((action) =>
         this.roomService.resgiterRoom(action.id, action.content).pipe(
-          map(() => addRoomSuccess({ id: action.id, content: action.content })),
+          map((response) => addRoomSuccess({ content: response })),
           catchError((error) => of(addRoomFailure({ error })))
         )
       )

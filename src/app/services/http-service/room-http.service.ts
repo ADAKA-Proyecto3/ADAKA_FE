@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Config } from 'src/app/config/config';
-import { map } from 'rxjs';
+import { catchError, map } from 'rxjs';
 import { LoadingService } from '../loading-service/loading.service';
 import { Room } from 'src/app/models/rooms.interface';
 import { Response } from 'src/app/models/response.interface';
@@ -34,14 +34,26 @@ export class RoomHttpService {
   }
   
 
-  deleteRoom( id: number){
+  deleteRoom(id: number){
     return this.httpClient.delete(`${this.url}/delete/${id}`,Utils.getHttpHeaders())
   }
 
   resgiterRoom(id: number, room: Room) {
-    return this.httpClient.post(`${this.url}/${id}`,room,Utils.getHttpHeaders());
-  }
-  
+    this.loader.showLoadingModal();
+    return this.httpClient
+    .post(`${this.url}/${id}`, room, Utils.getHttpHeaders())
+    .pipe(
+      map((resp: any) => {
+        this.loader.dismiss();
+        console.log('resp', resp);
+        return resp.data[0];
+      }),
+      catchError((error) => {
+        console.error('Error en la petición:', error);
+        throw(error.error.title);
+      })
+    );
+  };
 
 
   editRoom(id: number, room: Room) {
