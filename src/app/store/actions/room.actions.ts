@@ -4,12 +4,12 @@ import { Room } from 'src/app/models/rooms.interface';
 // Create room
 export const addRoom = createAction(
   '[Room Page] Add Room',
-  props<{ content: Room }>()
+  props<{ id: number; content: Room }>()
 );
 
 export const addRoomSuccess = createAction(
   '[Room Page] Add Room Success',
-  props<{ content: Room }>()
+  props<{ id: number; content: Room }>()
 );
 
 export const addRoomFailure = createAction(
@@ -50,7 +50,10 @@ export const removeRoomFailure = createAction(
 );
 
 //Loading rooms
-export const loadRooms = createAction('[Room Page] Load Rooms');
+export const loadRooms = createAction(
+  '[Room Page] Load Rooms',
+  props<{ id: number }>()
+);
 
 export const loadRoomsSuccess = createAction(
   '[Rooms Page] Rooms Load Success',

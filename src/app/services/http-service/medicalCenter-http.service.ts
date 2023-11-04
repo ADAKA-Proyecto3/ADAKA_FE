@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MedicalCenter } from 'src/app/models/medical-center.interface';
-import { Response } from 'src/app/models/Response.interface';
+import { Response } from 'src/app/models/response.interface';
 import { Config } from 'src/app/config/config';
 import { DebugerService } from '../debug-service/debug.service';
 import { Observable, catchError, map, throwError } from 'rxjs';

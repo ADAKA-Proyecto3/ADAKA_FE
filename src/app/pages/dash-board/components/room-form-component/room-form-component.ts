@@ -1,14 +1,13 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Store } from '@ngrx/store';
+import { SelectOption } from 'src/app/common/interfaces/option.interface';
 import { Room } from 'src/app/models/rooms.interface';
-import { User } from 'src/app/models/user.interface';
 import { DebugerService } from 'src/app/services/debug-service/debug.service';
+import { loadMedicalCenter } from 'src/app/store/actions/medicalCenter.actions';
+import { AppState } from 'src/app/store/app.state';
 
-interface SelectOption {
-  value: string;
-  viewValue: string;
-}
 
 @Component({
   selector: 'app-room-form-component',
@@ -18,33 +17,45 @@ interface SelectOption {
 export class RoomFormComponent implements OnInit {
   public registerForm: FormGroup = {} as FormGroup;
 
-  selectedValue: string = '';
-
-  roles: SelectOption[] = [
-    { value: 'ADMIN', viewValue: 'Admin' },
-    { value: 'NURSE', viewValue: 'Enfermero' },
-  ];
-
-  status: SelectOption[] = [
-    { value: 'ACTIVE', viewValue: 'Activo' },
-    { value: 'INACTIVE', viewValue: 'Inactivo' },
-  ];
-
+  activeUser: any;
+  medicalCenterOptions: SelectOption[] = [];
   editing = false;
+  dataSource: any;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public room: Room | undefined,
-    private matDialogRef: MatDialogRef<RoomFormComponent>
+    private matDialogRef: MatDialogRef<RoomFormComponent>,
+    private readonly store: Store<AppState>
   ) {
     matDialogRef.disableClose = true;
   }
 
   ngOnInit(): void {
-    this.initilizeProperties();
+    this.initializeProperties();
+    this.store
+      .select((state) => state.user.activeUser.id)
+      .subscribe((id) => {
+        this.activeUser = id;
+
+        this.loadMedicalCenters(this.activeUser);
+
+
+      });
   }
 
-
-  initilizeProperties() {
+  
+  loadMedicalCenters(userId: number) {
+    this.store.dispatch(loadMedicalCenter({ id: userId }));
+    this.store
+    .select((state) => state.medicalCenters.medicalCenters)
+    .subscribe((medicalCenters) => {
+      this.medicalCenterOptions = medicalCenters.map((mc) => {
+        return { value: mc.id!, viewValue: mc.name };
+      });
+    });
+  }
+  
+  initializeProperties() {
     this.registerForm = new FormGroup({
       name: new FormControl('', [
         Validators.required,
@@ -53,7 +64,7 @@ export class RoomFormComponent implements OnInit {
       length: new FormControl('', [Validators.required]),
       width: new FormControl('', [Validators.required]),
       height: new FormControl('', [Validators.required]),
-      status: new FormControl('', [Validators.required]),
+      medicalCenter: new FormControl('', [Validators.required]),
     });
 
     if (this.room) {
@@ -64,13 +75,10 @@ export class RoomFormComponent implements OnInit {
         length: this.room.length || '',
         width: this.room.width || '',
         height: this.room.height || '',
-        status: this.room.status || '',
+        medicalCenter: this.room.medicalCenter || '',
       });
     }
-
-
   }
- 
 
   onSubmit() {
     if (this.registerForm.invalid) {
@@ -79,28 +87,25 @@ export class RoomFormComponent implements OnInit {
 
     const room: Room = {
       name: this.registerForm.value.name,
-      length: this.registerForm.value.role,
-      width: this.registerForm.value.phone,
-      height: this.registerForm.value.email,
-      status: this.registerForm.value.status,
+      length: this.registerForm.value.length,
+      width: this.registerForm.value.width,
+      height: this.registerForm.value.height,
+
     };
 
     if (this.editing) {
-      this.matDialogRef.close( {id: this.room?.id, room: room} );
-    }else{
+      this.matDialogRef.close({ id: this.room?.id, room: room });
+    } else {
       DebugerService.log('NO EDITING');
-      this.matDialogRef.close({room: room});
+      this.matDialogRef.close({ id: this.registerForm.value.medicalCenter, room: room });
     }
-
-  
   }
 
   closeDialog() {
     this.matDialogRef.close();
   }
 
-
-  public error = (controlName: string, errorName: string) => {
-    return this.registerForm.controls[controlName].hasError(errorName);
-  };
+  error(controlName: string, errorName: string) {
+    return this.registerForm.get(controlName)?.hasError(errorName);
+  }
 }
