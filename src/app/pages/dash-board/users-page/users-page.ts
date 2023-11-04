@@ -1,7 +1,6 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort, SortDirection } from '@angular/material/sort';
 import { User } from 'src/app/models/user.interface';
 import { Store, select } from '@ngrx/store';
 import { AppState } from 'src/app/store/app.state';
@@ -14,10 +13,7 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { UserFormComponent } from '../components/user-form-component/user-form-component';
 import { DebugerService } from 'src/app/services/debug-service/debug.service';
-import {
-  selectUserStatus,
-  selectUsers,
-} from 'src/app/store/selectors/user.selector';
+import { selectUserStatus } from 'src/app/store/selectors/user.selector';
 import { DialogService } from 'src/app/services/dialog-service/dialog.service';
 import { Utils } from 'src/app/common/utils/app-util';
 import Swal from 'sweetalert2';
@@ -28,7 +24,7 @@ import { ActionStatus } from 'src/app/common/enums/action-status.enum';
   templateUrl: './users-page.html',
   styleUrls: ['./users-page.scss'],
 })
-export class UsersPage implements AfterViewInit, OnInit {
+export class UsersPage implements  OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(
@@ -38,9 +34,9 @@ export class UsersPage implements AfterViewInit, OnInit {
   ) {}
 
   result: string = '';
+  activeUser: any;
 
   displayedColumns: string[] = [
-    //'id',
     'name',
     'role',
     'phone',
@@ -56,8 +52,12 @@ export class UsersPage implements AfterViewInit, OnInit {
   }
 
   ngOnInit(): void {
-    this.store.dispatch(loadUsers());
-    //console.log('onInit');
+    this.store
+      .select((state) => state.user.activeUser.id)
+      .subscribe((id) => {
+        this.activeUser = id;
+        this.store.dispatch(loadUsers({ id: this.activeUser }));
+      });
   }
 
   ngAfterViewInit(): void {
@@ -69,14 +69,27 @@ export class UsersPage implements AfterViewInit, OnInit {
   }
 
   //CRUD
-  registerUser(user: User) {
-    this.store.dispatch(addSubUser({ content: user }));
-    this.checkStatusRequest('Usuario registrado con éxito', 'Ha sucedido un error, por favor intente de nuevo');
+  registerUser(user: User, parentId: number, medicalCenterId: number) {
+    this.store.dispatch(
+      addSubUser({
+        content: user,
+        parentId: parentId,
+        medicalCenterId: medicalCenterId,
+      })
+    );
+    this.checkStatusRequest(
+      'Usuario registrado con éxito',
+      'Ha sucedido un error, por favor intente de nuevo'
+    );
   }
 
   editUser(id: number, user: User) {
+
     this.store.dispatch(updateUser({ id: id, content: user }));
-    this.checkStatusRequest('Usuario actualizado con éxito', 'Ha sucedido un error, por favor intente de nuevo');
+    this.checkStatusRequest(
+      'Usuario actualizado con éxito',
+      'Ha sucedido un error, por favor intente de nuevo'
+    );
   }
 
   getDeleteUserConfirmation(user: User) {
@@ -99,9 +112,10 @@ export class UsersPage implements AfterViewInit, OnInit {
   deleteUser(user: User) {
     const userId = user.id!;
     this.store.dispatch(removeUser({ id: userId }));
-    this.checkStatusRequest('Usuario eliminado con éxito', 'Ha sucedido un error, por favor intente de nuevo');
-
-   
+    this.checkStatusRequest(
+      'Usuario eliminado con éxito',
+      'Ha sucedido un error, por favor intente de nuevo'
+    );
   }
 
   deactivateUserUser(user: User) {
@@ -114,11 +128,15 @@ export class UsersPage implements AfterViewInit, OnInit {
         },
       })
     );
-    this.checkStatusRequest('Usuario desactivado con éxito', 'Ha sucedido un error, por favor intente de nuevo');
+    this.checkStatusRequest(
+      'Usuario desactivado con éxito',
+      'Ha sucedido un error, por favor intente de nuevo'
+    );
   }
 
   // Dialog | Modal Control
   openUserEditDialog(user: User): void {
+    console.log(user);
     const dialogRef = this.dialog.open(UserFormComponent, {
       width: '60%',
       data: user,
@@ -140,17 +158,18 @@ export class UsersPage implements AfterViewInit, OnInit {
       DebugerService.log('USER REGISTRATION DIALOG CLOSED');
       console.log(result);
       if (result && result.user) {
-        this.registerUser(result.user);
+        console.log('user: ' + JSON.stringify(result.user));
+        console.log('parentId: ' + result.parentId);
+        console.log('parentId: ' + result.medicalCenterId);
+        this.registerUser(result.user, result.parentId, result.medicalCenterId);
       }
     });
   }
 
-
-  private checkStatusRequest( successMessage: string, errorMessage: string){
-
+  private checkStatusRequest(successMessage: string, errorMessage: string) {
     this.store.pipe(select(selectUserStatus)).subscribe((status) => {
       DebugerService.log('RequestStatus: ' + status);
-      
+
       if (status === ActionStatus.SUCCESS) {
         this.dialogService.showToast(successMessage);
       } else if (status === ActionStatus.ERROR) {

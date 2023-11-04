@@ -3,7 +3,7 @@ import { User } from 'src/app/models/user.interface';
 
 export const addSubUser = createAction(
   '[User Page] Add User',
-  props<{ content: User }>()
+  props<{ content: User, parentId:number, medicalCenterId:number }>()
 );
 
 export const addSubUserSuccess = createAction(
@@ -49,7 +49,10 @@ export const removeUserFailure = createAction(
 );
 
 //Loading users
-export const loadUsers = createAction('[User Page] Load Users');
+export const loadUsers = createAction(
+  '[User Page] Load Users',
+  props<{ id: number }>()
+  );
 
 export const loadUsersSuccess = createAction(
   '[Users API] Users Load Success',

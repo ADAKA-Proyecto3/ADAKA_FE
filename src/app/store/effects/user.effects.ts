@@ -30,9 +30,9 @@ export class UserEffects {
   loadUsers$ = createEffect(() =>
     this.actions$.pipe(
       ofType(loadUsers),
-      switchMap(() =>
+      switchMap((action) =>
         // Call the get method, convert it to an observable
-        from(this.userService.getUsers()).pipe(
+        from(this.userService.getUsers(action.id)).pipe(
           // Take the returned value and return a new success action containing the todos
           map((users) => loadUsersSuccess({ users: users })),
           // Or... if it errors return a new failure action containing the error
@@ -74,7 +74,7 @@ export class UserEffects {
     this.actions$.pipe(
       ofType(addSubUser),
       mergeMap((action) =>
-        this.userService.resgiterSubUser(action.content).pipe(
+        this.userService.resgiterSubUser(action.content, action.parentId, action.medicalCenterId).pipe(
           map(() => addSubUserSuccess({ content: action.content })),
           catchError((error) => of(addSubUserFailure({ error })))
         )

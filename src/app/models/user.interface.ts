@@ -11,5 +11,9 @@ export interface User {
     password?: string | null;
     medicalCenters?: MedicalCenter[];
     subscription?: Suscription;
+    assignedMedicalCenter?: number;
+    manager?: number;
+
+
 
 }
