@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MedicalCenter } from 'src/app/models/medical-center.interface';
 import { Room } from 'src/app/models/rooms.interface';
 import { User } from 'src/app/models/user.interface';
 import { DebugerService } from 'src/app/services/debug-service/debug.service';
@@ -17,6 +18,41 @@ interface SelectOption {
 })
 export class RoomFormComponent implements OnInit {
   public registerForm: FormGroup = {} as FormGroup;
+
+  medicalCenterList: MedicalCenter[] = [
+    {
+      id: 1,
+      name: "Sample Medical Center",
+      status: "Open",
+      phone: "123-456-7890",
+      address: "123 Main Street",
+      coordenates: {
+        latitude: 40.7128,
+        longitude: -74.0060,
+      }
+    },{
+        id: 2,
+        name: "Sample Medical Center",
+        status: "Open",
+        phone: "123-456-7890",
+        address: "123 Main Street",
+        coordenates: {
+          latitude: 40.7128,
+          longitude: -74.0060,
+        }
+    },
+    {
+      id: 2,
+      name: "Sample Medical Center",
+      status: "Open",
+      phone: "123-456-7890",
+      address: "123 Main Street",
+      coordenates: {
+        latitude: 40.7128,
+        longitude: -74.0060,
+      }
+  }
+  ];
 
   selectedValue: string = '';
 
@@ -64,7 +100,7 @@ export class RoomFormComponent implements OnInit {
         length: this.room.length || '',
         width: this.room.width || '',
         height: this.room.height || '',
-        status: this.room.status || '',
+        medicalCenter: this.room.medicalCenter || '',
       });
     }
 
@@ -82,8 +118,8 @@ export class RoomFormComponent implements OnInit {
       length: this.registerForm.value.length,
       width: this.registerForm.value.width,
       height: this.registerForm.value.height,
-      status: this.registerForm.value.status,
-    };
+      medicalCenter: this.registerForm.value.medicalCenter,
+    }
   
     if (this.editing) {
       this.matDialogRef.close({ id: this.room?.id, room: room });

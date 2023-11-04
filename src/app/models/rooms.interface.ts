@@ -5,6 +5,5 @@ export interface Room {
     length: number;
     width: number;
     height: number;
-    status: string;
-    MedicalCenter?: MedicalCenter;
+    medicalCenter?: MedicalCenter;
 }

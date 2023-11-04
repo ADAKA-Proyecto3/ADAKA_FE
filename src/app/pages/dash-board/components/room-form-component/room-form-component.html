@@ -44,17 +44,14 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="pt-3">
-            <mat-label>Estado</mat-label>
-            <mat-select formControlName="status">
-                <mat-option *ngFor="let state of status" [value]="state.value">
-                    {{state.viewValue}}
-                </mat-option>
-            </mat-select>
-            <mat-error *ngIf="error('status','required')">
-                Estado de sala es <strong>requerido</strong>
+            <mat-label>Centros Medicos</mat-label>
+            <select *ngFor="let item of medicalCenterList" name="medical_centers" id="medical_centers">
+                <option value="item.id">item.name</option>
+            </select>
+            <mat-error *ngIf="error('height','required')">
+                Ancho de sala es <strong>requerido</strong>
             </mat-error>
         </mat-form-field>
-
       
         <div class="d-flex justify-content-between">
 

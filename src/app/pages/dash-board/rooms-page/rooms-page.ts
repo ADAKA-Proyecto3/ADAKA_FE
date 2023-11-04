@@ -27,7 +27,6 @@ export class RoomsPage implements AfterViewInit, OnInit{
     'length',
     'width',
     'height',
-    'medical center',
     'actions',
   ];
   dataSource = new MatTableDataSource<Room>();
@@ -54,6 +53,24 @@ export class RoomsPage implements AfterViewInit, OnInit{
     }*/
   }
 
+  /*public async getMedicalCenter() {
+    const medicalCenterId = this.addressForm.value.provincia;
+
+    if (!provinciaId) {
+      return;
+    }
+
+    const cantones = await this.HttpService.getCanton(provinciaId);
+    if (cantones) {
+      this.cantonOptions = Object.keys(cantones).map((key) => {
+        return {
+          value: key,
+          viewValue: cantones[key],
+        };
+      });
+    }
+    this.addressForm.controls.canton.setValue('');
+  }*/
 
   ngAfterViewInit(): void {
     this.store.select('rooms').subscribe(({ rooms, status }) => {
@@ -85,7 +102,6 @@ export class RoomsPage implements AfterViewInit, OnInit{
         id: room.id!,
         content: {
           ...room,
-          status: 'INACTIVE',
         },
       })
     );
@@ -96,6 +112,7 @@ export class RoomsPage implements AfterViewInit, OnInit{
     const dialogRef = this.dialog.open(RoomFormComponent, {
       width: '60%',
       data: room,
+      //opciones: this.medicalCenters,
     });
 
     dialogRef.afterClosed().subscribe(async (result) => {
