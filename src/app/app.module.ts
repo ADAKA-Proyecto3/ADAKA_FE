@@ -29,7 +29,7 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
     EffectsModule.forRoot( EffectsArray ),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
     SweetAlert2Module.forRoot(),
-    
+
   ],
   providers: [],
   bootstrap: [AppComponent]

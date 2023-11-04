@@ -37,6 +37,13 @@ const routes: Routes = [
           ),
       },
       {
+        path: UrlPages.MEDICAL_CENTERS,
+        loadChildren: () =>
+          import('../medicalCenters-page/medicalCenter-page.module').then(
+            (m) => m.MedicalCenterModule
+          ),
+      },
+      {
         path: '**',
         redirectTo: UrlPages.MAIN,
         pathMatch: 'full',
