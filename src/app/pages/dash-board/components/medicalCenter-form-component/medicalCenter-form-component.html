@@ -27,7 +27,7 @@
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="pt-3">
-        <mat-label>Latitud</mat-label>
+        <mat-label>Latitud (Formato decimal)</mat-label>
         <input type="number" matInput formControlName="latitude" value={{medicalCenter?.latitude}}>
         <mat-error *ngIf="error('latitude','required')">
           La latitud es <strong>requerida</strong>
@@ -35,7 +35,7 @@
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="pt-3">
-        <mat-label>Longitud</mat-label>
+        <mat-label>Longitud (Formato decimal)</mat-label>
         <input type="number" matInput formControlName="longitude" value={{medicalCenter?.longitude}}>
         <mat-error *ngIf="error('longitude','required')">
           La Longitud es <strong>requerida</strong>

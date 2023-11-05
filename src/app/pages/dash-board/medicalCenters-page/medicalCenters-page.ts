@@ -74,7 +74,9 @@ export class MedicalCentersPage implements AfterViewInit, OnInit {
 
   //CRUD
   registerMedicalCenter(id: number, medicalCenter: MedicalCenter) {
+
     this.store.dispatch(addMedicalCenter({ id: id, content: medicalCenter }));
+    this.checkStatusRequest("Centro médico registrado con éxito");
   }
 
   editMedicalCenter(id: number, medicalCenter: MedicalCenter) {
@@ -185,5 +187,5 @@ export class MedicalCentersPage implements AfterViewInit, OnInit {
       });
   }
 
-
+  
 }
