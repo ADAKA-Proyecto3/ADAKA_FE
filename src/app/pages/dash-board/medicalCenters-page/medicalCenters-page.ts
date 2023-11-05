@@ -20,7 +20,7 @@ import { ActionStatus } from 'src/app/common/enums/action-status.enum';
 import { DialogService } from 'src/app/services/dialog-service/dialog.service';
 import { Utils } from 'src/app/common/utils/app-util';
 import { AuthService } from 'src/app/auth/services/auth.service';
-import { filter, take } from 'rxjs';
+import { Subscription, filter, take } from 'rxjs';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -50,6 +50,7 @@ export class MedicalCentersPage implements AfterViewInit, OnInit {
   ];
   dataSource = new MatTableDataSource<MedicalCenter>();
   idAdmin: any = 0;
+  private statusSubscription: Subscription = new Subscription();
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -148,18 +149,21 @@ export class MedicalCentersPage implements AfterViewInit, OnInit {
     });
   }
 
+
   private checkStatusRequest(successMessage: string) {
-    this.store.pipe(select(medicalCenterStatusAndError)).subscribe((data) => {
+    this.statusSubscription = this.store.pipe(select(medicalCenterStatusAndError)).subscribe((data) => {
       DebugerService.log('RequestStatus: ' + data.status);
       console.log(data.error)
       if (data.status === ActionStatus.SUCCESS) {
         this.dialogService.showToast(successMessage);
+        this.statusSubscription.unsubscribe(); 
       } else if (data.status === ActionStatus.ERROR) {
         Utils.showNotification({
           icon: 'error',
           text: data.error.error.title,
           showConfirmButton: true,
         });
+        this.statusSubscription.unsubscribe(); 
       }
     });
   }

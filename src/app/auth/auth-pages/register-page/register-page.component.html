@@ -40,13 +40,22 @@
 
                         </mat-form-field>
 
-                        <mat-form-field appearance="outline" class="field-full-width">
+                        <mat-form-field appearance="outline" class="field-full-width " [class.pb-3]="phone?.errors?.['minlength'] && phone?.errors?.['digitsOnly'] || phone?.errors?.['digitsOnly'] && phone?.errors?.['required']">
                             <mat-label>Número de teléfono</mat-label>
                             <input type="text" matInput formControlName="phone">
+
                             <mat-error *ngIf="phone?.errors?.['required']">
                                 Número de teléfono es <strong>requerido</strong>
                             </mat-error>
 
+                            <mat-error *ngIf="phone?.errors?.['minlength']">
+                                Número de teléfono debe contener  <strong>mínimo 8 dígitos</strong>
+                            </mat-error>
+
+                            <mat-error *ngIf="phone?.errors?.['digitsOnly'] " class="mb-5">
+                                Número de teléfono debe contener dígitos <strong>únicamente</strong>
+                            </mat-error>
+                       
                         </mat-form-field>
 
                         <mat-form-field appearance="outline" class="field-full-width">

@@ -18,6 +18,7 @@ import { DialogService } from 'src/app/services/dialog-service/dialog.service';
 import { Utils } from 'src/app/common/utils/app-util';
 import Swal from 'sweetalert2';
 import { ActionStatus } from 'src/app/common/enums/action-status.enum';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-users-page',
@@ -45,6 +46,7 @@ export class UsersPage implements  OnInit {
     'actions',
   ];
   dataSource = new MatTableDataSource<User>();
+  private statusSubscription: Subscription = new Subscription();
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -167,17 +169,19 @@ export class UsersPage implements  OnInit {
   }
 
   private checkStatusRequest(successMessage: string, errorMessage: string) {
-    this.store.pipe(select(selectUserStatus)).subscribe((status) => {
+    this.statusSubscription =  this.store.pipe(select(selectUserStatus)).subscribe((status) => {
       DebugerService.log('RequestStatus: ' + status);
 
       if (status === ActionStatus.SUCCESS) {
         this.dialogService.showToast(successMessage);
+        this.statusSubscription.unsubscribe();
       } else if (status === ActionStatus.ERROR) {
         Utils.showNotification({
           icon: 'error',
           text: errorMessage,
           showConfirmButton: true,
         });
+        this.statusSubscription.unsubscribe();
       }
     });
   }

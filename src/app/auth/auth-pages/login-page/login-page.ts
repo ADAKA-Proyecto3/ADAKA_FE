@@ -12,6 +12,7 @@ import { PageRouterService } from 'src/app/services/page-router-service/page-rou
 })
 export class LoginPage implements OnInit {
   public loginForm: FormGroup = {} as FormGroup;
+  hide = true;
   constructor(
     
     private loginPageController: loginPageController,
