@@ -1,12 +1,14 @@
 <div class="vh-100 d-flex align-items-center">
   <div class="container">
     <div class="row">
-      <a (click)="returnToHome()" class="mb-5 sky-blue-darker-text titulo-3 btn_back"><i class="fa-solid fa-arrow-left"></i> Regresar a Inicio</a>
+      <a (click)="returnToHome()" class="mb-5 sky-blue-darker-text titulo-3 btn_back"><i
+          class="fa-solid fa-arrow-left"></i> Regresar a Inicio</a>
     </div>
 
     <div class="row h-681px">
 
-      <div class="col-sm-12 col-xl-6 d-flex align-items-center br-left-20px br-max-w-xl-20px justify-content-center justify-content-xl-start">
+      <div
+        class="col-sm-12 col-xl-6 d-flex align-items-center br-left-20px br-max-w-xl-20px justify-content-center justify-content-xl-start">
         <div class="box-width-20">
           <h1 class="mb-4 titulo-1 ">Bienvenido</h1>
           <div class="d-flex flex-column">
@@ -19,7 +21,7 @@
                   <mat-label>Email</mat-label>
                   <input type="email" matInput formControlName="email" placeholder="jon@email.com">
                   <mat-error *ngIf="myError('email','required')">
-                    Correo electrónico es  <strong>requerido</strong>
+                    Correo electrónico es <strong>requerido</strong>
                   </mat-error>
                   <mat-error *ngIf="myError('email','email')">
                     Correo electrónico <strong>inválido</strong>
@@ -28,32 +30,31 @@
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="field-full-width pt-3">
-
                   <mat-label>Contraseña</mat-label>
-                  <input type="password" matInput formControlName="password" placeholder="*********">
+                  <input [type]="hide ? 'password' : 'text'" matInput formControlName="password">
+                  <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+                    [attr.aria-pressed]="hide">
+                    <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                  </button>
                   <mat-error *ngIf="myError('password','required')">
                     La contraseña es <strong>requerida</strong>
                   </mat-error>
-
-
                 </mat-form-field>
 
 
-                <button 
-                mat-raised-button 
-                class="btn_login mt-3 sky-blue-darker-bg white-text"
-                
-                >
+                <button mat-raised-button class="btn_login mt-3 sky-blue-darker-bg white-text">
                   <mat-icon iconPositionEnd>chevron_right</mat-icon>
                   INICIAR SESIÓN
 
                 </button>
 
                 <div class="pt-4 d-flex justify-content-between">
-                  <a (click)="goToPasswordRecovery()" class="anchore-1 text-decoration-none sky-blue-darker-text cursor-pointer">
+                  <a (click)="goToPasswordRecovery()"
+                    class="anchore-1 text-decoration-none sky-blue-darker-text cursor-pointer">
                     Recuperar contraseña
                   </a>
-                  <a (click)="goToRegister()" class="anchore-1 text-decoration-none sky-blue-darker-text cursor-pointer">
+                  <a (click)="goToRegister()"
+                    class="anchore-1 text-decoration-none sky-blue-darker-text cursor-pointer">
                     Registrarse
                   </a>
                 </div>

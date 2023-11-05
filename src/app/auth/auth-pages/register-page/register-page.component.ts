@@ -78,7 +78,12 @@ export class RegisterPage implements OnInit {
         Validators.required,
         Validators.maxLength(30),
       ]),
-      phone: new FormControl('', [Validators.required]),
+      phone: new FormControl('', [
+        this.digitsOnly,
+        Validators.required,
+        Validators.minLength(8),
+       
+      ]),
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [
         Validators.required,
@@ -112,6 +117,13 @@ export class RegisterPage implements OnInit {
 
     return { passwordInvalid: true };
   }
+
+  digitsOnly(control: AbstractControl): { [key: string]: any } | null {
+    const isValid = /^\d+$/.test(control.value); // This regular expression checks if the input contains only digits
+  
+    return isValid ? null : { digitsOnly: true };
+  }
+
 
   addressForm = this._formBuilder.group({
     provincia: ['', Validators.required],
@@ -241,9 +253,8 @@ export class RegisterPage implements OnInit {
                 paymentAmount: order.purchase_units[0].amount.value,
                 paymentCurrency: order.purchase_units[0].amount.currency_code,
               };
-              DebugerService.log('Register Page:  submitRegistration' );
+              DebugerService.log('Register Page:  submitRegistration');
               this.submitRegistration(suscription);
-              
             }
           },
           onError: (err: any) => {
@@ -269,7 +280,6 @@ export class RegisterPage implements OnInit {
   }
 
   private async submitRegistration(suscription: Suscription) {
-
     if (
       this.addressForm.value.provincia &&
       this.addressForm.value.canton &&
@@ -310,12 +320,11 @@ export class RegisterPage implements OnInit {
           ',' +
           suscription.shippingAddress.address,
       };
-      DebugerService.log('Register Page:  Call registerUser' );
+      DebugerService.log('Register Page:  Call registerUser');
       const registrationResult = await this.registerPageController.registerUser(
         adminRegistration
       );
-      
-    } 
+    }
   }
 
   private getOptionViewValue(options: SelectOption[], value: string): string {
