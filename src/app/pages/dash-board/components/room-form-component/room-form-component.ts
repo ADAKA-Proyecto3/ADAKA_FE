@@ -8,7 +8,6 @@ import { DebugerService } from 'src/app/services/debug-service/debug.service';
 import { loadMedicalCenter } from 'src/app/store/actions/medicalCenter.actions';
 import { AppState } from 'src/app/store/app.state';
 
-
 @Component({
   selector: 'app-room-form-component',
   templateUrl: './room-form-component.html',
@@ -37,24 +36,21 @@ export class RoomFormComponent implements OnInit {
         this.activeUser = id;
         this.loadMedicalCenters(this.activeUser);
       });
-
-     
   }
 
-  
   loadMedicalCenters(userId: number) {
     this.store.dispatch(loadMedicalCenter({ id: userId }));
     this.store
-    .select((state) => state.medicalCenters.medicalCenters)
-    .subscribe((medicalCenters) => {
-      this.medicalCenterOptions = medicalCenters.map((mc) => {
-        return { value: mc.id!, viewValue: mc.name };
+      .select((state) => state.medicalCenters.medicalCenters)
+      .subscribe((medicalCenters) => {
+        this.medicalCenterOptions = medicalCenters.map((mc) => {
+          return { value: mc.id!, viewValue: mc.name };
+        });
       });
-    });
 
     this.initializeProperties();
   }
-  
+
   initializeProperties() {
     this.registerForm = new FormGroup({
       name: new FormControl('', [
@@ -68,7 +64,6 @@ export class RoomFormComponent implements OnInit {
     });
 
     if (this.room) {
-      console.log(this.room);
       this.editing = true;
 
       this.registerForm.patchValue({
@@ -82,6 +77,7 @@ export class RoomFormComponent implements OnInit {
   }
 
   onSubmit() {
+    console.log('im submitting');
     if (this.registerForm.invalid) {
       return;
     }
@@ -91,14 +87,20 @@ export class RoomFormComponent implements OnInit {
       length: this.registerForm.value.length,
       width: this.registerForm.value.width,
       height: this.registerForm.value.height,
-
     };
 
     if (this.editing) {
-      this.matDialogRef.close({ id: this.room?.id, room: room });
+      this.matDialogRef.close({
+        id: this.room?.roomToEdit.id,
+        room: room,
+        newMedicalCenter: this.registerForm.value.medicalCenter,
+      });
     } else {
       DebugerService.log('NO EDITING');
-      this.matDialogRef.close({ id: this.registerForm.value.medicalCenter, room: room });
+      this.matDialogRef.close({
+        id: this.registerForm.value.medicalCenter,
+        room: room,
+      });
     }
   }
 

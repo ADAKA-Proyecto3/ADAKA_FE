@@ -54,7 +54,7 @@ export class RegisterPageController {
         password: password,
       };
       const result = await this.authHttpService.login(loginRequest);
-      console.log('result', result);
+     
       return result;
     } catch (error) {
       console.error(error);

@@ -1,7 +1,20 @@
 import { createReducer, on } from '@ngrx/store';
 
 import { ActionStatus } from 'src/app/common/enums/action-status.enum';
-import { addRoomFailure, addRoomSuccess, loadRooms, loadRoomsFailure, loadRoomsSuccess, removeRoomFailure, removeRoomSuccess, updateRoomFailure, updateRoomSucess } from '../actions/room.actions';
+import {
+  addRoom,
+  addRoomFailure,
+  addRoomSuccess,
+  loadRooms,
+  loadRoomsFailure,
+  loadRoomsSuccess,
+  removeRoom,
+  removeRoomFailure,
+  removeRoomSuccess,
+  updateRoom,
+  updateRoomFailure,
+  updateRoomSucess,
+} from '../actions/room.actions';
 import { Room } from 'src/app/models/rooms.interface';
 
 export interface RoomState {
@@ -19,6 +32,11 @@ export const initialState: RoomState = {
 export const roomReducer = createReducer(
   initialState,
 
+  on(addRoom, (state) => ({
+    ...state,
+    status: ActionStatus.LOADING,
+  })),
+
   on(addRoomSuccess, (state, { content }) => ({
     ...state,
     rooms: [...state.rooms, content],
@@ -32,6 +50,11 @@ export const roomReducer = createReducer(
       status: ActionStatus.ERROR,
     };
   }),
+
+  on(updateRoom, (state) => ({
+    ...state,
+    status: ActionStatus.LOADING,
+  })),
 
   on(updateRoomSucess, (state, { id, content }) => ({
     ...state,
@@ -53,6 +76,12 @@ export const roomReducer = createReducer(
       status: ActionStatus.ERROR,
     };
   }),
+
+
+  on(removeRoom, (state) => ({
+    ...state,
+    status: ActionStatus.LOADING,
+  })),
 
   on(removeRoomSuccess, (state, { id }) => ({
     ...state,

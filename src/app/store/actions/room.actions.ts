@@ -9,7 +9,7 @@ export const addRoom = createAction(
 
 export const addRoomSuccess = createAction(
   '[Room Page] Add Room Success',
-  props<{ id: number; content: Room }>()
+  props<{ content: Room }>()
 );
 
 export const addRoomFailure = createAction(
@@ -20,7 +20,7 @@ export const addRoomFailure = createAction(
 //Updating rooms
 export const updateRoom = createAction(
   '[Room Page] Update Room',
-  props<{ id: number; content: Room }>()
+  props<{ id: number; medicalCenterId:number ;content: Room }>()
 );
 
 export const updateRoomSucess = createAction(

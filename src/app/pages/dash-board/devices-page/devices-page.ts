@@ -93,7 +93,7 @@ export class DevicesPage  implements AfterViewInit, OnInit{
 
     dialogRef.afterClosed().subscribe(async (result) => {
       DebugerService.log('DEVICE REGISTRATION DIALOG CLOSED');
-      console.log(result);
+    
       if (result && result.device) {
         this.registerDevice(result.device);
       }
