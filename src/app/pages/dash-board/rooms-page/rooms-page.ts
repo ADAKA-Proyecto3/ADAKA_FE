@@ -48,13 +48,11 @@ export class RoomsPage implements AfterViewInit, OnInit{
 
   ngOnInit(): void {
     this.store.dispatch(loadRooms({id: this.id_centro_medico}));
-
   }
 
   ngAfterViewInit(): void {
     this.store.select('rooms').subscribe(({ rooms }) => {
-    this.dataSource.data = rooms;
-      
+    this.dataSource.data = rooms; 
     });
 
     this.dataSource.paginator = this.paginator;
@@ -69,9 +67,9 @@ export class RoomsPage implements AfterViewInit, OnInit{
     this.store.dispatch(updateRoom({ id: id, content: room }));
   }
 
+
   deleteRoom(room: Room) {
     console.log('borrando room',room)
-
     const roomId = room.id!;
     this.store.dispatch(removeRoom({ id: roomId }));
     this.checkStatusRequest("Eliminado correctamente")
