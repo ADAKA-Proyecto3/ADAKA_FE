@@ -66,7 +66,7 @@ export class MedicalCentersPage implements AfterViewInit, OnInit {
 
   ngAfterViewInit(): void {
     this.store.select('medicalCenters').subscribe(({ medicalCenters }) => {
-      console.log(medicalCenters);
+   
       this.dataSource.data = medicalCenters;
     });
     this.dataSource.paginator = this.paginator;
@@ -86,7 +86,7 @@ export class MedicalCentersPage implements AfterViewInit, OnInit {
   }
 
   deleteMedicalCenter(medicalCenter: MedicalCenter) {
-    console.log(medicalCenter)
+  
     const medicalId = medicalCenter.id!;
     this.store.dispatch(removeMedicalCenter({ id: medicalId }));
 
@@ -126,7 +126,7 @@ export class MedicalCentersPage implements AfterViewInit, OnInit {
 
     dialogRef.afterClosed().subscribe(async (result) => {
       DebugerService.log('MEDICAL CENTER REGISTRATION DIALOG CLOSED');
-      console.log(result);
+      
       if (result && result.medicalCenter) {
         this.registerMedicalCenter(this.idAdmin, result.medicalCenter);
       }
@@ -134,7 +134,7 @@ export class MedicalCentersPage implements AfterViewInit, OnInit {
   }
 
   getDeleteMedicalCenterConfirmation(medicalCenter: MedicalCenter) {
-    console.log("entro aqui a eliminar")
+   
     Swal.fire({
       title: `¿Está seguro de eliminar el centro medico:  ${medicalCenter.name}?`,
       text: 'Esta acción no se puede revertir',
@@ -155,7 +155,7 @@ export class MedicalCentersPage implements AfterViewInit, OnInit {
   private checkStatusRequest(successMessage: string) {
     this.statusSubscription = this.store.pipe(select(medicalCenterStatusAndError)).subscribe((data) => {
       DebugerService.log('RequestStatus: ' + data.status);
-      console.log(data.error)
+    
       if (data.status === ActionStatus.SUCCESS) {
         this.dialogService.showToast(successMessage);
         this.statusSubscription.unsubscribe(); 

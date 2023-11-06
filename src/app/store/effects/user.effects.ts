@@ -17,6 +17,7 @@ import {
 import { of, from } from 'rxjs';
 import { switchMap, map, catchError, mergeMap } from 'rxjs/operators';
 import { UserHttpService } from 'src/app/services/http-service/user-http.service';
+import { User } from 'src/app/models/user.interface';
 
 @Injectable()
 export class UserEffects {
@@ -75,7 +76,10 @@ export class UserEffects {
       ofType(addSubUser),
       mergeMap((action) =>
         this.userService.resgiterSubUser(action.content, action.parentId, action.medicalCenterId).pipe(
-          map(() => addSubUserSuccess({ content: action.content })),
+          map((response) => {
+            const userResponse = response as User; 
+            return addSubUserSuccess({ content: userResponse });
+          }),
           catchError((error) => of(addSubUserFailure({ error })))
         )
       )

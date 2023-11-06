@@ -16,6 +16,8 @@ import { RoomFormModule } from '../components/room-form-component/room-form.modu
 import { MatSelectModule } from '@angular/material/select';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
+import { ReactiveFormsModule } from '@angular/forms';
+
 
 
 
@@ -34,7 +36,8 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
     RoomFormModule,
     MatTooltipModule,
     MatSelectModule,
-    NgxSkeletonLoaderModule
+    NgxSkeletonLoaderModule,
+    ReactiveFormsModule
 
   ],
   providers: [{ provide: MatPaginatorIntl, useValue: getSpanishPaginatorIntl() }],

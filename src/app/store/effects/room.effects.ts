@@ -50,7 +50,7 @@ export class RoomEffects {
     this.actions$.pipe(
       ofType(updateRoom),
       mergeMap((action) =>
-        this.roomService.editRoom(action.id, action.content).pipe(
+        this.roomService.editRoom(action.id, action.medicalCenterId ,action.content).pipe(
           map(() =>
             updateRoomSucess({ id: action.id, content: action.content })
           ),
@@ -65,7 +65,7 @@ export class RoomEffects {
       ofType(addRoom),
       mergeMap((action) =>
         this.roomService.resgiterRoom(action.id, action.content).pipe(
-          map(() => addRoomSuccess({ id: action.id, content: action.content })),
+          map((respose) => addRoomSuccess({ content: respose })),
           catchError((error) => of(addRoomFailure({ error })))
         )
       )

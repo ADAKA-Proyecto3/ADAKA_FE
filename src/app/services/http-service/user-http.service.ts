@@ -81,7 +81,7 @@ export class UserHttpService {
       .pipe(
         map((resp) => {
           this.loader.dismiss();
-          console.log('resp', resp);
+          DebugerService.log('resp' + JSON.stringify(resp));
           return resp as User;
         })
       );

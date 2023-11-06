@@ -44,8 +44,7 @@ export class MedicalCenterHttpService {
   registerMedicalCenter(id: number, medicalCenter: MedicalCenter) {
     this.loader.showLoadingModal();
     DebugerService.log("Entro al registro");
-    console.log(medicalCenter);
-  
+ 
     return this.httpClient
       .post(`${this.url}/${id}`, medicalCenter, Utils.getHttpHeaders())
       .pipe(
@@ -66,7 +65,6 @@ export class MedicalCenterHttpService {
   getMedicalCenters(id: number) {
     this.loader.showLoadingModal();
     const urlWithId = `${this.url}/all/${id}`;
-    console.log(urlWithId);
     return this.httpClient.get<Response<MedicalCenter>>(urlWithId,Utils.getHttpHeaders()).pipe(
       map((resp) => {
         console.log('resp', resp);

@@ -38,6 +38,7 @@ export class UsersPage implements  OnInit {
   activeUser: any;
 
   displayedColumns: string[] = [
+    'id',
     'name',
     'role',
     'phone',
@@ -138,7 +139,7 @@ export class UsersPage implements  OnInit {
 
   // Dialog | Modal Control
   openUserEditDialog(user: User): void {
-    console.log(user);
+  
     const dialogRef = this.dialog.open(UserFormComponent, {
       width: '60%',
       data: user,
@@ -158,11 +159,8 @@ export class UsersPage implements  OnInit {
 
     dialogRef.afterClosed().subscribe(async (result) => {
       DebugerService.log('USER REGISTRATION DIALOG CLOSED');
-      console.log(result);
+   
       if (result && result.user) {
-        console.log('user: ' + JSON.stringify(result.user));
-        console.log('parentId: ' + result.parentId);
-        console.log('parentId: ' + result.medicalCenterId);
         this.registerUser(result.user, result.parentId, result.medicalCenterId);
       }
     });
