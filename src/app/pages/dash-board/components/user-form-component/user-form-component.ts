@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { SelectOption } from 'src/app/common/interfaces/option.interface';
@@ -60,7 +60,12 @@ export class UserFormComponent implements OnInit {
         Validators.maxLength(30),
       ]),
       role: new FormControl('', [Validators.required]),
-      phone: new FormControl('', [Validators.required]),
+      phone: new FormControl('', [
+        this.digitsOnly,
+        Validators.required,
+        Validators.minLength(8),
+       
+      ]),
       email: new FormControl('', [Validators.required]),
       status: new FormControl('', [Validators.required]),
       medicalCenter: new FormControl('', [Validators.required]),
@@ -79,6 +84,8 @@ export class UserFormComponent implements OnInit {
       });
     }
   }
+
+
 
   onSubmit() {
     if (this.registerForm.invalid) {
@@ -106,6 +113,19 @@ export class UserFormComponent implements OnInit {
     }
   }
 
+  get name() {
+    return this.registerForm.get('name');
+  }
+  get phone() {
+    return this.registerForm.get('phone');
+  }
+  get email() {
+    return this.registerForm.get('email');
+  }
+  get role() {
+    return this.registerForm.get('role');
+  }
+
   closeDialog() {
     this.matDialogRef.close();
   }
@@ -128,8 +148,9 @@ export class UserFormComponent implements OnInit {
   }
 
 
-  private getMedicalCenterName(id: number) {
-    
-    return this.medicalCenterOptions.find((mc) => mc.value === id)?.viewValue;
+   digitsOnly(control: AbstractControl): { [key: string]: any } | null {
+    const isValid = /^\d+$/.test(control.value); // This regular expression checks if the input contains only digits
+  
+    return isValid ? null : { digitsOnly: true };
   }
 }

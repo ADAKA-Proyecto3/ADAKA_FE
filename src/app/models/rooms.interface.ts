@@ -6,4 +6,5 @@ export interface Room {
     width: number;
     height: number;
     medicalCenter?: MedicalCenter;
+    assignedMedicalCenter?: number;
 }

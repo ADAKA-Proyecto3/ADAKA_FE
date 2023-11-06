@@ -13,6 +13,8 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 import { RoomsPage } from './rooms-page';
 import { RoomsPageRoutingModule } from './rooms-page-routing.module';
 import { RoomFormModule } from '../components/room-form-component/room-form.module';
+import { MatSelectModule } from '@angular/material/select';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
 
 
@@ -30,7 +32,9 @@ import { RoomFormModule } from '../components/room-form-component/room-form.modu
     MatButtonModule,
     MatIconModule,
     RoomFormModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatSelectModule,
+    NgxSkeletonLoaderModule
 
   ],
   providers: [{ provide: MatPaginatorIntl, useValue: getSpanishPaginatorIntl() }],
