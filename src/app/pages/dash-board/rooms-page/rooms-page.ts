@@ -4,35 +4,37 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Store } from '@ngrx/store';
 import { Room } from 'src/app/models/rooms.interface';
-import { addRoom, loadRooms, removeRoom, updateRoom } from 'src/app/store/actions/room.actions';
+import {
+  addRoom,
+  loadRooms,
+  removeRoom,
+  updateRoom,
+} from 'src/app/store/actions/room.actions';
 import { AppState } from 'src/app/store/app.state';
 import { RoomFormComponent } from '../components/room-form-component/room-form-component';
 import { DebugerService } from 'src/app/services/debug-service/debug.service';
 import { MedicalCenter } from 'src/app/models/medical-center.interface';
 import { User } from 'src/app/models/user.interface';
+import { SelectOption } from 'src/app/common/interfaces/option.interface';
 
 @Component({
   templateUrl: './rooms-page.html',
-  styleUrls: ['./rooms-page.scss']
+  styleUrls: ['./rooms-page.scss'],
 })
-export class RoomsPage implements AfterViewInit, OnInit{
+export class RoomsPage implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(
-    private store: Store<AppState>, 
-    private dialog: MatDialog) {}
+  constructor(private store: Store<AppState>, private dialog: MatDialog) {}
 
-  displayedColumns: string[] = [
-    'name',
-    'length',
-    'width',
-    'height',
-    'actions',
-  ];
+  displayedColumns: string[] = ['name', 'length', 'width', 'height', 'actions'];
   dataSource = new MatTableDataSource<Room>();
-  medicalCenters = [];
-  user : User | undefined;
+  medicalCenters: MedicalCenter[] = [];
+  medicalCenterOptions: SelectOption[] = [];
+  medicalCenterSelected: boolean = false;
+  assignedMedicalCenterOnEdit: number = 0;
 
+  user: User | undefined;
+  //medicalCenters: any;
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -41,47 +43,44 @@ export class RoomsPage implements AfterViewInit, OnInit{
   id_centro_medico: number = 1;
 
   ngOnInit(): void {
-    /*this.store.select('activeUser').subscribe(({ user, status }) => {
-      this.user = user;
-        
+    this.store
+      .select((state) => state.user.activeUser.medicalCenters)
+      .subscribe((mc) => {
+        if (mc) {
+          this.medicalCenters = mc;
+          this.medicalCenterOptions = this.medicalCenters.map((mc) => {
+            return { value: mc.id!, viewValue: mc.name };
+          });
+        }
       });
-    }
-    this.store.dispatch(loadMedicalCenters({id: user.id}))*/
-    this.store.dispatch(loadRooms({id: this.id_centro_medico}));
-
   }
 
-  /*public async getMedicalCenter() {
-    const medicalCenterId = this.addressForm.value.provincia;
-
-    if (!provinciaId) {
-      return;
-    }
-
-    const cantones = await this.HttpService.getCanton(provinciaId);
-    if (cantones) {
-      this.cantonOptions = Object.keys(cantones).map((key) => {
-        return {
-          value: key,
-          viewValue: cantones[key],
-        };
-      });
-    }
-    this.addressForm.controls.canton.setValue('');
-  }*/
-
-  ngAfterViewInit(): void {
+  loadRoomsTable(): void {
     this.store.select('rooms').subscribe(({ rooms }) => {
-    this.dataSource.data = rooms;
-      
+      this.dataSource.data = rooms;
+
+      if (rooms.length < 1) {
+        this.medicalCenterSelected = true;
+      }
     });
 
     this.dataSource.paginator = this.paginator;
   }
 
+  editRoomDialog(room: Room) {
+    this.openRoomEditDialog(room);
+  }
+
+  onSelectChange(event: any) {
+    const selectedValue = event.value;
+    this.assignedMedicalCenterOnEdit = selectedValue;
+    this.store.dispatch(loadRooms({ id: selectedValue }));
+    this.loadRoomsTable();
+  }
+
   //CRUD
   registerRoom(id: number, room: Room) {
-    this.store.dispatch(addRoom({ id: id , content: room }));
+    this.store.dispatch(addRoom({ id: id, content: room }));
   }
 
   editRoom(id: number, room: Room) {
@@ -89,7 +88,7 @@ export class RoomsPage implements AfterViewInit, OnInit{
   }
 
   deleteRoom(room: Room) {
-    console.log('borrando room',room)
+    console.log('borrando room', room);
 
     const roomId = room.id!;
     this.store.dispatch(removeRoom({ id: roomId }));
@@ -106,12 +105,17 @@ export class RoomsPage implements AfterViewInit, OnInit{
     );
   }
 
-  // Dialog | Modal Control
+
   openRoomEditDialog(room: Room): void {
+    
+    const roomToEdit ={
+      ...room,
+      assignedMedicalCenter: this.assignedMedicalCenterOnEdit,
+    }
     const dialogRef = this.dialog.open(RoomFormComponent, {
       width: '60%',
-      data: room,
-      //opciones: this.medicalCenters,
+      data: { roomToEdit },
+    
     });
 
     dialogRef.afterClosed().subscribe(async (result) => {
@@ -130,7 +134,7 @@ export class RoomsPage implements AfterViewInit, OnInit{
       DebugerService.log('ROOM REGISTRATION DIALOG CLOSED');
       console.log(result);
       if (result && result.room) {
-        console.log(result)
+        console.log(result);
         this.registerRoom(result.id, result.room);
       }
     });

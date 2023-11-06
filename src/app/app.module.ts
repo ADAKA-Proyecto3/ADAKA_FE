@@ -15,6 +15,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 @NgModule({
@@ -32,7 +33,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
     SweetAlert2Module.forRoot(),
     MatNativeDateModule,
-    MatDatepickerModule
+    MatDatepickerModule,
+    MatSnackBarModule
     
 
   ],

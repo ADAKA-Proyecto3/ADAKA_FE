@@ -23,7 +23,7 @@ export class RoomFormComponent implements OnInit {
   dataSource: any;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public room: Room | undefined,
+    @Inject(MAT_DIALOG_DATA) public room: any | undefined,
     private matDialogRef: MatDialogRef<RoomFormComponent>,
     private readonly store: Store<AppState>
   ) {
@@ -31,16 +31,14 @@ export class RoomFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.initializeProperties();
     this.store
       .select((state) => state.user.activeUser.id)
       .subscribe((id) => {
         this.activeUser = id;
-
         this.loadMedicalCenters(this.activeUser);
-
-
       });
+
+     
   }
 
   
@@ -53,6 +51,8 @@ export class RoomFormComponent implements OnInit {
         return { value: mc.id!, viewValue: mc.name };
       });
     });
+
+    this.initializeProperties();
   }
   
   initializeProperties() {
@@ -68,14 +68,15 @@ export class RoomFormComponent implements OnInit {
     });
 
     if (this.room) {
+      console.log(this.room);
       this.editing = true;
 
       this.registerForm.patchValue({
-        name: this.room.name || '',
-        length: this.room.length || '',
-        width: this.room.width || '',
-        height: this.room.height || '',
-        medicalCenter: this.room.medicalCenter || '',
+        name: this.room.roomToEdit.name || '',
+        length: this.room.roomToEdit.length || '',
+        width: this.room.roomToEdit.width || '',
+        height: this.room.roomToEdit.height || '',
+        medicalCenter: this.room.roomToEdit.assignedMedicalCenter || '',
       });
     }
   }
