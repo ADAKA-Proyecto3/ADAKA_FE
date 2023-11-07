@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -10,7 +11,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 export class PasswordRecoveryPage implements OnInit {
   recoveryForm: FormGroup;
-
   constructor(private formBuilder: FormBuilder) {
     this.recoveryForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
@@ -26,7 +26,18 @@ export class PasswordRecoveryPage implements OnInit {
 
   sendRecoveryCode() {
     if (this.recoveryForm.valid) {
-    
+      
+      Swal.fire({
+        icon: 'success',
+        title: 'Éxito',
+        text: 'Se han enviado instrucciones a su correo',
+        confirmButtonText: 'Ir a login',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = 'auth/login'; 
+        }
+      });
+      
     }
   }
 
