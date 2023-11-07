@@ -10,6 +10,9 @@ import Swal from 'sweetalert2';
 })
 
 export class PasswordRecoveryPage implements OnInit {
+
+  codeSent: Boolean = false;
+
   recoveryForm: FormGroup;
   constructor(private formBuilder: FormBuilder) {
     this.recoveryForm = this.formBuilder.group({
@@ -17,7 +20,6 @@ export class PasswordRecoveryPage implements OnInit {
     });
   }
   
-
   ngOnInit(): void {
     this.recoveryForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
@@ -26,7 +28,10 @@ export class PasswordRecoveryPage implements OnInit {
 
   sendRecoveryCode() {
     if (this.recoveryForm.valid) {
-      
+      // http post password recovery email
+      // if (http response de enviado es true) then
+      this.codeSent = true;
+      if (this.codeSent){
       Swal.fire({
         icon: 'success',
         title: 'Éxito',
@@ -37,8 +42,8 @@ export class PasswordRecoveryPage implements OnInit {
           window.location.href = 'auth/login'; 
         }
       });
-      
     }
+  }
   }
 
   public error = (controlName: string, errorName: string) => {
