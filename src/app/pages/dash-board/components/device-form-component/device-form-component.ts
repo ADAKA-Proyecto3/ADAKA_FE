@@ -1,13 +1,12 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Store } from '@ngrx/store';
 import { Device } from 'src/app/models/devices.interface';
 import { DebugerService } from 'src/app/services/debug-service/debug.service';
-
-interface SelectOption {
-  value: string;
-  viewValue: string;
-}
+import { AppState } from 'src/app/store/app.state';
+import { loadRooms } from '../../../../store/actions/room.actions' 
+import { SelectOption } from 'src/app/common/interfaces/option.interface';
 
 @Component({
   selector: 'app-device-form-component',
@@ -21,45 +20,68 @@ export class DeviceFormComponent implements OnInit {
 
   editing = false;
 
+  activeUser: any;
+  roomOptions: SelectOption[] = [];
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public device: Device | undefined,
-    private matDialogRef: MatDialogRef<DeviceFormComponent>
-  ) {
+    private matDialogRef: MatDialogRef<DeviceFormComponent>,
+    private readonly store: Store<AppState>
+    ) {
     matDialogRef.disableClose = true;
   }
 
   ngOnInit(): void {
-    this.initilizeProperties();
-  }
+    this.store
+    .select((state) => state.user.activeUser.id)
+    .subscribe((id) => {
+      this.activeUser = id;
+   
+      this.loadRooms(this.activeUser);
 
-
-  initilizeProperties() {
-    
-    this.registerForm = new FormGroup({
-      id: new FormControl('', [Validators.required]),
-      model: new FormControl('', [
-        Validators.required,
-        Validators.maxLength(30),
-      ]),
-      installationDate: new FormControl('', [Validators.required]),
-      room: new FormControl('', [Validators.required]),
-
+     
     });
 
-    if (this.device) {
-      this.editing = true;
-
-      this.registerForm.patchValue({
-        id: this.device.id || '',
-        model: this.device.model || '',
-        installatonDate: this.device.installationDate || '',
-        room: this.device.room || '',
-      });
-    }
 
 
+  this.registerForm = new FormGroup({
+    model: new FormControl('', [
+      Validators.required,
+      Validators.maxLength(30),
+    ]),
+    date: new FormControl('', [Validators.required]),
+    room: new FormControl('', [Validators.required]),
+  });
+
+  if (this.device) {
+    this.editing = true;
+    this.registerForm.patchValue({
+      model: this.device.model || '',
+      date: this.device.date || '',
+      room: this.device.room || '',
+     });
   }
- 
+  }
+  get model() {
+    return this.registerForm.get('model');
+  }
+  get date() {
+    return this.registerForm.get('date');
+  }
+  get room() {
+    return this.registerForm.get('room');
+  }
+
+  loadRooms(userId: number) {
+    this.store.dispatch(loadRooms({id: userId}));
+    this.store
+    .select((state) => state.rooms.rooms)
+    .subscribe((rooms) => {
+      this.roomOptions = rooms.map((room) => {
+        return { value: room.id!, viewValue: room.name };
+      });
+    });
+  }
 
   onSubmit() {
     if (this.registerForm.invalid) {
@@ -69,11 +91,12 @@ export class DeviceFormComponent implements OnInit {
     const device: Device = {
       id: this.registerForm.value.id,
       model: this.registerForm.value.model,
-      installationDate: this.registerForm.value.installationDate,
+      date: this.registerForm.value.date,
       room: this.registerForm.value.room,
     };
 
     if (this.editing) {
+      device.assignedRoomId = this.registerForm.value.room;
       this.matDialogRef.close( {id: this.device?.id, device: device} );
     }else{
       DebugerService.log('NO EDITING');
