@@ -13,4 +13,5 @@ export enum UrlPages {
     MAIN = 'main',
     MEDICAL_CENTERS = 'medical-centers',
     MAP = 'live-map',
+    ZHENAIR_STATS = 'zhenair-stats',
 }

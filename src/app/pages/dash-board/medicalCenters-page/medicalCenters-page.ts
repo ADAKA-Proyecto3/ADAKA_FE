@@ -28,7 +28,7 @@ import Swal from 'sweetalert2';
   templateUrl: './medicalCenters-page.html',
   styleUrls: ['./medicalCenters-page.scss'],
 })
-export class MedicalCentersPage implements AfterViewInit, OnInit {
+export class MedicalCentersPage implements  OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
 
@@ -62,9 +62,10 @@ export class MedicalCentersPage implements AfterViewInit, OnInit {
       this.aut.checkSignedInUser();
     }
     this.loadUser();
+    this.loadMedicalCenterTable()
   }
 
-  ngAfterViewInit(): void {
+  loadMedicalCenterTable(): void {
     this.store.select('medicalCenters').subscribe(({ medicalCenters }) => {
    
       this.dataSource.data = medicalCenters;
