@@ -32,6 +32,19 @@ export class RoomHttpService {
       );
   }
 
+  getRoomsByUser(id: number) {
+    this.loader.showLoadingModal();
+    return this.httpClient
+      .get<Response<Room>>(`${this.url}/allUser/${id}`, Utils.getHttpHeaders())
+      .pipe(
+        map((resp) => {
+          DebugerService.log('resp: ' + JSON.stringify(resp));
+          this.loader.dismiss();
+          return resp.data as Room[];
+        })
+      );
+  }
+
   deleteRoom(id: number) {
     return this.httpClient.delete(
       `${this.url}/delete/${id}`,

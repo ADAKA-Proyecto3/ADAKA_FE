@@ -44,6 +44,13 @@ const routes: Routes = [
           ),
       },
       {
+        path: UrlPages.ZHENAIR_STATS,
+        loadChildren: () =>
+          import('../zhenair-stats/zhenair-stats.module').then(
+            (m) => m.ZhenairStatsModule
+          ),
+      },
+      {
         path: '**',
         redirectTo: UrlPages.MAIN,
         pathMatch: 'full',

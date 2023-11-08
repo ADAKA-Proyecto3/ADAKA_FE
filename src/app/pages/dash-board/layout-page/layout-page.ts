@@ -21,18 +21,23 @@ export class LayoutPage implements OnInit {
     },
     {
       label: 'Centros',
-      icon: 'apartment',
+      icon: 'home_health',
       url: `/${UrlPages.DASHBOARD}/${UrlPages.MEDICAL_CENTERS}`,
     },
     {
       label: 'Salas',
-      icon: 'bedroom_child',
+      icon: 'bed',
       url: `/${UrlPages.DASHBOARD}/${UrlPages.ROOMS}`,
     },
     {
       label: 'Dispositivos',
       icon: 'devices',
       url: `/${UrlPages.DASHBOARD}/${UrlPages.DEVICES}`,
+    },
+    {
+      label: 'Estadísticas',
+      icon: 'bar_chart',
+      url: `/${UrlPages.DASHBOARD}/${UrlPages.ZHENAIR_STATS}`,
     },
   ];
 

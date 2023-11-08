@@ -22,7 +22,7 @@ export class RoomEffects {
       switchMap((action) =>
 
         // Call the get method, convert it to an observable
-        from(this.roomService.getRooms(action.id)).pipe(
+        from(this.roomService.getRoomsByUser(action.id)).pipe(
           // Take the returned value and return a new success action containing the todos
           map((room) =>
             loadRoomsSuccess({ rooms : room })

@@ -7,6 +7,7 @@ import { User } from 'src/app/models/user.interface';
 import { DebugerService } from 'src/app/services/debug-service/debug.service';
 import { AppState } from 'src/app/store/app.state';
 import { loadMedicalCenter } from '../../../../store/actions/medicalCenter.actions';
+import { roleOptions, statusOptions } from 'src/app/common/selectOptions/selectOptions';
 
 @Component({
   selector: 'app-user-form-component',
@@ -19,14 +20,12 @@ export class UserFormComponent implements OnInit {
   selectedValue: string = '';
 
   roles: SelectOption[] = [
-    { value: 'ADMIN', viewValue: 'Admin' },
+    // { value: 'ADMIN', viewValue: 'Admin' },
     { value: 'NURSE', viewValue: 'Enfermero' },
+    {value: 'MEDICAL_DOCTOR', viewValue: 'Médico'}
   ];
 
-  status: SelectOption[] = [
-    { value: 'ACTIVE', viewValue: 'Activo' },
-    { value: 'INACTIVE', viewValue: 'Inactivo' },
-  ];
+  status: SelectOption[] = statusOptions;
 
   medicalCenterOptions: SelectOption[] = [];
   activeUser: any;

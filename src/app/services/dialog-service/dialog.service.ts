@@ -19,7 +19,7 @@ export class DialogService {
   async showToast(message: string, action:string = "OK") {
 
     this._snackBar.open(message, action, {
-      duration: 2000,
+      duration: 2700,
       verticalPosition: 'top',
     });
 
