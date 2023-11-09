@@ -38,7 +38,7 @@ export class DevicesPage  implements AfterViewInit, OnInit{
     'id',
     'model',
     'room',
-    'installationDate',
+    'date',
     'actions',
   ];
 
@@ -148,8 +148,6 @@ export class DevicesPage  implements AfterViewInit, OnInit{
 
   private checkStatusRequest(successMessage: string, errorMessage: string) {
     this.statusSubscription =  this.store.pipe(select(selectDeviceStatus)).subscribe((status) => {
-      DebugerService.log('RequestStatus: ' + status);
-
       if (status === ActionStatus.SUCCESS) {
         this.dialogService.showToast(successMessage);
         this.statusSubscription.unsubscribe();
