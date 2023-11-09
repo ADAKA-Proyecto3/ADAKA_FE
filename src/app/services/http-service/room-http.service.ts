@@ -33,7 +33,7 @@ export class RoomHttpService {
   }
 
   getRoomsByUser(id: number) {
-    this.loader.showLoadingModal();
+    //this.loader.showLoadingModal();
     return this.httpClient
       .get<Response<Room>>(`${this.url}/allUser/${id}`, Utils.getHttpHeaders())
       .pipe(

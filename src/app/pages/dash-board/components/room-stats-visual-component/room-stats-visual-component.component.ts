@@ -1,24 +1,31 @@
-import { Component,  OnInit,  } from '@angular/core';
-import { EChartsOption } from 'echarts/types/dist/echarts';
-import {
-  CO2_SensorConfig,
-  Humidity_SensorConfig,
-  PM10_SensorConfig,
-  PM25_SensorConfig,
-  Temperature_SensorConfig,
-} from 'src/app/common/chart-config/chart-config';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Store } from '@ngrx/store';
+import { EChartsOption } from 'echarts';
+import { CO2_SensorConfig, Humidity_SensorConfig, PM10_SensorConfig, PM25_SensorConfig, Temperature_SensorConfig } from 'src/app/common/chart-config/chart-config';
 import { SensorName } from 'src/app/common/enums/sensor-name.enum';
 import { SensorReading } from 'src/app/common/interfaces/sensor-reading';
 import { LoadingService } from 'src/app/services/loading-service/loading.service';
-@Component({
-  selector: 'app-zhenair-stats',
-  templateUrl: './zhenair-stats.page.html',
-  styleUrls: ['./zhenair-stats.page.scss'],
-})
-export class ZhenairStatsPage implements OnInit {
-  constructor(private readonly loadingService: LoadingService) {}
+import { AppState } from 'src/app/store/app.state';
 
-  //Data que viene del API
+@Component({
+  selector: 'app-room-stats-visual-component',
+  templateUrl: './room-stats-visual-component.component.html',
+  styleUrls: ['./room-stats-visual-component.component.scss']
+})
+export class RoomStatsVisualComponentComponent implements OnInit {
+
+
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: any | undefined,
+    private matDialogRef: MatDialogRef<RoomStatsVisualComponentComponent>,
+    private readonly store: Store<AppState>,
+    private readonly loadingService: LoadingService
+  ) {
+    matDialogRef.disableClose = true;
+  }
+
+   //Data que viene del API
   mockdata = [
     {
       value: 2819,
@@ -442,4 +449,5 @@ export class ZhenairStatsPage implements OnInit {
 
     this.x.push(newReading);
   }
+
 }

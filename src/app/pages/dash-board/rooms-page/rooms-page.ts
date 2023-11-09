@@ -33,10 +33,8 @@ export class RoomsPage implements OnInit {
   displayedColumns: string[] = [
     'id',
     'name',
-    'length',
-    'width',
-    'height',
     'medicalCenter',
+    'zhenair',
     'actions',
   ];
   dataSource = new MatTableDataSource<Room>();
@@ -77,14 +75,9 @@ export class RoomsPage implements OnInit {
       .select((state) => state.user.activeUser.id)
       .subscribe((id) => {
         this.activeUser = id;
-        
         this.store.dispatch(loadRooms({ id: this.activeUser }));
-        
       });
-
       this.loadRoomsTable();
-    
-    //  this.store.dispatch(loadRooms({ id: id }))
   }
 
   editRoomDialog(room: Room) {
@@ -95,27 +88,22 @@ export class RoomsPage implements OnInit {
     const selectedValue = event.value;
     this.assignedMedicalCenterOnEdit = selectedValue;
     this.store.dispatch(loadRooms({ id: selectedValue }));
-    //this.loadRoomsTable();
   }
 
   updateMedicalCenterSelectionOnSave(id: number) {
     this.selectedMedicalCenter.setValue(id);
     this.store.dispatch(loadRooms({ id: id }));
-    //this.loadRoomsTable();
   }
 
   loadRoomsTable(): void {
-
     this.store.select('rooms').subscribe(({ rooms }) => {
       this.dataSource.data = rooms;
     });
-
     this.dataSource.paginator = this.paginator;
   }
 
   registerRoom(id: number, room: Room) {
     this.store.dispatch(addRoom({ id: id, content: room }));
-    //this.updateMedicalCenterSelectionOnSave(id);
     this.checkStatusRequest(
       'Sala registrada con éxito',
       'Ha sucedido un error, por favor intente de nuevo'
@@ -126,7 +114,6 @@ export class RoomsPage implements OnInit {
     this.store.dispatch(
       updateRoom({ id: id, medicalCenterId: newMedicalCenterId, content: room })
     );
-   // this.updateMedicalCenterSelectionOnSave(newMedicalCenterId);
     this.checkStatusRequest(
       'Sala actualizado con éxito',
       'Ha sucedido un error, por favor intente de nuevo'
@@ -160,10 +147,6 @@ export class RoomsPage implements OnInit {
   }
 
   openRoomEditDialog(room: Room): void {
-    // const roomToEdit = {
-    //   ...room,
-    //   assignedMedicalCenter: this.assignedMedicalCenterOnEdit,
-    // };
     const dialogRef = this.dialog.open(RoomFormComponent, {
       width: '60%',
       data: room,

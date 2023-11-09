@@ -16,11 +16,12 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { RoomStatsVisualComponentComponent } from './pages/dash-board/components/room-stats-visual-component/room-stats-visual-component.component';
 
 
 
 @NgModule({
-  declarations: [ AppComponent ],
+  declarations: [ AppComponent, RoomStatsVisualComponentComponent ],
   imports: [
     BrowserModule,
     AuthModule,
