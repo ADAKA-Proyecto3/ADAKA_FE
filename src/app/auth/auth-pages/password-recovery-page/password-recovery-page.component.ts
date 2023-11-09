@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { UrlPages } from 'src/app/common/enums/url-pages.enum';
+import { PageRouterService } from 'src/app/services/page-router-service/page-router.service';
 import Swal from 'sweetalert2';
 
 
@@ -10,11 +13,11 @@ import Swal from 'sweetalert2';
 })
 
 export class PasswordRecoveryPage implements OnInit {
-
+  
   codeSent: Boolean = false;
 
   recoveryForm: FormGroup;
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder, private readonly router: Router,) {
     this.recoveryForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
     });
@@ -24,6 +27,10 @@ export class PasswordRecoveryPage implements OnInit {
     this.recoveryForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
     });
+  }
+
+  public returnToLogin(): void {
+    this.router.navigateByUrl(`${UrlPages.AUTH}/${UrlPages.LOGIN}`);
   }
 
   sendRecoveryCode() {
