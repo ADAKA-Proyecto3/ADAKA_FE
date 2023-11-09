@@ -19,7 +19,12 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthCustomDialogComponent } from './components/auth-dialog/auth-custom-dialog.component';
 import { MatListModule } from '@angular/material/list';
-
+import { RegisterPageController } from './auth-pages/register-page/register-page.controller';
+import {MatStepperModule} from '@angular/material/stepper';
+import { MatSelectModule } from '@angular/material/select';
+import { MatCardModule } from '@angular/material/card';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { loginPageController } from './auth-pages/login-page/login-page.controller';
 
 
 
@@ -44,9 +49,17 @@ import { MatListModule } from '@angular/material/list';
     MatIconModule,
     MatDialogModule,
     HttpClientModule,
-    MatListModule
+    MatListModule,
+    MatStepperModule,
+    MatSelectModule,
+    MatCardModule,
+    MatButtonModule,
+    MatListModule,
+    MatSlideToggleModule,
    
   ],
+
+  providers: [ RegisterPageController, loginPageController ],
 
 })
 export class AuthModule { }

@@ -20,6 +20,7 @@ async showLoadingModal( messageKey: LoadingMessages = LoadingMessages.LOADING ) 
 
 
     this.loadingDialog = this.dialog.open(SpinnerComponent, {
+      width: '20%',
       data: messageKey,
       panelClass: 'base-modal',
     });

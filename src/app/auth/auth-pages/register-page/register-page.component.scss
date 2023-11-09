@@ -1,7 +1,3 @@
-.login-form {
-
-}
-
 
 .top-decoration{
   //clip-path: circle(63.3% at 28% 21%);
@@ -55,4 +51,62 @@
   background-size: cover;
   height: 100vh;
   animation: rotate 15s infinite alternate linear;
+}
+
+.mat-stepper-horizontal {
+  margin-top: 8px;
+}
+
+
+//PLANS
+.top-decoration-basic{
+  background-color: #05c7f2;
+  //clip-path: polygon(0 0, 100% 0%, 100% 8%, 0 8%);
+  height: 0.5rem;
+}
+
+.top-decoration-pro{
+  background-color: #049DD9;
+  //clip-path: polygon(0 0, 100% 0%, 100% 8%, 0 8%);
+  height: 0.5rem;
+}
+
+.top-decoration-enterprice{
+  background-color: #042959;
+  //clip-path: polygon(0 0, 100% 0%, 100% 8%, 0 8%);
+  height: 0.5rem;
+}
+
+.title{
+  font-weight: 700;
+  font-size: 3rem;
+}
+
+.subtitle{
+  font-weight: 300;
+  font-size: 1.2rem;
+  letter-spacing: 0.1rem;
+}
+
+.price-title{
+  font-weight: 700;
+  font-size: 1.5rem;
+  letter-spacing: 0.1rem;
+
+}
+
+.price{
+  font-weight: 700;
+  font-size: 3rem;
+  letter-spacing: 0.1rem;
+}
+
+.price-frecuency{
+  font-weight: 300;
+  font-size: 1.2rem;
+  letter-spacing: 0.1rem;
+}
+
+.card-sub{
+  font-size: 0.8rem;
 }

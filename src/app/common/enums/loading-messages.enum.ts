@@ -2,7 +2,7 @@
 export enum LoadingMessages {
   // GENERICOS
   LOADING = 'Cargando',
-  PLEASE_WAIT = 'Por favor espere',
+  PLEASE_WAIT = 'Por favor esperar',
   BUFFERING = 'Consultando',
   PROCESSING = 'Procesando',
   // ESPECIFICOS

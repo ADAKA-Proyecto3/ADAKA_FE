@@ -1,16 +1,36 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
 
 @Component({
   selector: 'app-password-recovery-page',
   templateUrl: './password-recovery-page.component.html',
   styleUrls: ['./password-recovery-page.component.scss'],
 })
-export class PasswordRecoveryPage implements OnInit {
-  ngOnInit(): void {
-    throw new Error('Method not implemented.');
-  }
- 
 
+export class PasswordRecoveryPage implements OnInit {
+  recoveryForm: FormGroup;
+
+  constructor(private formBuilder: FormBuilder) {
+    this.recoveryForm = this.formBuilder.group({
+      email: ['', [Validators.required, Validators.email]],
+    });
+  }
+  
+
+  ngOnInit(): void {
+    this.recoveryForm = this.formBuilder.group({
+      email: ['', [Validators.required, Validators.email]],
+    });
+  }
+
+  sendRecoveryCode() {
+    if (this.recoveryForm.valid) {
+    
+    }
+  }
+
+  public error = (controlName: string, errorName: string) => {
+    return this.recoveryForm.controls[controlName].hasError(errorName);
+  };
 }

@@ -9,29 +9,57 @@ const routes: Routes = [
     component: LayoutPage,
     children: [
       {
-        path: 'devices',
+        path: UrlPages.DEVICES,
         loadChildren: () =>
           import('../devices-page/devices-page.module').then(
             (m) => m.DevicesPageModule
           ),
       },
       {
-        path: 'users',
+        path: UrlPages.USERS,
         loadChildren: () =>
           import('../users-page/users-page.module').then(
             (m) => m.UsersPageModule
           ),
       },
       {
-        path: '',
-        redirectTo: 'devices',
+        path: UrlPages.ROOMS,
+        loadChildren: () =>
+          import('../rooms-page/rooms-page.module').then(
+            (m) => m.RoomsPageModule
+          ),
+      },
+      {
+        path: UrlPages.MAIN,
+        loadChildren: () =>
+          import('../main-page/main-page.module').then(
+            (m) => m.MainPageModule
+          ),
+      },
+      {
+        path: UrlPages.MEDICAL_CENTERS,
+        loadChildren: () =>
+          import('../medicalCenters-page/medicalCenter-page.module').then(
+            (m) => m.MedicalCenterModule
+          ),
+      },
+      {
+        path: UrlPages.ZHENAIR_STATS,
+        loadChildren: () =>
+          import('../zhenair-stats/zhenair-stats.module').then(
+            (m) => m.ZhenairStatsModule
+          ),
+      },
+      {
+        path: '**',
+        redirectTo: UrlPages.MAIN,
         pathMatch: 'full',
       },
     ],
   },
-  {
+{
     path: '',
-    redirectTo: 'devices',
+    redirectTo: UrlPages.MAIN,
     pathMatch: 'full',
   },
 ];

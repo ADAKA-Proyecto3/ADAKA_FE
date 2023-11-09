@@ -1,29 +1,17 @@
 
-    <mat-toolbar>
-      
-      <img class="logo" src="assets/logos/ZhenAir_Secondary.png" alt="ZhenAir logo">
+<app-navbar></app-navbar>
+<div class="home_top_banner">
+  <div class="home_top_banner_textContainer">
+    <h1 class="home_top_banner_textContainer_header  titulo-1 text-white">Eleva la calidad de vida con soluciones modernas</h1>
 
-      <span class="example-spacer"></span>
+    <p class="home_top_banner_textContainer_body" >
+      Descubre una forma innovadora y sencilla de disfrutar de un aire limpio con Zhen Air.  ¡Únete a nosotros en el
+      camino hacia un futuro más limpio y revitalizante!
 
-      <button mat-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
-        Mapa en vivo
-      </button>
+    </p>
+  </div>
 
-      <button mat-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
-        Precios
-      </button>
-
-      <button mat-button class="sky-blue-darker-bg white-text" aria-label="Example icon-button with heart icon">
-        Comenzar una prueba
-      </button>
-
-    
-
-      <button mat-button class="example-icon" aria-label="Example icon-button with share icon">
-        Iniciar Sesión
-      </button>
-
-    </mat-toolbar>
+</div>
 
 
 
@@ -31,22 +19,20 @@
 <div class="container w-100 align-content-center text-center pt-5">
 
 
+  <div class="pt-2">
+
+    <h1>Home Page</h1>
+
+  </div>
+  <div class="pt-2">
+
     <div class="pt-2">
-
-        <h1>Home Page</h1>
-
+      <button (click)="goToDashBoard()">Muestra - despues de login</button>
     </div>
-    <div class="pt-2">
-        <div>
-            <button (click)="goToLanding()">Ir a Landing Page</button>
-        </div>
-        <div class="pt-2">
-            <button (click)="goToLogin()">Login</button>
-        </div>
-        <div class="pt-2">
-            <button (click)="goToDashBoard()">Muestra - despues de login</button>
-        </div>
 
-    </div>
+  </div>
 
 </div>
+
+<app-footer></app-footer>
+

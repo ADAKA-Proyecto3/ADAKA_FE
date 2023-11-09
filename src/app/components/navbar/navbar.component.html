@@ -1,38 +1,41 @@
-<mat-sidenav-container 
-
->
-
-  <mat-sidenav #sidenav mode="push" [ngStyle]="{width: '250px'}">
-
-      <mat-toolbar>
-          <span>Menu</span>
-          <span class="spacer"></span>
-          <button mat-icon-button (click)="sidenav.toggle()"><mat-icon>menu</mat-icon></button>
-
-      </mat-toolbar>
-
-      <mat-nav-list>
-          <mat-list-item
-              *ngFor=" let item of sideBarItems"
-              [routerLink]="item.url"
-              (click)="sidenav.toggle()"
-          >
-              <mat-icon matListItemIcon>{{item.icon}}</mat-icon>
-              {{item.label}}
-
-          </mat-list-item>
-      </mat-nav-list>
-
-  </mat-sidenav>
-  <mat-toolbar color="primary">
-      <button mat-icon-button (click)="sidenav.toggle()"><mat-icon>menu</mat-icon></button>
-      <span class="spacer"></span>
-      <button mat-button>Logout</button>
+<mat-toolbar>
+    <img  (click)="goToHome()"  class="logo pt-3 pb-3" src="assets/logos/ZhenAir_Secondary.png" alt="ZhenAir logo">
+    <span class="example-spacer"></span>
+    <ng-container *ngIf="windowWidth <= 750">
+      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="goToLiveMap()">
+          <mat-icon color="warn" class="blink-1">adjust</mat-icon> Mapa en vivo
+        </button>
+        <button mat-menu-item class="example-icon favorite-icon">
+          <mat-icon>eco</mat-icon>
+          <span>Planes</span>
+        </button>
+        <button mat-menu-item class="sky-blue-darker-bg white-text" (click)="goToRegister()">
+          <mat-icon class="white-text">app_registration</mat-icon>
+          Suscribirme
+        </button>
+        <button mat-menu-item class="example-icon" (click)="goToLogin()">
+          <mat-icon>login</mat-icon>
+          Iniciar Sesión
+        </button>
+      </mat-menu>
+    </ng-container>
+    <!-- Display buttons on larger screens -->
+    <ng-container *ngIf="windowWidth > 750">
+      <button mat-button class="example-icon favorite-icon" (click)="goToLiveMap()">
+        <mat-icon color="warn" class="blink-1">adjust</mat-icon> Mapa en vivo
+      </button>
+      <button mat-button class="example-icon favorite-icon ms-3" (click)="goToPlans()">
+        Planes
+      </button>
+      <button mat-button class="sky-blue-darker-bg white-text ms-3" (click)="goToRegister()">
+        Suscribirme
+      </button>
+      <button mat-button class="example-icon ms-3" (click)="goToLogin()">
+        Iniciar Sesión
+      </button>
+    </ng-container>
   </mat-toolbar>
-
-  <div class="container">
-      Hola
-     
-  </div>
-
-</mat-sidenav-container>

@@ -1,0 +1,105 @@
+<app-navbar></app-navbar>
+
+<div class="container text-center title pt-5">Planes</div>
+<div class="container text-center w-50 subtitle pt-1">Encuentre el plan que mejor se ajuste a sus necesidades y le
+    permita administrar su centro de salud.</div>
+<div class="container text-end pt-5">
+    <p><span class="pe-2" [ngStyle]="{ color: isChecked ? 'black' : 'green' }"> Precios mensuales</span> <mat-slide-toggle color="secondary" [(ngModel)]="isChecked" /> <span
+            class="ps-2" [ngStyle]="{ color: isChecked ? 'green' : 'black' }">Precios anuales</span></p>
+</div>
+<div class="container pb-5">
+    <div class="row">
+        <div class="col">
+            <mat-card class="example-card my-10">
+                <div class="top-decoration-basic"></div>
+                <mat-card-header class="card-head">
+
+                    <mat-card-title class="price-title">Basic</mat-card-title>
+                    <mat-card-title class="price pt-4"><span>$</span> {{ (isChecked ? basicPlan : basicPlan/months)| number:'1.0-0' }}</mat-card-title>
+                    <mat-card-subtitle class="card-sub pt-4">
+                        Ideal para organizaciones medianas y emprendimientos en crecimiento. </mat-card-subtitle>
+                </mat-card-header>
+
+                <mat-card-actions class="pt-3">
+                    <button mat-raised-button class="sky-blue-darker-bg white-text" (click)="goToRegister()">Suscribirse ahora </button>
+                </mat-card-actions>
+
+
+
+                <mat-card-content class="pt-2 card-content-container">
+                    <p class="card-content"> Incluye lo siguiente: </p>
+                    <mat-list>
+                        <mat-list-item><mat-icon matListItemIcon>check</mat-icon> 1 centro médico</mat-list-item>
+                        <mat-list-item><mat-icon matListItemIcon>check</mat-icon> 45 usuarios</mat-list-item>
+                        <mat-list-item><mat-icon matListItemIcon>check</mat-icon> 6 salas</mat-list-item>
+                        <mat-list-item><mat-icon matListItemIcon>check</mat-icon> 6 dispositivos ZhenAir</mat-list-item>
+                    </mat-list>
+                </mat-card-content>
+
+            </mat-card>
+        </div>
+
+        <div class="col">
+            <mat-card class="example-card my-10">
+                <div class="top-decoration-pro"></div>
+
+                <mat-card-header class="card-head">
+
+                    <mat-card-title class="price-title">Pro</mat-card-title>
+                    <mat-card-title class="price pt-4"><span>$</span> {{ (isChecked ? proPlan : proPlan/months)| number:'1.0-0' }}</mat-card-title>
+                    <mat-card-subtitle class="card-sub pt-4">
+                        Dirigido a empresas en crecimiento que buscan funcionalidades avanzadas.
+                     </mat-card-subtitle>
+                </mat-card-header>
+
+                <mat-card-actions class="pt-3">
+                    <button mat-raised-button class="sky-blue-darker-bg white-text" (click)="goToRegister()">Suscribirse ahora </button>
+                </mat-card-actions>
+
+                <mat-card-content class="pt-2 card-content-container">
+                    <p class="card-content "> Incluye lo siguiente: </p>
+                    <mat-list>
+                        <mat-list-item><mat-icon matListItemIcon>check</mat-icon> 5 centros médicos</mat-list-item>
+                        <mat-list-item><mat-icon matListItemIcon>check</mat-icon> 150 usuarios</mat-list-item>
+                        <mat-list-item><mat-icon matListItemIcon>check</mat-icon> 10 salas</mat-list-item>
+                        <mat-list-item><mat-icon matListItemIcon>check</mat-icon> 10 dispositivos ZhenAir</mat-list-item>
+                    </mat-list>
+                </mat-card-content>
+
+            </mat-card>
+
+        </div>
+        <div class="col">
+            <mat-card class="example-card my-10">
+                <div class="top-decoration-enterprice"></div>
+                <mat-card-header class="card-head">
+
+                    <mat-card-title class="price-title">Enterprise</mat-card-title>
+                    <mat-card-title class="price pt-4"><span>$</span> {{ (isChecked ? enterpricePlan : enterpricePlan/months)| number:'1.0-0' }}</mat-card-title>
+                    <mat-card-subtitle class="card-sub pt-4">
+                        Diseñado para grandes corporaciones y empresas globales.
+                     </mat-card-subtitle>
+                </mat-card-header>
+
+                <mat-card-actions class="pt-3">
+                    <button mat-raised-button class="sky-blue-darker-bg white-text" (click)="goToRegister()">Suscribirse ahora </button>
+                </mat-card-actions>
+
+                <mat-card-content class="pt-2 card-content-container">
+                    <p class="card-content "> Incluye lo siguiente: </p>
+                    <mat-list>
+                        <mat-list-item><mat-icon matListItemIcon>check</mat-icon> 10 centros médicos</mat-list-item>
+                        <mat-list-item><mat-icon matListItemIcon>check</mat-icon> 400 usuarios</mat-list-item>
+                        <mat-list-item><mat-icon matListItemIcon>check</mat-icon> 20 salas</mat-list-item>
+                        <mat-list-item><mat-icon matListItemIcon>check</mat-icon> 20 dispositivos ZhenAir</mat-list-item>
+                    </mat-list>
+                </mat-card-content>
+
+            </mat-card>
+        </div>
+    </div>
+
+</div>
+
+
+<app-footer></app-footer>

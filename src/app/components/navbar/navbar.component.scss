@@ -1,3 +1,37 @@
-.spacer {
-    flex: 1 1 auto;
+.logo {
+  width: 8.625rem;
+  height: 6.25rem;
+  cursor: pointer;
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+.blink-1 {
+  -webkit-animation: blink-1 2s infinite forwards;
+  animation: blink-1 2s infinite forwards;
+}
+
+@-webkit-keyframes blink-1 {
+  0%,
+  50%,
+  100% {
+    opacity: 1;
   }
+  25%,
+  75% {
+    opacity: 0;
+  }
+}
+@keyframes blink-1 {
+  0%,
+  50%,
+  100% {
+    opacity: 1;
+  }
+  25%,
+  75% {
+    opacity: 0;
+  }
+}
