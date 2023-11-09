@@ -4,7 +4,7 @@ import { Device } from 'src/app/models/devices.interface';
 // Create device
 export const addDevice = createAction(
   '[Device Page] Add Device',
-  props<{ content: Device }>()
+  props<{ content: Device, roomId: number }>()
 );
 
 export const addDeviceSuccess = createAction(
@@ -24,43 +24,43 @@ export const updateDevice = createAction(
 );
 
 export const updateDeviceSuccess = createAction(
-  '[device Page] Update Device Success',
+  '[Device Page] Update Device Success',
   props<{ id: number; content: Device  }>()
 );
 
 export const updateDeviceFailure = createAction(
-  '[device Page] Update device Failure',
+  '[Device Page] Update device Failure',
   props<{ error: any }>()
 );
 
 //Deleting device
 export const removeDevice = createAction(
-  '[device Page] Remove device',
+  '[Device Page] Remove device',
   props<{ id: number }>()
 );
 
 export const removeDeviceSuccess = createAction(
-  '[device Page] Remove device Success',
+  '[Device Page] Remove device Success',
   props<{ id: number }>()
 );
 
 export const removeDeviceFailure = createAction(
-  '[device Page] Remove device Failure',
+  '[Device Page] Remove device Failure',
   props<{ error: any }>()
 );
 
 //Loading devices
 export const loadDevices = createAction(
-  '[device Page] Load devices',
+  '[Device Page] Load devices',
   props<{ id: number }>()
 );
 
 export const loadDevicesSuccess = createAction(
-  '[devices Page] devices Load Success',
+  '[Devices Page] devices Load Success',
   props<{ devices: Device[] }>()
 );
 
 export const loadDevicesFailure = createAction(
-  '[devices Page] devices Load Failure',
+  '[Devices Page] devices Load Failure',
   props<{ error: any }>()
 );
