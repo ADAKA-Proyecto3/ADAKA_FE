@@ -111,9 +111,6 @@ export class RoomsPage implements OnInit {
     this.store.dispatch(
       updateRoom({ id: id, medicalCenterId: newMedicalCenterId, content: room })
     );
-    //this.store.select('rooms').subscribe(({ rooms }) => {
-    // console.log('Datos de salas cargados desde el Store:', rooms);
-    //});
     this.updateMedicalCenterSelectionOnSave(newMedicalCenterId);
     this.checkStatusRequest(
       'Sala actualizado con éxito',
