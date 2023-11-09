@@ -22,6 +22,8 @@ import { ActionStatus } from 'src/app/common/enums/action-status.enum';
 import { Utils } from 'src/app/common/utils/app-util';
 import { DialogService } from 'src/app/services/dialog-service/dialog.service';
 import Swal from 'sweetalert2';
+import { RoomStatsVisualComponent } from '../components/room-stats-visual-component/room-stats-visual-component';
+
 
 @Component({
   templateUrl: './rooms-page.html',
@@ -171,6 +173,13 @@ export class RoomsPage implements OnInit {
         this.registerRoom(result.id, result.room);
       }
     });
+  }
+
+  showRoomStats(id:number):void{
+    const dialogRef = this.dialog.open(RoomStatsVisualComponent,{
+      width: '80%',
+      data: id
+    })
   }
 
   private checkStatusRequest(successMessage: string, errorMessage: string) {

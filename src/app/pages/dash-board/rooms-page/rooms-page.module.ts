@@ -17,6 +17,7 @@ import { MatSelectModule } from '@angular/material/select';
 
 
 import { ReactiveFormsModule } from '@angular/forms';
+import { RoomStatsVisualComponentModule } from '../components/room-stats-visual-component/room-stats-visual-component.module';
 
 
 
@@ -36,7 +37,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     RoomFormModule,
     MatTooltipModule,
     MatSelectModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RoomStatsVisualComponentModule
+    
 
   ],
   providers: [{ provide: MatPaginatorIntl, useValue: getSpanishPaginatorIntl() }],

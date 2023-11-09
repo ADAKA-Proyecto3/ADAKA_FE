@@ -16,12 +16,11 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { RoomStatsVisualComponentComponent } from './pages/dash-board/components/room-stats-visual-component/room-stats-visual-component.component';
-
+import { NgxEchartsModule } from 'ngx-echarts';
 
 
 @NgModule({
-  declarations: [ AppComponent, RoomStatsVisualComponentComponent ],
+  declarations: [ AppComponent ],
   imports: [
     BrowserModule,
     AuthModule,
@@ -36,7 +35,10 @@ import { RoomStatsVisualComponentComponent } from './pages/dash-board/components
     SweetAlert2Module.forRoot(),
     MatNativeDateModule,
     MatDatepickerModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    NgxEchartsModule.forRoot({
+      echarts: () => import('echarts')
+    })
     
 
   ],
