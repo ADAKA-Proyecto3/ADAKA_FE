@@ -11,15 +11,15 @@ import { Utils } from 'src/app/common/utils/app-util';
   providedIn: 'root',
 })
 export class EmailSenderHttpService {
-  
+
   private passwordRecoveryUrl = `${Config.BASE_URL}/passwordRecovery`; //to be defined
 
   constructor(
     private readonly httpClient: HttpClient,
   ) {}
 
-  sendPasswordRecoveryInstructions(email: String) {
-      return this.httpClient.post(`${this.passwordRecoveryUrl}/${email}`, Utils.getHttpHeaders());
-    }
+  sendPasswordRecoveryInstructions(email: string) {
+      return this.httpClient.post(`${this.passwordRecoveryUrl}`, email);
+  }
 
 }
