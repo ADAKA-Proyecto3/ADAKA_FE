@@ -17,11 +17,11 @@ export class DeviceHttpService {
     private loader: LoadingService
     ) {}
 
- registerDevice(idUser: number, device:Device): Promise<void> {
+ registerDevice(idAdmin: number, device:Device, roomId: number = 0): Promise<void> {
     this.loader.showLoadingModal();
 
     return new Promise((resolve, reject) => {
-      this.httpClient.post(`${this.url}/${idUser}`, device, Utils.getHttpHeaders() ).subscribe({
+      this.httpClient.post(`${this.url}/${idAdmin}/${roomId}`, device, Utils.getHttpHeaders() ).subscribe({
         next: (response) => {
             if (response) {
                 resolve();
@@ -76,4 +76,5 @@ export class DeviceHttpService {
       })
     );
   }
+  
 }
