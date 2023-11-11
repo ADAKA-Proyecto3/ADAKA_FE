@@ -58,7 +58,7 @@ export class LayoutPage implements OnInit {
 
  
   manageProfile(): void {
-    //this.router.navigate([`/${UrlPages.DASHBOARD}/${UrlPages.PROFILE}`]);
+    this.router.navigate([`/${UrlPages.DASHBOARD}/${UrlPages.PROFILE}`]);
   }
 
   onLogout(): void {

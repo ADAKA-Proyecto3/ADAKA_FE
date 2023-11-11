@@ -1,0 +1,41 @@
+<form class="d-flex flex-column w-75" [formGroup]="userForm" >
+
+  <mat-form-field appearance="outline" class="pt-3">
+    <mat-label>Nombre Completo</mat-label>
+    <input type="text" matInput formControlName="fullName" placeholder="Nombre Completo">
+    <mat-error *ngIf="error('fullName', 'required')">Nombre es requerido</mat-error>
+    <mat-error *ngIf="error('fullName', 'maxLength')">Nombre debe tener máximo 40 caracteres</mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="pt-3">
+    <mat-label>Dirección</mat-label>
+    <input type="text" matInput formControlName="direction" placeholder="Dirección">
+    <mat-error *ngIf="error('direction', 'required')">La dirección es requerida</mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="pt-3">
+    <mat-label>Latitud (Formato decimal)</mat-label>
+    <input type="number" matInput formControlName="latitude" placeholder="Latitud">
+    <mat-error *ngIf="error('latitude', 'required')">La latitud es requerida</mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="pt-3">
+    <mat-label>Longitud (Formato decimal)</mat-label>
+    <input type="number" matInput formControlName="longitude" placeholder="Longitud">
+    <mat-error *ngIf="error('longitude', 'required')">La longitud es requerida</mat-error>
+  </mat-form-field>
+
+  <!-- Agrega el resto de los campos según sea necesario -->
+
+  <div class="d-flex justify-content-between">
+    <button type="button" mat-raised-button color="warn" class="btn_login mt-3">
+      <mat-icon iconPositionEnd>close</mat-icon>
+      CANCELAR
+    </button>
+    <button mat-raised-button class="btn_login mt-3 sky-blue-darker-bg white-text">
+      <mat-icon iconPositionEnd>chevron_right</mat-icon>
+      CONFIRMAR
+    </button>
+  </div>
+
+</form>
