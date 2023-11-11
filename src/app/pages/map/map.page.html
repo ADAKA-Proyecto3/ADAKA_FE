@@ -1,54 +1,116 @@
 <app-navbar></app-navbar>
 
-
 <div class="container-fluid pt-5 pb-5">
   <div class="row">
-    <div class="col-4">
-      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <div class="col-6">
+      <h1>Tabla de lugares</h1>
+      <div class="col-12 mb-4">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef class="text-center">
+              Nombre
+            </th>
+            <td mat-cell *matCellDef="let element" class="text-center">
+              {{element.name}}
+            </td>
+          </ng-container>
 
+          <ng-container matColumnDef="direction">
+            <th mat-header-cell *matHeaderCellDef class="text-center">
+              Dirección
+            </th>
+            <td mat-cell *matCellDef="let element" class="text-center">
+              {{element.direction}}
+            </td>
+          </ng-container>
 
-        <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef class="text-center"> Nombre </th>
-          <td mat-cell *matCellDef="let element" class="text-center"> {{element.name}} </td>
-        </ng-container>
-    
-        <ng-container matColumnDef="direction">
-          <th mat-header-cell *matHeaderCellDef class="text-center"> Dirección </th>
-          <td mat-cell *matCellDef="let element" class="text-center"> {{element.direction}} </td>
-        </ng-container>
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef class="text-center">
+              Estado
+            </th>
 
-        <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef class="text-center"> Estado </th>
-          <td mat-cell *matCellDef="let element" class="text-center"> {{element.status}} </td>
-        </ng-container>
-    
-         <ng-container matColumnDef="actions" >
-          <th mat-header-cell *matHeaderCellDef class="text-center"> Ver en mapa </th>
-          <td mat-cell *matCellDef="let element" class="text-center">
-            <button  mat-icon-button color="primary" matTooltip="Ver" (click)="cambiarVista(element)">
-              <mat-icon>flag</mat-icon>
-            </button>
+            <td
+              mat-cell
+              *matCellDef="let element"
+              class="text-center"
+              [class]="getColorClass(element.status)"
+            >
+              {{element.status}}
+            </td>
+          </ng-container>
 
-          </td>
-        </ng-container>
-    
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    
-        <tr class="mat-row" *matNoDataRow>
-          <td class="mat-cell titulo-3 pt-3 pb-3 text-center" colspan="6">No se encontráron datos</td>
-        </tr>
-    
-    
-      </table>
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef class="text-center">
+              Ver en mapa
+            </th>
+            <td mat-cell *matCellDef="let element" class="text-center">
+              <button
+                mat-icon-button
+                color="primary"
+                matTooltip="Ver"
+                (click)="cambiarVista(element)"
+              >
+                <mat-icon>flag</mat-icon>
+              </button>
+            </td>
+          </ng-container>
 
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr
+            mat-row
+            *matRowDef="let row; columns: displayedColumns;"
+            [ngClass]="getColorClass(row.status)"
+          ></tr>
+
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell titulo-3 pt-3 pb-3 text-center" colspan="6">
+              No se encontráron datos
+            </td>
+          </tr>
+        </table>
+      </div>
     </div>
-    <div class="col-8">
+
+    <div class="col-5">
+      <h1>Mapa interactivo</h1>
       <div id="map"></div>
     </div>
   </div>
+  <div class="container mt-5">
+    <h1>Tabla de información de valores</h1>
+    <table mat-table [dataSource]="dataSourceInfo" class="mat-elevation-z8">
+      <!-- Rango -->
+      <ng-container matColumnDef="range">
+        <th mat-header-cell *matHeaderCellDef>Rango</th>
+        <td mat-cell *matCellDef="let element">{{ element.range }}</td>
+      </ng-container>
+    
+      <!-- Nivel -->
+      <ng-container matColumnDef="level">
+        <th mat-header-cell *matHeaderCellDef>Nivel</th>
+        <td mat-cell *matCellDef="let element" [ngClass]="getColorClass(element.level)">
+          {{ element.level }}
+        </td>
+      </ng-container>
+    
+      <!-- Implicaciones para la salud -->
+      <ng-container matColumnDef="healthImplications">
+        <th mat-header-cell *matHeaderCellDef>Implicaciones para la salud</th>
+        <td mat-cell *matCellDef="let element">{{ element.healthImplications }}</td>
+      </ng-container>
+    
+      <!-- Declaración precautoria -->
+      <ng-container matColumnDef="cautionaryStatement">
+        <th mat-header-cell *matHeaderCellDef>Declaración precautoria</th>
+        <td mat-cell *matCellDef="let element">{{ element.cautionaryStatement }}</td>
+      </ng-container>
+    
+      <!-- Asocia las columnas a las propiedades de la interfaz -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumnsInfo"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumnsInfo;" [ngClass]="getColorClass(row.level)"></tr>
+    </table>
+    
+  </div>
 </div>
-
-
 
 <app-footer></app-footer>

@@ -4,4 +4,5 @@ export interface MapInfo {
     latitude: string;
     longitude: string;
     status: string;
+    valor: string;
 }
