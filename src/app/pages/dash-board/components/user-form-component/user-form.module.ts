@@ -25,9 +25,7 @@ import { MatSelectModule } from '@angular/material/select';
     MatInputModule,
     MatFormFieldModule,
     MatSelectModule,
-   
-
-
+  
   ],
   exports: [UserFormComponent]
 })

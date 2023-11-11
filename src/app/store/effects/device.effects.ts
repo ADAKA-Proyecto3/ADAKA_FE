@@ -17,6 +17,7 @@ import {
 import { of, from } from 'rxjs';
 import { switchMap, map, catchError, mergeMap } from 'rxjs/operators';
 import { DeviceHttpService } from 'src/app/services/http-service/device-http.service';
+import { Device } from 'src/app/models/devices.interface';
 
 
 @Injectable()
@@ -69,15 +70,18 @@ export class DeviceEffects {
     )
   );
 
-  resgiterSubDevice$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(addDevice),
-      mergeMap((action) =>
-        this.deviceService.resgiterDevice(action.content).pipe(
-          map(() => addDeviceSuccess({ content: action.content })),
-          catchError((error) => of(addDeviceFailure({ error })))
-        )
+  resgiterDevice$ = createEffect(() =>
+  this.actions$.pipe(
+    ofType(addDevice),
+    mergeMap((action) =>
+      this.deviceService.resgiterDevice(action.content).pipe(
+        map((response) => {
+          const userResponse = response as Device; 
+          return addDeviceSuccess({ content: userResponse });
+        }),
+        catchError((error) => of(addDeviceFailure({ error })))
       )
     )
-  );
+  )
+);
 }
