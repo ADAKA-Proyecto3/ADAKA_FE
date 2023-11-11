@@ -23,6 +23,8 @@ import { Utils } from 'src/app/common/utils/app-util';
 import { DialogService } from 'src/app/services/dialog-service/dialog.service';
 import Swal from 'sweetalert2';
 import { RoomStatsVisualComponent } from '../components/room-stats-visual-component/room-stats-visual-component';
+import { PageRouterService } from 'src/app/services/page-router-service/page-router.service';
+import { UrlPages } from 'src/app/common/enums/url-pages.enum';
 
 
 @Component({
@@ -53,7 +55,9 @@ export class RoomsPage implements OnInit {
   constructor(
     private store: Store<AppState>,
     private dialog: MatDialog,
-    private readonly dialogService: DialogService
+    private readonly dialogService: DialogService,
+    private readonly pageRouter: PageRouterService
+  
   ) {}
 
   applyFilter(event: Event) {
@@ -210,4 +214,8 @@ export class RoomsPage implements OnInit {
     )?.name;
     return viewValue;
   }
+
+  goToMain(){
+    this.pageRouter.route(`${UrlPages.DASHBOARD}/${UrlPages.MAIN}`)
+      }
 }

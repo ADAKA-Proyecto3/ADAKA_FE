@@ -22,6 +22,8 @@ import { Utils } from 'src/app/common/utils/app-util';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { Subscription, filter, take } from 'rxjs';
 import Swal from 'sweetalert2';
+import { PageRouterService } from 'src/app/services/page-router-service/page-router.service';
+import { UrlPages } from 'src/app/common/enums/url-pages.enum';
 
 @Component({
   selector: 'app-medicalCenter-page',
@@ -36,7 +38,9 @@ export class MedicalCentersPage implements  OnInit {
     private store: Store<AppState>,
     private dialog: MatDialog,
     private readonly dialogService: DialogService,
-    private readonly aut: AuthService
+    private readonly aut: AuthService,
+    private readonly pageRouter: PageRouterService
+  
   ) {}
 
   displayedColumns: string[] = [
@@ -187,6 +191,10 @@ export class MedicalCentersPage implements  OnInit {
 
       });
   }
+
+  goToMain(){
+    this.pageRouter.route(`${UrlPages.DASHBOARD}/${UrlPages.MAIN}`)
+      }
 
   
 }
