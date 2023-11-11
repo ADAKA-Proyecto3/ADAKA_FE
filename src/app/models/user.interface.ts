@@ -14,7 +14,6 @@ export interface User {
     subscription?: Suscription;
     assignedMedicalCenter?: number;
     manager?: number;
-    devices?: Device[];
 
 
 
