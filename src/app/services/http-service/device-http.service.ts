@@ -6,40 +6,40 @@ import { catchError, map } from 'rxjs';
 import { LoadingService } from '../loading-service/loading.service';
 import { Utils } from 'src/app/common/utils/app-util';
 
+
+
 @Injectable({
   providedIn: 'root',
 })
 export class DeviceHttpService {
-  private url = `${Config.BASE_URL}/device`;
+  private url = `${Config.BASE_URL}/devices`;
 
   constructor(
     private readonly httpClient: HttpClient,
     private loader: LoadingService
     ) {}
 
- registerDevice(idAdmin: number, device:Device, roomId: number = 0): Promise<void> {
-    this.loader.showLoadingModal();
-
-    return new Promise((resolve, reject) => {
-      this.httpClient.post(`${this.url}/${idAdmin}/${roomId}`, device, Utils.getHttpHeaders() ).subscribe({
-        next: (response) => {
-            if (response) {
-                resolve();
-            } else {
-                reject();
-            }
-        },
-        error: (error) => {
-          reject(error);
-          console.error('Error al registrar: ',error);
-        },
-      });
-    });
+  registerDevice(userId: number, device: Device, roomId: number = 1){
+    return this.httpClient
+      .post(`${this.url}/save/${userId}/${roomId}`, device, Utils.getHttpHeaders())
+      .pipe(
+        map((resp: any) => {
+          this.loader.dismiss();
+          return resp;
+        }),
+        catchError((error) => {
+          console.error('Error en la petición:', error);
+          throw(error.error.title);
+        })
+      );
   }
 
-  getDevices(idUser: number) {
+
+
+  getDevices(userId: number) {
+    console.log("entro al http service ");
     this.loader.showLoadingModal();
-    return this.httpClient.get(`${this.url}/all/${idUser}`)
+    return this.httpClient.get(`${this.url}/all/${userId}`, Utils.getHttpHeaders())
     .pipe(
       map(resp => {
         console.log("resp", resp);
@@ -56,19 +56,16 @@ export class DeviceHttpService {
      }),
      map((resp: any) => {
        this.loader.dismiss();
-       /*const response: Response = {
-         title: 'Deleted Device',
-         data: resp.data,
-       };
-       return response;*/
+       const response: any = "Deleted device" + resp;
+       return response;
      })
 
     )
   }
 
-  editDevice(id: number, device: Device) {
+  editDevice(deviceId: number, device: Device) {
     this.loader.showLoadingModal();
-    return this.httpClient.put(`${this.url}/edit/${id}`, device)
+    return this.httpClient.put(`${this.url}/edit/${deviceId}`, device)
     .pipe(
       map(resp => {
         this.loader.dismiss();

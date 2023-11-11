@@ -22,15 +22,16 @@ export class RoomHttpService {
   getRooms(id: number) {
     this.loader.showLoadingModal();
     return this.httpClient
-      .get<Response<Room>>(`${this.url}/all/${id}`, Utils.getHttpHeaders())
+      .get<Response<Room>>(`${this.url}/allUser/${id}`, Utils.getHttpHeaders())
       .pipe(
         map((resp) => {
-          DebugerService.log('resp: ' + JSON.stringify(resp));
+          console.log('resp: ' + JSON.stringify(resp));
           this.loader.dismiss();
           return resp.data as Room[];
         })
       );
   }
+
 
   deleteRoom(id: number) {
     return this.httpClient.delete(

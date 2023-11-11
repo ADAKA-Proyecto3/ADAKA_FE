@@ -36,15 +36,12 @@ export class DeviceFormComponent implements OnInit {
     .select((state) => state.user.activeUser.id)
     .subscribe((id) => {
       this.activeUser = id;
-   
       this.loadRooms(this.activeUser);
-
-     
     });
 
 
-
   this.registerForm = new FormGroup({
+    deviceId: new FormControl('', [Validators.required]),
     model: new FormControl('', [
       Validators.required,
       Validators.maxLength(30),
@@ -56,11 +53,16 @@ export class DeviceFormComponent implements OnInit {
   if (this.device) {
     this.editing = true;
     this.registerForm.patchValue({
+      deviceId: this.device.assignedRoomId || '',
       model: this.device.model || '',
       date: this.device.date || '',
       room: this.device.room || '',
      });
   }
+  }
+
+  get deviceId() {
+    return this.registerForm.get('deviceId');
   }
   get model() {
     return this.registerForm.get('model');
@@ -71,6 +73,7 @@ export class DeviceFormComponent implements OnInit {
   get room() {
     return this.registerForm.get('room');
   }
+  
 
   loadRooms(userId: number) {
     this.store.dispatch(loadRooms({id: userId}));
@@ -89,18 +92,21 @@ export class DeviceFormComponent implements OnInit {
     }
 
     const device: Device = {
-      id: this.registerForm.value.id,
+      deviceId: this.registerForm.value.deviceId,
       model: this.registerForm.value.model,
       date: this.registerForm.value.date,
       room: this.registerForm.value.room,
     };
 
+
+    console.log('Device:', device); 
+
     if (this.editing) {
       device.assignedRoomId = this.registerForm.value.room;
-      this.matDialogRef.close( {id: this.device?.id, device: device} );
+      this.matDialogRef.close( {id: this.device?.deviceId, device: device} );
     }else{
       DebugerService.log('NO EDITING');
-      this.matDialogRef.close({device: device});
+      this.matDialogRef.close({userId: this.activeUser, device: device, roomId: device.room});
     }
 
   

@@ -1,3 +1,4 @@
+import { Device } from "./devices.interface";
 import { MedicalCenter } from "./medical-center.interface";
 import { Suscription } from "./suscription.interface";
 
@@ -13,6 +14,7 @@ export interface User {
     subscription?: Suscription;
     assignedMedicalCenter?: number;
     manager?: number;
+    devices?: Device[];
 
 
 

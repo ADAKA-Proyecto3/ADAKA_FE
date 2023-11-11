@@ -4,7 +4,7 @@ import { Device } from 'src/app/models/devices.interface';
 // Create device
 export const addDevice = createAction(
   '[Device Page] Add Device',
-  props<{ content: Device, roomId: number }>()
+  props<{ userId: number, content: Device, roomId: number }>()
 );
 
 export const addDeviceSuccess = createAction(
@@ -49,10 +49,13 @@ export const removeDeviceFailure = createAction(
   props<{ error: any }>()
 );
 
+
+console.log("entro al action");
+
 //Loading devices
 export const loadDevices = createAction(
   '[Device Page] Load devices',
-  props<{ id: number }>()
+  props<{ userId: number }>()
 );
 
 export const loadDevicesSuccess = createAction(

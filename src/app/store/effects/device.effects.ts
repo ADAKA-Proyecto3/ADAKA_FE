@@ -18,7 +18,14 @@ import { of, from } from 'rxjs';
 import { switchMap, map, catchError, mergeMap } from 'rxjs/operators';
 import { DeviceHttpService } from 'src/app/services/http-service/device-http.service';
 import { Device } from 'src/app/models/devices.interface';
+import { activeUserReducer } from '../reducers/activeUser.reducer';
+import { ActiveUserEffects } from './activeUser.effects';
+import { ActiveUserState } from '../reducers/activeUser.reducer';
+import { selectActiveUser } from '../selectors/activeUser.selector';
+import { loadActiveUser } from '../actions/activeUser.actions';
 
+
+console.log("entro al efecto");
 
 @Injectable()
 export class DeviceEffects {
@@ -28,17 +35,20 @@ export class DeviceEffects {
     private deviceService: DeviceHttpService
   ) {}
 
+ 
+
   // Run this code when a loadTodos action is dispatched
   loadDevices$ = createEffect(() =>
     this.actions$.pipe(
       ofType(loadDevices),
-      switchMap(() =>
+      switchMap((action) =>
         // Call the get method, convert it to an observable
-        from(this.deviceService.getDevices()).pipe(
+        from(this.deviceService.getDevices(action.userId)).pipe( //action id no, deberia ser userid???
           // Take the returned value and return a new success action containing the todos
           map((Devices) => loadDevicesSuccess({ devices: Devices })),
           // Or... if it errors return a new failure action containing the error
           catchError((error) => of(loadDevicesFailure({ error })))
+          
         )
       )
     )
@@ -74,9 +84,13 @@ export class DeviceEffects {
   this.actions$.pipe(
     ofType(addDevice),
     mergeMap((action) =>
-      this.deviceService.resgiterDevice(action.content).pipe(
+      this.deviceService.registerDevice(action.userId, action.content, action.roomId).pipe(
         map((response) => {
-          const userResponse = response as Device; 
+          const userResponse = response as Device;
+          console.log('Register Device Response:', userResponse);
+          console.log('id admin', action.userId);
+          console.log('id room', action.roomId);
+          console.log('device', action.content);
           return addDeviceSuccess({ content: userResponse });
         }),
         catchError((error) => of(addDeviceFailure({ error })))
@@ -84,4 +98,5 @@ export class DeviceEffects {
     )
   )
 );
+
 }
