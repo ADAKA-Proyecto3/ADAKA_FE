@@ -4,11 +4,9 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Store, select } from '@ngrx/store';
 import { Device } from 'src/app/models/devices.interface';
-import { loadRooms, removeRoom, updateRoom } from 'src/app/store/actions/room.actions';
 import { AppState } from 'src/app/store/app.state';
 import { DeviceFormComponent } from '../components/device-form-component/device-form-component';
 import { DebugerService } from 'src/app/services/debug-service/debug.service';
-import { loadUsers } from 'src/app/store/actions/user.actions';
 import { addDevice, loadDevices, removeDevice, updateDevice } from 'src/app/store/actions/device.actions';
 import { Subscription, filter, map, take } from 'rxjs';
 import { selectDeviceStatus } from 'src/app/store/selectors/device.selector';
@@ -77,7 +75,6 @@ export class DevicesPage  implements AfterViewInit, OnInit{
 
       });
   }
-
 
 
   ngAfterViewInit(): void {
@@ -151,7 +148,7 @@ export class DevicesPage  implements AfterViewInit, OnInit{
 
     dialogRef.afterClosed().subscribe(async (result) => {
       if (result && result.id) {
-        this.editDevice(result.id, result.room);
+        this.editDevice(result.id, result.device);
       }
     });
   }
@@ -165,8 +162,8 @@ export class DevicesPage  implements AfterViewInit, OnInit{
       DebugerService.log('DEVICE REGISTRATION DIALOG CLOSED');
     
       if (result && result.device) {
-        console.log("Resultado:",result.device) //construlle bien el device
         this.registerDevice(result.userId, result.device, result.roomId);
+        console.log("RESULT.DEVICE: ", result.device);
       }
     });
   }

@@ -55,7 +55,7 @@ export class DeviceFormComponent implements OnInit {
     this.registerForm.patchValue({
       deviceId: this.device.assignedRoomId || '',
       model: this.device.model || '',
-      date: this.device.date || '',
+      date: this.device.installation || '',
       room: this.device.room || '',
      });
   }
@@ -90,26 +90,24 @@ export class DeviceFormComponent implements OnInit {
     if (this.registerForm.invalid) {
       return;
     }
-
+  
     const device: Device = {
       deviceId: this.registerForm.value.deviceId,
       model: this.registerForm.value.model,
-      date: this.registerForm.value.date,
-      room: this.registerForm.value.room,
+      installation: this.registerForm.value.date,  // Asegúrate de que esta propiedad coincida con el nombre "installation" en tu objeto JSON
+      user: { id: this.activeUser }, // Asigna el ID del usuario activo
+      room: this.registerForm.value.room, 
     };
-
-
-    console.log('Device:', device); 
-
+  
+    console.log('Device:', device);
+  
     if (this.editing) {
       device.assignedRoomId = this.registerForm.value.room;
-      this.matDialogRef.close( {id: this.device?.deviceId, device: device} );
-    }else{
+      this.matDialogRef.close({ deviceId: this.device?.deviceId, device: device });
+    } else {
       DebugerService.log('NO EDITING');
       this.matDialogRef.close({userId: this.activeUser, device: device, roomId: device.room});
     }
-
-  
   }
 
   closeDialog() {

@@ -19,9 +19,9 @@ export class DeviceHttpService {
     private loader: LoadingService
     ) {}
 
-  registerDevice(userId: number, device: Device, roomId: number = 1){
+  registerDevice(userId: number, content: Device, roomId: number = 1){
     return this.httpClient
-      .post(`${this.url}/save/${userId}/${roomId}`, device, Utils.getHttpHeaders())
+      .post(`${this.url}/save/${userId}/${roomId}`, content, Utils.getHttpHeaders())
       .pipe(
         map((resp: any) => {
           this.loader.dismiss();
@@ -29,7 +29,7 @@ export class DeviceHttpService {
         }),
         catchError((error) => {
           console.error('Error en la petición:', error);
-          throw(error.error.title);
+          throw(error.error);
         })
       );
   }
@@ -50,7 +50,7 @@ export class DeviceHttpService {
   }
 
   deleteDevice( deviceId: number){
-    return this.httpClient.delete(`${this.url}/delete/${deviceId}`, Utils.getHttpHeaders())
+    return this.httpClient.delete(`${this.url}/${deviceId}`, Utils.getHttpHeaders())
     .pipe(catchError((error) => {
       throw error;
      }),
@@ -65,7 +65,7 @@ export class DeviceHttpService {
 
   editDevice(deviceId: number, device: Device) {
     this.loader.showLoadingModal();
-    return this.httpClient.put(`${this.url}/edit/${deviceId}`, device)
+    return this.httpClient.put(`${this.url}/${deviceId}`, device)
     .pipe(
       map(resp => {
         this.loader.dismiss();
