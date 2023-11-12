@@ -83,9 +83,6 @@
       <button mat-icon-button color="warn" matTooltip="Eliminar" (click)="getDeleteUserConfirmation(element)">
         <mat-icon>delete</mat-icon>
       </button>
-      <!-- <button mat-icon-button color="accent" matTooltip="Desactivar" (click)="deactivateRoom(element)">
-        <mat-icon>hide_source</mat-icon>
-      </button> -->
     </td>
   </ng-container>
 
@@ -95,12 +92,8 @@
   <tr class="mat-row" *matNoDataRow>
     <td class="mat-cell titulo-3 pt-3 pb-3 text-center" colspan="12">
       No hay datos disponibles
-
     </td>
   </tr>
-
-
-
 
 </table>
 <mat-paginator  class="mat-elevation-z8" [pageSizeOptions]="[5, 10, 20]"
