@@ -64,3 +64,18 @@ export const loadRoomsFailure = createAction(
   '[Rooms Page] Rooms Load Failure',
   props<{ error: any }>()
 );
+
+export const loadRoomsByMedicalCenter = createAction(
+  '[Room Page] Load Rooms ByMedicalCenter',
+  props<{ id: number }>()
+);
+
+export const loadRoomsByMedicalCenterSuccess = createAction(
+  '[Rooms Page] Rooms Load ByMedicalCenter Success',
+  props<{ rooms: Room[] }>()
+);
+
+export const loadRoomsByMedicalCenterFailure = createAction(
+  '[Rooms Page] Rooms Load  ByMedicalCenter Failure',
+  props<{ error: any }>()
+);

@@ -17,3 +17,6 @@ export const loadActiveUserFailure = createAction(
   '[Users] Load Active User Failure',
   props<{ error: any }>()
 );
+
+
+export const activeUserReset = createAction('[Example] Reset State');
