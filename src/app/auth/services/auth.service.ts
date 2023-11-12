@@ -5,7 +5,7 @@ import { User } from '../../models/user.interface';
 import { Observable, of, tap } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/app.state';
-import { loadActiveUser } from 'src/app/store/actions/activeUser.actions';
+import { activeUserReset, loadActiveUser } from 'src/app/store/actions/activeUser.actions';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -14,7 +14,7 @@ export class AuthService {
 
   constructor(
     private readonly httpClient: HttpClient,
-    private readonly store: Store<AppState>
+    private readonly store: Store<AppState>,
   ) {}
 
 
@@ -48,6 +48,7 @@ export class AuthService {
   logout(): void {
     localStorage.clear();
     sessionStorage.clear();
+    this.store.dispatch(activeUserReset());
   }
 
   checkSignedInUser(): void {

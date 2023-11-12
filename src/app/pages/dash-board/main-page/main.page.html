@@ -5,7 +5,7 @@
             class="sky-blue-dark-text vertical-align-middle">chevron_right</mat-icon>
     </div>
     <div class="row">
-        <div class="col pt-3 justify-content-center d-flex" (click)="goToUsers()" *ngIf="adminRole">
+        <div class="col pt-3 justify-content-center d-flex" (click)="goToUsers()" *ngIf="showDiv()">
             <mat-card class="example-card">
                 <img mat-card-image class="tile_img" src="/assets/tiles/users.jpg">
                 <mat-card-footer class="text-center pt-2">
@@ -17,7 +17,7 @@
             </mat-card>
 
         </div>
-        <div class="col pt-3 justify-content-center d-flex" (click)="goToMedicalCenters()" *ngIf="adminRole">
+        <div class="col pt-3 justify-content-center d-flex" (click)="goToMedicalCenters()" *ngIf="showDiv()">
 
             <mat-card class="example-card">
                 <img mat-card-image class="tile_img" src="/assets/tiles/medical_centers.jpg">
@@ -46,7 +46,7 @@
         </div>
 
 
-        <div class="col pt-3 justify-content-center d-flex" (click)="goToDevices()" *ngIf="adminRole">
+        <div class="col pt-3 justify-content-center d-flex" (click)="goToDevices()" *ngIf="showDiv()">
 
             <mat-card class="example-card ">
                 <img mat-card-image class="tile_img" src="/assets/tiles/devices.jpg">

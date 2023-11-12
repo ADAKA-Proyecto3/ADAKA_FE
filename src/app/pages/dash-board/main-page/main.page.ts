@@ -1,4 +1,3 @@
-import { state } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { UrlPages } from 'src/app/common/enums/url-pages.enum';
@@ -9,26 +8,24 @@ import { AppState } from 'src/app/store/app.state';
 @Component({
   selector: 'app-main',
   templateUrl: './main.page.html',
-  styleUrls: ['./main.page.scss']
+  styleUrls: ['./main.page.scss'],
 })
 export class MainPage implements OnInit {
+  activeUser: any;
+  isVisible: boolean = false;
 
-  activeUser:any;
-  adminRole:boolean = false;
   constructor(
     private readonly pageRouter: PageRouterService,
     private readonly store: Store<AppState>
-  ) { }
-
+  ) {}
 
   ngOnInit(): void {
-    this.store.select((state) => state.user.activeUser)
-    .subscribe((user) => {
-      this.activeUser = user;
-    });
-    if(this.activeUser.role === UserRoles.ADMIN){
-      this.adminRole = true;
-    }
+    this.store
+      .select((state) => state.user.activeUser)
+      .subscribe((user) => {
+        this.activeUser = user;
+      });
+  
   }
 
   goToUsers(): void {
@@ -51,8 +48,12 @@ export class MainPage implements OnInit {
     this.pageRouter.route(`${UrlPages.DASHBOARD}/${UrlPages.ZHENAIR_STATS}`);
   }
 
-  goToMain(){
-    this.pageRouter.route(`${UrlPages.DASHBOARD}/${UrlPages.MAIN}`)
-      }
+  goToMain() {
+    this.pageRouter.route(`${UrlPages.DASHBOARD}/${UrlPages.MAIN}`);
+  }
 
+  showDiv():boolean {
+     return  this.activeUser.role === UserRoles.ADMIN ? true : false; 
+  }
+  
 }

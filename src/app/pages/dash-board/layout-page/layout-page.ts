@@ -8,6 +8,7 @@ import { AppState } from 'src/app/store/app.state';
 import { loadActiveUser } from '../../../store/actions/activeUser.actions';
 import { PageRouterService } from 'src/app/services/page-router-service/page-router.service';
 import { UserRoles } from 'src/app/common/enums/user-roles.enum';
+import { DebugerService } from 'src/app/services/debug-service/debug.service';
 
 @Component({
   selector: 'app-layout-page',
@@ -69,6 +70,7 @@ export class LayoutPage implements OnInit {
 
   ngOnInit(): void {
     if (this.activeUser === '' || this.activeUser === undefined) {
+      DebugerService.log('active Unser estaba vacip');
       this.authService.checkSignedInUser();
     }
     this.loadActiveUser();
