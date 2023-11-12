@@ -55,6 +55,13 @@ const routes: Routes = [
           ),
       },
       {
+        path: UrlPages.PROFILE,
+        loadChildren: () =>
+          import('../user-page/user-page.module').then(
+            (m) => m.UserPageModule
+          ),
+      },
+      {
         path: '**',
         redirectTo: UrlPages.MAIN,
         pathMatch: 'full',

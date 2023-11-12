@@ -24,6 +24,7 @@ import { MedicalCenterHttpService } from 'src/app/services/http-service/medicalC
 
 @Injectable()
 export class MedicalCenterEffects {
+  
   constructor(
     private actions$: Actions,
     private medicalService: MedicalCenterHttpService
