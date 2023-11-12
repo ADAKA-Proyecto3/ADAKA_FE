@@ -9,14 +9,14 @@
 
         </mat-toolbar>
 
-        <mat-nav-list *ngIf="adminRole">
+        <mat-nav-list *ngIf="checkAdmin()">
             <mat-list-item *ngFor=" let item of adminSideBarItems" [routerLink]="item?.url" (click)="sidenav.toggle()">
                 <mat-icon matListItemIcon>{{item?.icon}}</mat-icon>
                 {{item?.label}}
             </mat-list-item>
         </mat-nav-list>
 
-        <mat-nav-list *ngIf="!adminRole">
+        <mat-nav-list *ngIf="!checkAdmin()">
             <mat-list-item *ngFor=" let item of userSideBarItems" [routerLink]="item?.url" (click)="sidenav.toggle()">
                 <mat-icon matListItemIcon>{{item?.icon}}</mat-icon>
                 {{item?.label}}

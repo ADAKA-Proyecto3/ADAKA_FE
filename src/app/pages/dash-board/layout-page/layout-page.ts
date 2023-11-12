@@ -38,7 +38,7 @@ export class LayoutPage implements OnInit {
       url: `/${UrlPages.DASHBOARD}/${UrlPages.DEVICES}`,
     },
     {
-      label: 'Estadísticas',
+      label: 'Lecturas',
       icon: 'bar_chart',
       url: `/${UrlPages.DASHBOARD}/${UrlPages.ZHENAIR_STATS}`,
     },
@@ -51,15 +51,13 @@ export class LayoutPage implements OnInit {
       url: `/${UrlPages.DASHBOARD}/${UrlPages.ROOMS}`,
     },
     {
-      label: 'Estadísticas',
+      label: 'Lecturas',
       icon: 'bar_chart',
       url: `/${UrlPages.DASHBOARD}/${UrlPages.ZHENAIR_STATS}`,
     },
-  ]
-  ;
+  ];
 
   activeUser: any;
-  adminRole:boolean = false;
 
   constructor(
     private readonly authService: AuthService,
@@ -70,23 +68,17 @@ export class LayoutPage implements OnInit {
 
   ngOnInit(): void {
     if (this.activeUser === '' || this.activeUser === undefined) {
-      DebugerService.log('active Unser estaba vacip');
       this.authService.checkSignedInUser();
     }
     this.loadActiveUser();
 
-    this.store.select((state) => state.user.activeUser)
-    .subscribe((user) => {
-      this.activeUser = user;
-      if(this.activeUser.role === UserRoles.ADMIN){
-        this.adminRole = true;
-      }
-    });
-   
-    
+    this.store
+      .select((state) => state.user.activeUser)
+      .subscribe((user) => {
+        this.activeUser = user;
+      });
   }
 
- 
   manageProfile(): void {
     //this.router.navigate([`/${UrlPages.DASHBOARD}/${UrlPages.PROFILE}`]);
   }
@@ -102,7 +94,11 @@ export class LayoutPage implements OnInit {
     });
   }
 
-  goToMain(){
-    this.pageRouter.route(`${UrlPages.DASHBOARD}/${UrlPages.MAIN}`)
-      }
+  goToMain() {
+    this.pageRouter.route(`${UrlPages.DASHBOARD}/${UrlPages.MAIN}`);
+  }
+
+  checkAdmin(): boolean {
+    return this.authService.isAdmin();
+  }
 }

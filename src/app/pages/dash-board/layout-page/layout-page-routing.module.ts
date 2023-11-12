@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LayoutPage } from './layout-page';
 import { UrlPages } from 'src/app/common/enums/url-pages.enum';
+import { authGuardChild } from 'src/app/auth/guard/auth.guard';
 
 const routes: Routes = [
   {
@@ -10,6 +11,7 @@ const routes: Routes = [
     children: [
       {
         path: UrlPages.DEVICES,
+        canActivate: [authGuardChild],
         loadChildren: () =>
           import('../devices-page/devices-page.module').then(
             (m) => m.DevicesPageModule
@@ -17,6 +19,7 @@ const routes: Routes = [
       },
       {
         path: UrlPages.USERS,
+        canActivate: [authGuardChild],
         loadChildren: () =>
           import('../users-page/users-page.module').then(
             (m) => m.UsersPageModule
@@ -38,6 +41,7 @@ const routes: Routes = [
       },
       {
         path: UrlPages.MEDICAL_CENTERS,
+        canActivate: [authGuardChild],
         loadChildren: () =>
           import('../medicalCenters-page/medicalCenter-page.module').then(
             (m) => m.MedicalCenterModule

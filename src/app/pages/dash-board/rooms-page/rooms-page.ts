@@ -95,8 +95,9 @@ export class RoomsPage implements OnInit {
   loadRoomsTable(): void {
     this.store.select('rooms').subscribe(({ rooms }) => {
       this.dataSource.data = rooms;
+      this.dataSource.paginator = this.paginator;
     });
-    this.dataSource.paginator = this.paginator;
+   
   }
 
   editRoomDialog(room: Room) {

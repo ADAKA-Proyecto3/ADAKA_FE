@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { AuthService } from 'src/app/auth/services/auth.service';
 import { UrlPages } from 'src/app/common/enums/url-pages.enum';
 import { UserRoles } from 'src/app/common/enums/user-roles.enum';
 import { PageRouterService } from 'src/app/services/page-router-service/page-router.service';
@@ -16,7 +17,8 @@ export class MainPage implements OnInit {
 
   constructor(
     private readonly pageRouter: PageRouterService,
-    private readonly store: Store<AppState>
+    private readonly store: Store<AppState>,
+    private readonly authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -53,7 +55,7 @@ export class MainPage implements OnInit {
   }
 
   showDiv():boolean {
-     return  this.activeUser.role === UserRoles.ADMIN ? true : false; 
+    return this.authService.isAdmin(); 
   }
   
 }
