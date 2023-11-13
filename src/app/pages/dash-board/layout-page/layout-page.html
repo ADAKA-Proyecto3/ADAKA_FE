@@ -29,11 +29,11 @@
 
     <mat-toolbar class="ms-2 ">
 
-        <button mat-icon-button (click)="sidenav.toggle()" [disabled]="expiredPassword" matTooltip="{{ expiredPassword ? 'Password has expired' : '' }}">
+        <button mat-icon-button (click)="sidenav.toggle()" [disabled]="expiredPassword">
             <mat-icon>menu</mat-icon>
         </button>
 
-        <img src="/assets/logos/ZhenAir.png" width="200px" style="margin-top: 20px;" class="cursor-pointer" (click)="goToMain()">
+        <img src="/assets/logos/ZhenAir.png" width="200px" style="margin-top: 20px;" class="cursor-pointer" (click)="goToMain()" >
 
         <button class="ms-5" mat-button matTooltip="Administrar mi perfil" (click)="manageProfile()" disabled>
             <mat-icon>work</mat-icon> <strong>Workspace:</strong>   San Juan de Dios 
