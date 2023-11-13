@@ -87,6 +87,17 @@ export class UserHttpService {
       );
   }
 
+  editUserPassword(id: number, user: User) {
+    return this.httpClient
+      .put(`${this.url}/password/${id}`, user, Utils.getHttpHeaders())
+      .pipe(
+        map((resp) => {
+          DebugerService.log('resp' + JSON.stringify(resp));
+          return resp as User;
+        })
+      );
+  }
+
   getActiveUser(email: string): any {
     return this.httpClient
       .get(`${this.url}/email/${email}`, Utils.getHttpHeaders())
