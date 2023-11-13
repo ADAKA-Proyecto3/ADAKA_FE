@@ -10,7 +10,5 @@ import { UrlPages } from 'src/app/common/enums/url-pages.enum';
 export class HomePage {
   constructor(private readonly router: Router) {}
 
-  goToDashBoard(): void {
-    this.router.navigate([UrlPages.DASHBOARD]);
-  }
+  
 }

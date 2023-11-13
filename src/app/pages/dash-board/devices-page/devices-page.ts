@@ -16,6 +16,8 @@ import { ActionStatus } from 'src/app/common/enums/action-status.enum';
 import { DialogService } from 'src/app/services/dialog-service/dialog.service';
 import { Utils } from 'src/app/common/utils/app-util';
 import Swal from 'sweetalert2';
+import { UrlPages } from 'src/app/common/enums/url-pages.enum';
+import { PageRouterService } from 'src/app/services/page-router-service/page-router.service';
 
 @Component({
   selector: 'app-devices-page',
@@ -30,7 +32,9 @@ export class DevicesPage  implements AfterViewInit, OnInit{
   constructor(
     private store: Store<AppState>, 
     private dialog: MatDialog,
-    private readonly dialogService: DialogService) {}
+    private readonly dialogService: DialogService,
+    private readonly pageRouter: PageRouterService
+    ) {}
 
     
 
@@ -163,4 +167,8 @@ export class DevicesPage  implements AfterViewInit, OnInit{
       }
     });
   }
+
+  goToMain(){
+    this.pageRouter.route(`${UrlPages.DASHBOARD}/${UrlPages.MAIN}`)
+      }
 }

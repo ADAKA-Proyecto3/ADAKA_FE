@@ -16,7 +16,7 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-
+import { NgxEchartsModule } from 'ngx-echarts';
 
 
 @NgModule({
@@ -35,7 +35,10 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     SweetAlert2Module.forRoot(),
     MatNativeDateModule,
     MatDatepickerModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    NgxEchartsModule.forRoot({
+      echarts: () => import('echarts')
+    })
     
 
   ],

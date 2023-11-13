@@ -6,6 +6,9 @@ import {
   addRoomFailure,
   addRoomSuccess,
   loadRooms,
+  loadRoomsByMedicalCenter,
+  loadRoomsByMedicalCenterFailure,
+  loadRoomsByMedicalCenterSuccess,
   loadRoomsFailure,
   loadRoomsSuccess,
   removeRoom,
@@ -109,6 +112,23 @@ export const roomReducer = createReducer(
   })),
 
   on(loadRoomsFailure, (state, { error }) => ({
+    ...state,
+    error: error,
+    status: ActionStatus.ERROR,
+  })),
+
+  on(loadRoomsByMedicalCenter, (state) => ({
+    ...state,
+    status: ActionStatus.LOADING,
+  })),
+
+  on(loadRoomsByMedicalCenterSuccess, (state, { rooms }) => ({
+    ...state,
+    rooms: rooms,
+    status: ActionStatus.SUCCESS,
+  })),
+
+  on(loadRoomsByMedicalCenterFailure, (state, { error }) => ({
     ...state,
     error: error,
     status: ActionStatus.ERROR,

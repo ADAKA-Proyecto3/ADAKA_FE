@@ -1,0 +1,22 @@
+<div class="container-fluid">
+    <div class="row pt-2">
+        <div class="titulo-1">Estadísticas</div>
+
+    </div>
+    <div class="row d-flex justify-content-evenly">
+        <div class="col-sm-12 col-md-4" *ngFor="let reading of x">
+            <div echarts [options]="reading" style="height: 250px"></div>
+        </div>
+        <div class="col-sm-12 col-md-4">
+            <div echarts style="height: 250px" [options]="y"></div>
+        </div>
+    </div>
+    <div class="row d-flex justify-content-evenly  text-end  pt-2 pb-3">
+        <button type="button" mat-raised-button  class="btn_close" (click)="closeDialog()">
+            <mat-icon iconPositionEnd>close</mat-icon>
+            Cerrar
+
+        </button>
+    </div>
+
+</div>

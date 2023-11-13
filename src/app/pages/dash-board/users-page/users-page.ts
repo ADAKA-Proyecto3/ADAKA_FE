@@ -25,6 +25,8 @@ import {
 } from 'src/app/common/selectOptions/selectOptions';
 import { loadMedicalCenter } from 'src/app/store/actions/medicalCenter.actions';
 import { MedicalCenter } from 'src/app/models/medical-center.interface';
+import { PageRouterService } from 'src/app/services/page-router-service/page-router.service';
+import { UrlPages } from 'src/app/common/enums/url-pages.enum';
 
 @Component({
   selector: 'app-users-page',
@@ -37,7 +39,8 @@ export class UsersPage implements OnInit {
   constructor(
     private store: Store<AppState>,
     private dialog: MatDialog,
-    private readonly dialogService: DialogService
+    private readonly dialogService: DialogService,
+    private readonly pageRouter: PageRouterService
   ) {}
 
   result: string = '';
@@ -221,5 +224,9 @@ export class UsersPage implements OnInit {
       (mc) => mc.id === medicalCenterId
     )?.name;
     return viewValue;
+  }
+
+  goToMain(){
+this.pageRouter.route(`${UrlPages.DASHBOARD}/${UrlPages.MAIN}`)
   }
 }
