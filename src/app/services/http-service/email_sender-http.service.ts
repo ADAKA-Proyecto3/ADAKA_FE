@@ -15,7 +15,8 @@ export class EmailSenderHttpService {
   ) {}
 
   sendPasswordRecoveryInstructions(email: string) {
-    return this.httpClient.post(`${this.Url}`, email);
+    const emailObj = {email};
+    return this.httpClient.post(`${this.Url}`, emailObj);
   }
 
 }
