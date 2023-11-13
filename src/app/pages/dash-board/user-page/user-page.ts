@@ -9,7 +9,7 @@ import {
 import { Store } from '@ngrx/store';
 import { filter, take } from 'rxjs';
 import { User } from 'src/app/models/user.interface';
-import { updateActiveUser } from 'src/app/store/actions/activeUser.actions';
+import { loadActiveUserSuccess, updateActiveUser } from 'src/app/store/actions/activeUser.actions';
 import { AppState } from 'src/app/store/app.state';
 import { UserHttpService } from 'src/app/services/http-service/user-http.service';
 import { DebugerService } from 'src/app/services/debug-service/debug.service';
@@ -122,6 +122,7 @@ export class UserPage implements OnInit {
         (result) => {
           console.log(result);
           // Aquí puedes manejar la respuesta exitosa
+          this.store.dispatch(loadActiveUserSuccess({user:result}));
           this.dialogService.showToast('Contraseña modificada con éxito');
         },
         (error) => {
