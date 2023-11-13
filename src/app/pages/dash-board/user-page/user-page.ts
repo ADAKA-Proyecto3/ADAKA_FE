@@ -28,11 +28,14 @@ export class UserPage implements OnInit {
   activeUser: any;
   hide = true;
 
+  expiredPassword = false;
+  selectedTabIndex = 0;
+
   constructor(
     private fb: FormBuilder,
     private readonly store: Store<AppState>,
     private readonly userHttpService: UserHttpService,
-    private readonly dialogService: DialogService,
+    private readonly dialogService: DialogService
   ) {}
 
   ngOnInit() {
@@ -45,6 +48,9 @@ export class UserPage implements OnInit {
       )
       .subscribe((activeUser) => {
         this.activeUser = activeUser.activeUser.id;
+
+        this.expiredPassword =
+          activeUser.activeUser.status === 'FREEZE' ? true : false;
 
         this.userForm.patchValue({
           name: activeUser.activeUser.name || '',
@@ -87,8 +93,9 @@ export class UserPage implements OnInit {
     };
 
     console.log(user, this.activeUser);
-    this.store.dispatch(updateActiveUser({ id: this.activeUser, content: user }));
-
+    this.store.dispatch(
+      updateActiveUser({ id: this.activeUser, content: user })
+    );
   }
 
   onSubmitPassword() {
@@ -102,18 +109,18 @@ export class UserPage implements OnInit {
       email: '',
       password: this.passwordForm.value.password,
     };
-    
-    this.modPassword(user);
 
+    this.modPassword(user);
   }
 
-
-
-  async modPassword(user:User): Promise<any> {
+  async modPassword(user: User): Promise<any> {
     try {
       DebugerService.log('Requesting HTTP PUT change password');
-      const result = await this.userHttpService.editUserPassword(this.activeUser,user);
-        this.dialogService.showToast('Contraseña modificada con éxito');
+      const result = await this.userHttpService.editUserPassword(
+        this.activeUser,
+        user
+      );
+      this.dialogService.showToast('Contraseña modificada con éxito');
     } catch (error) {
       Utils.showNotification({
         icon: 'error',
@@ -123,7 +130,6 @@ export class UserPage implements OnInit {
     } finally {
     }
   }
-
 
   get name() {
     return this.userForm.get('name');
@@ -163,5 +169,11 @@ export class UserPage implements OnInit {
 
   limpiarContrasena() {
     this.passwordForm.reset();
+  }
+
+  expiredPasswordChange() {
+    if (this.expiredPassword) return (this.selectedTabIndex = 2);
+
+    return this.selectedTabIndex;
   }
 }

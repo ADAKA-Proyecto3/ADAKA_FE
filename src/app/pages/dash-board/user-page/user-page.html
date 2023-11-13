@@ -1,7 +1,7 @@
 <div class="container">
 
-  <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center">
-    <mat-tab label="Modificar perfil">
+  <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center" [selectedIndex]="expiredPasswordChange()">
+    <mat-tab label="Modificar perfil" *ngIf="!expiredPassword">
 
       <div class="container mb-3">
         <div class="row justify-content-center align-items-center  mt-4">

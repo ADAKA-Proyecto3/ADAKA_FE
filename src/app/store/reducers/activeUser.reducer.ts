@@ -64,7 +64,7 @@ export const activeUserReducer = createReducer(
       status: ActionStatus.ERROR,
     };
   }),
-  })),
+  
 
   on(activeUserReset, () => initialState)
 );

@@ -3,9 +3,11 @@ import { LoadingService } from 'src/app/services/loading-service/loading.service
 import { AuthService } from '../../services/auth.service';
 import { DebugerService } from 'src/app/services/debug-service/debug.service';
 import { Utils } from 'src/app/common/utils/app-util';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState } from 'src/app/store/app.state';
 import { loadActiveUser } from 'src/app/store/actions/activeUser.actions';
+import { PageRouterService } from 'src/app/services/page-router-service/page-router.service';
+import { UrlPages } from 'src/app/common/enums/url-pages.enum';
 
 type LoginRequest = {
   email: string;
@@ -16,10 +18,12 @@ type LoginRequest = {
 export class loginPageController {
   constructor(
     private readonly loadingService: LoadingService,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
+    private readonly pageRouter: PageRouterService,
+    private readonly store: Store<AppState>
   ) {}
 
-  async requestLogin(email: string, password: string): Promise<boolean> {
+  async requestLogin(email: string, password: string): Promise<void> {
     this.loadingService.showLoadingModal();
 
     try {
@@ -30,12 +34,9 @@ export class loginPageController {
       };
 
       const result = await this.authService.login(loginRequest);
-
       const accessToken = result.token;
-
       if (accessToken) {
         const claims = JSON.parse(atob(accessToken.split('.')[1]));
-
         sessionStorage.setItem('token', `Bearer ${accessToken}`);
         sessionStorage.setItem(
           'login',
@@ -45,26 +46,44 @@ export class loginPageController {
             user: claims.username,
           })
         );
-        this.authService.checkSignedInUser();
-        // this.store.dispatch(loadActiveUser({ email: claims.username }));
 
-        return true;
-      } else {
-        return false;
+         this.authService.checkSignedInUser();
+
+         this.routerUser()
+        //this.pageRouter.route(UrlPages.DASHBOARD);
       }
-    } catch (error) {
-      DebugerService.log('Login Error: ' + error);
+    } catch (error: any) {
+      DebugerService.log('Login Error: ' + error.error.error);
 
-      Utils.showNotification({
-        icon: 'error',
-        text: 'Usuario o contraseña incorrectos',
-        title: 'Error',
-        showConfirmButton: true,
-      });
-
-      return false;
+      this.showErrorMessage(error);
     } finally {
       this.loadingService.dismiss();
     }
+  }
+
+  private showErrorMessage(error: any): void {
+    var message: string = 'Usuario o contraseña incorrectos';
+    if (error.error.error === 'User account is locked') {
+      message = 'Usuario inactivo, contacte su administrador';
+    }
+
+    Utils.showNotification({
+      icon: 'error',
+      text: message,
+      title: 'Error',
+      showConfirmButton: true,
+    });
+  }
+
+  private routerUser(): void {
+    this.store.select((state)=> state.user.activeUser).subscribe((activeUser)=> {
+      if(activeUser.status === 'FREEZE'){
+        this.pageRouter.route(`${UrlPages.DASHBOARD}/${UrlPages.PROFILE}`);
+
+      }else{
+        this.pageRouter.route(UrlPages.DASHBOARD);
+      }
+        
+    });
   }
 }

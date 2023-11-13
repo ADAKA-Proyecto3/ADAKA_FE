@@ -9,4 +9,5 @@ export const roleOptions: SelectOption[] = [
   export const statusOptions: SelectOption[] = [
     { value: 'ACTIVE', viewValue: 'Activo' },
     { value: 'INACTIVE', viewValue: 'Inactivo' },
+    { value: 'FREEZE', viewValue: 'Expirado' }
   ];

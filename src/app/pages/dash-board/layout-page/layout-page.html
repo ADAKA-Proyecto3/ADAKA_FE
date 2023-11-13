@@ -5,7 +5,9 @@
         <mat-toolbar class="">
             <span>Menu</span>
             <span class="spacer"></span>
-            <button mat-icon-button (click)="sidenav.toggle()"><mat-icon>close</mat-icon></button>
+            <button mat-icon-button (click)="sidenav.toggle()" >
+                <mat-icon>close</mat-icon>
+            </button>
 
         </mat-toolbar>
 
@@ -27,7 +29,9 @@
 
     <mat-toolbar class="ms-2 ">
 
-        <button mat-icon-button (click)="sidenav.toggle()"><mat-icon>menu</mat-icon></button>
+        <button mat-icon-button (click)="sidenav.toggle()" [disabled]="expiredPassword" matTooltip="{{ expiredPassword ? 'Password has expired' : '' }}">
+            <mat-icon>menu</mat-icon>
+        </button>
 
         <img src="/assets/logos/ZhenAir.png" width="200px" style="margin-top: 20px;" class="cursor-pointer" (click)="goToMain()">
 
