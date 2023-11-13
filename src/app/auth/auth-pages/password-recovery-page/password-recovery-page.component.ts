@@ -45,28 +45,28 @@ export class PasswordRecoveryPage implements OnInit{
 
     const email: string =  this.recoveryForm.value.email;
       
-      this.emailSenderService.sendPasswordRecoveryInstructions(email)
-        .subscribe(
-          (response) => {
-            console.log('Correo electrónico enviado con éxito', response);
-            this.codeSent = true;
-
-            Swal.fire({
-              icon: 'success',
-              title: 'Éxito',
-              text: 'Se han enviado instrucciones a su correo',
-              confirmButtonText: 'Ir a login',
-            }).then((result) => {
-              if (result.isConfirmed) {
-                this.router.navigateByUrl('auth/login'); 
-              }
-            });
-          },
-          (error) => {
-            console.error('Error al enviar el correo electrónico', error);
-            // Puedes mostrar un mensaje de error al usuario o realizar otras acciones en caso de error
+    this.emailSenderService.sendPasswordRecoveryInstructions(email)
+    .subscribe({
+      next: (response) => {
+        console.log('Correo electrónico enviado con éxito', response);
+        this.codeSent = true;
+  
+        Swal.fire({
+          icon: 'success',
+          title: 'Éxito',
+          text: 'Se han enviado instrucciones a su correo',
+          confirmButtonText: 'Ir a login',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.router.navigateByUrl('auth/login'); 
           }
-        );
+        });
+      },
+      error: (error) => {
+        console.error('Error al enviar el correo electrónico', error);
+      }
+    });
+  
     }
   public error = (controlName: string, errorName: string) => {
     return this.recoveryForm.controls[controlName].hasError(errorName);
