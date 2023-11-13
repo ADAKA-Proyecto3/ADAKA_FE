@@ -24,5 +24,6 @@ export const appReducers: ActionReducerMap<AppState> = {
   devices: deviceReducer,
   medicalCenters: medicalCenterReducer,
   user: activeUserReducer,
+  
 };
 
