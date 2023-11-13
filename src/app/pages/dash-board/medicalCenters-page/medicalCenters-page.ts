@@ -22,13 +22,15 @@ import { Utils } from 'src/app/common/utils/app-util';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { Subscription, filter, take } from 'rxjs';
 import Swal from 'sweetalert2';
+import { PageRouterService } from 'src/app/services/page-router-service/page-router.service';
+import { UrlPages } from 'src/app/common/enums/url-pages.enum';
 
 @Component({
   selector: 'app-medicalCenter-page',
   templateUrl: './medicalCenters-page.html',
   styleUrls: ['./medicalCenters-page.scss'],
 })
-export class MedicalCentersPage implements AfterViewInit, OnInit {
+export class MedicalCentersPage implements  OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
 
@@ -36,7 +38,9 @@ export class MedicalCentersPage implements AfterViewInit, OnInit {
     private store: Store<AppState>,
     private dialog: MatDialog,
     private readonly dialogService: DialogService,
-    private readonly aut: AuthService
+    private readonly aut: AuthService,
+    private readonly pageRouter: PageRouterService
+  
   ) {}
 
   displayedColumns: string[] = [
@@ -62,9 +66,10 @@ export class MedicalCentersPage implements AfterViewInit, OnInit {
       this.aut.checkSignedInUser();
     }
     this.loadUser();
+    this.loadMedicalCenterTable()
   }
 
-  ngAfterViewInit(): void {
+  loadMedicalCenterTable(): void {
     this.store.select('medicalCenters').subscribe(({ medicalCenters }) => {
    
       this.dataSource.data = medicalCenters;
@@ -186,6 +191,10 @@ export class MedicalCentersPage implements AfterViewInit, OnInit {
 
       });
   }
+
+  goToMain(){
+    this.pageRouter.route(`${UrlPages.DASHBOARD}/${UrlPages.MAIN}`)
+      }
 
   
 }

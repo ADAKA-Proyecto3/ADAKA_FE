@@ -2,6 +2,9 @@
     <div>
       <div class="titulo-1">Administración de dispositivos</div>
     </div>
+    <div class="pt-2">
+      <span class="bread_link" (click)="goToMain()">Dashboard</span>  <mat-icon class="sky-blue-dark-text vertical-align-middle">chevron_right</mat-icon> <span class="active_bread_link">Dispositivos</span>
+    </div>
   </div>
   
   <div class="mt-5">
@@ -14,7 +17,7 @@
   
       </div>
       <div class="col d-flex justify-content-end">
-          <button  mat-raised-button class="sky-blue-darker-bg white-text my-10" (click)="openRoomRegisterDialog()" >Registrar dispositivo</button>
+          <button  mat-raised-button class="sky-blue-darker-bg white-text my-10" (click)="openDeviceRegisterDialog()" >Registrar dispositivo</button>
       </div>
     </div>
   </div>
@@ -52,9 +55,6 @@
         </button>
         <button  mat-icon-button color="warn" matTooltip="Eliminar" (click)="deleteDevice(element)">
           <mat-icon>delete</mat-icon>
-        </button>
-        <button mat-icon-button color="accent" matTooltip="Desactivar" (click)="deactivateDevice(element)">
-          <mat-icon>hide_source</mat-icon>
         </button>
       </td>
     </ng-container>

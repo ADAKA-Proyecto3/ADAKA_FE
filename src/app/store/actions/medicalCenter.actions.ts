@@ -63,3 +63,19 @@ export const loadMedicalCenterFailure = createAction(
   '[Medical Center API] Medical Center Load Failure',
   props<{ error: any }>()
 );
+
+
+export const loadMedicalCenterForSubUser = createAction(
+  '[Medical Center Page] Load Medical Center ForSubUser',
+  props<{ id: number }>()
+);
+
+export const loadMedicalCenterForSubUserSuccess = createAction(
+  '[Medical Center API] Medical Center Load Success ForSubUser',
+  props<{ medicalCenter: MedicalCenter[] }>()
+);
+
+export const loadMedicalCenterForSubUserFailure = createAction(
+  '[Medical Center API] Medical Center Load Failure ForSubUser',
+  props<{ error: any }>()
+);

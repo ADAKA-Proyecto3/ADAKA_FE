@@ -1,1 +1,75 @@
+<div class="container">
+    <h1 class="titulo-1 ">Dashboard</h1>
+    <div class="pt-2 pb-3">
+        <span class="active_bread_link" (click)="goToMain()">Dashboard</span> <mat-icon
+            class="sky-blue-dark-text vertical-align-middle">chevron_right</mat-icon>
+    </div>
+    <div class="row">
+        <div class="col pt-3 justify-content-center d-flex" (click)="goToUsers()" *ngIf="showDiv()">
+            <mat-card class="example-card">
+                <img mat-card-image class="tile_img" src="/assets/tiles/users.jpg">
+                <mat-card-footer class="text-center pt-2">
+                    <strong> Usuarios</strong>
+                </mat-card-footer>
+                <mat-card-content class="pt-2 sub_tip text-center">
+                    Agregar | Editar | Eliminar usuarios
+                </mat-card-content>
+            </mat-card>
 
+        </div>
+        <div class="col pt-3 justify-content-center d-flex" (click)="goToMedicalCenters()" *ngIf="showDiv()">
+
+            <mat-card class="example-card">
+                <img mat-card-image class="tile_img" src="/assets/tiles/medical_centers.jpg">
+                <mat-card-footer class="text-center pt-2">
+                    <strong> Centros Médicos</strong>
+                </mat-card-footer>
+                <mat-card-content class="pt-2 sub_tip text-center">
+                    Agregar | Editar | Eliminar centros médicos
+                </mat-card-content>
+            </mat-card>
+
+        </div>
+
+        <div class="col pt-3 justify-content-center d-flex" (click)="goToRooms()">
+
+            <mat-card class="example-card ">
+                <img mat-card-image class="tile_img" src="/assets/tiles/rooms.jpg">
+                <mat-card-footer class="text-center pt-2">
+                    <strong> Salas</strong>
+                </mat-card-footer>
+                <mat-card-content class="pt-2 sub_tip text-center">
+                    Agregar | Editar | Eliminar salas
+                </mat-card-content>
+            </mat-card>
+
+        </div>
+
+
+        <div class="col pt-3 justify-content-center d-flex" (click)="goToDevices()" *ngIf="showDiv()">
+
+            <mat-card class="example-card ">
+                <img mat-card-image class="tile_img" src="/assets/tiles/devices.jpg">
+                <mat-card-footer class="text-center pt-2">
+                    <strong> Dispositivos ZhenAir</strong>
+                </mat-card-footer>
+                <mat-card-content class="pt-2 sub_tip text-center">
+                    Monitoreo & configuración de salas
+                </mat-card-content>
+            </mat-card>
+
+        </div>
+
+        <div class="col pt-3 justify-content-center d-flex" (click)="goToHistorical()">
+            <mat-card class="example-card ">
+                <img mat-card-image class="tile_img" src="/assets/tiles/stadistics.jpg">
+                <mat-card-footer class="text-center pt-2">
+                    <strong> Lecturas</strong>
+                </mat-card-footer>
+                <mat-card-content class="pt-2 sub_tip text-center">
+                    Histórico de lecturas
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+</div>

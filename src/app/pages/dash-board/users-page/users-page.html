@@ -2,6 +2,10 @@
   <div>
     <div class="titulo-1">Administración de usuarios</div>
   </div>
+  <div class="pt-2">
+    <span class="bread_link" (click)="goToMain()">Dashboard</span>  <mat-icon class="sky-blue-dark-text vertical-align-middle">chevron_right</mat-icon> <span class="active_bread_link">Usuarios</span>
+  </div>
+  
 </div>
 
 <div class="mt-5">
@@ -36,7 +40,7 @@
 
   <ng-container matColumnDef="role">
     <th mat-header-cell *matHeaderCellDef class="text-center"> Role </th>
-    <td mat-cell *matCellDef="let element" class="text-center"> {{element.role}} </td>
+    <td mat-cell *matCellDef="let element" class="text-center"> {{returRoleViewValue(element.role)}} </td>
   </ng-container>
 
  
@@ -51,10 +55,17 @@
     <td mat-cell *matCellDef="let element" class="text-center"> {{element.email}} </td>
   </ng-container>
 
+  <ng-container matColumnDef="medicalCenter">
+    <th mat-header-cell *matHeaderCellDef class="text-center"> Centro Médico </th>
+    <td mat-cell *matCellDef="let element" class="text-center"> {{returnMedicalCenterViewValue(element.assignedMedicalCenter)}} </td>
+  </ng-container>
+
+
+
 
   <ng-container matColumnDef="status">
     <th mat-header-cell *matHeaderCellDef class="text-center"> Estado </th>
-    <td mat-cell *matCellDef="let element" class="text-center"> {{element.status}} </td>
+    <td mat-cell *matCellDef="let element" class="text-center"> {{returnStatusViewValue(element.status)}} </td>
   </ng-container>
 
    <ng-container matColumnDef="actions" >
