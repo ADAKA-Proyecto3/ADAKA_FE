@@ -37,10 +37,9 @@ updateActiveUser$ = createEffect(() =>
       ofType(updateActiveUser),
       mergeMap((action) =>
       this.userService.editUser(action.id, action.content).pipe(
-          map(() =>
+          map((response) =>
             updateActiveUserSuccess({
-              id: action.id,
-              content: action.content,
+              content: response,
             })
           ),
           catchError((error) => of(updateActiveUserFailure({ error })))
