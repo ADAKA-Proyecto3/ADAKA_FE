@@ -4,6 +4,7 @@ import { RoomState, roomReducer } from "./reducers/room.reducer";
 import { DeviceState, deviceReducer } from "./reducers/device.reducer";
 import { MedicalCenterState, medicalCenterReducer } from "./reducers/medicalCenter.reducer";
 import { ActiveUserState, activeUserReducer } from "./reducers/activeUser.reducer";
+import { MapInfoState, mapInfoReducer } from "./reducers/mapInfo.reducer";
 import { EmailState, sendEmailReducer } from "./reducers/sendEmail.reducer";
 
 
@@ -16,6 +17,7 @@ export interface AppState {
   medicalCenters: MedicalCenterState;
   user: ActiveUserState;
   email: EmailState;
+  mapInfo: MapInfoState
 }
 
 
@@ -27,5 +29,7 @@ export const appReducers: ActionReducerMap<AppState> = {
   medicalCenters: medicalCenterReducer,
   user: activeUserReducer,
   email: sendEmailReducer,
+  mapInfo: mapInfoReducer
+
 };
 
