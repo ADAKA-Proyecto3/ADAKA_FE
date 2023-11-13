@@ -51,7 +51,7 @@ export const activeUserReducer = createReducer(
     status: ActionStatus.ERROR,
   })),
 
-  on(updateActiveUserSuccess, (state, { id, content }) => ({
+  on(updateActiveUserSuccess, (state, { content }) => ({
     ...state,
     activeUser: content,
     status: ActionStatus.SUCCESS,
