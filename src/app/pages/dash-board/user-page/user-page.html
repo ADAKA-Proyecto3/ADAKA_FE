@@ -1,136 +1,156 @@
 <div class="container">
-  <div class="container rounded border mb-3">
-    <h1>Administración de perfil</h1>
-    <form
-      class="d-flex flex-column w-100"
-      [formGroup]="userForm"
-      (ngSubmit)="onSubmit()"
-    >
-      <mat-form-field appearance="outline" class="field-full-width pt-5">
-        <mat-label>Nombre</mat-label>
-        <input
-          type="text"
-          matInput
-          formControlName="name"
-          placeholder="Ingrese su nombre"
-        />
-        <mat-error *ngIf="name?.errors?.['required']">
-          Nombre es <strong>requerido</strong>
-        </mat-error>
-        <mat-error *ngIf="name?.errors?.['maxlength']">
-          Nombre debe tener <strong>máximo 30 caracteres</strong>
-        </mat-error>
-      </mat-form-field>
 
-      <mat-form-field
-        appearance="outline"
-        class="field-full-width pt-3"
-        [class.pb-3]="phone?.errors?.['minlength'] && phone?.errors?.['digitsOnly'] || phone?.errors?.['digitsOnly'] && phone?.errors?.['required']"
-      >
-        <mat-label>Número de teléfono</mat-label>
-        <input type="text" matInput formControlName="phone" />
-        <mat-error *ngIf="phone?.errors?.['required']">
-          Número de teléfono es <strong>requerido</strong>
-        </mat-error>
-        <mat-error *ngIf="phone?.errors?.['minlength']">
-          Número de teléfono debe contener <strong>mínimo 8 dígitos</strong>
-        </mat-error>
-        <mat-error *ngIf="phone?.errors?.['digitsOnly'] ">
-          Número de teléfono debe contener dígitos <strong>únicamente</strong>
-        </mat-error>
-      </mat-form-field>
+  <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center">
+    <mat-tab label="Modificar perfil">
 
-      <mat-form-field appearance="outline" class="field-full-width pt-2">
-        <mat-label>Correo electrónico</mat-label>
-        <input
-          type="email"
-          matInput
-          formControlName="email"
-          placeholder="jon@email.com"
-        />
-        <mat-error *ngIf="email?.errors?.['required']">
-          Correo electrónico es <strong>requerido</strong>
-        </mat-error>
-        <mat-error *ngIf="email?.errors?.['email']">
-          Correo electrónico <strong>inválido</strong>
-        </mat-error>
-      </mat-form-field>
-
-      <!-- Agrega el resto de los campos según sea necesario -->
-
-      <div class="d-flex justify-content-between mb-3">
-        <button
-          type="button"
-          mat-raised-button
-          color="warn"
-          class="btn_login mt-3"
-        >
-          <mat-icon iconPositionEnd>close</mat-icon>
-          CANCELAR
-        </button>
-        <button
-          mat-raised-button
-          class="btn_login mt-3 sky-blue-darker-bg white-text"
-        >
-          <mat-icon iconPositionEnd>chevron_right</mat-icon>
-          CONFIRMAR
-        </button>
+      <div class="container mb-3">
+        <div class="row justify-content-center align-items-center  mt-4">
+          <!-- vh-100 establece la altura del contenedor al 100% de la altura de la ventana -->
+          <div class="col-lg-6">
+            <h1 class="titulo-1 text-center">Administración de perfil</h1>
+            <form
+              class="d-flex flex-column"
+              [formGroup]="userForm"
+              (ngSubmit)="onSubmit()"
+            >
+          <mat-form-field appearance="outline" class="field-full-width pt-5">
+            <mat-label>Nombre</mat-label>
+            <input
+              type="text"
+              matInput
+              formControlName="name"
+              placeholder="Ingrese su nombre"
+            />
+            <mat-error *ngIf="name?.errors?.['required']">
+              Nombre es <strong>requerido</strong>
+            </mat-error>
+            <mat-error *ngIf="name?.errors?.['maxlength']">
+              Nombre debe tener <strong>máximo 30 caracteres</strong>
+            </mat-error>
+          </mat-form-field>
+    
+          <mat-form-field
+            appearance="outline"
+            class="field-full-width pt-3"
+            [class.pb-3]="phone?.errors?.['minlength'] && phone?.errors?.['digitsOnly'] || phone?.errors?.['digitsOnly'] && phone?.errors?.['required']"
+          >
+            <mat-label>Número de teléfono</mat-label>
+            <input type="text" matInput formControlName="phone" />
+            <mat-error *ngIf="phone?.errors?.['required']">
+              Número de teléfono es <strong>requerido</strong>
+            </mat-error>
+            <mat-error *ngIf="phone?.errors?.['minlength']">
+              Número de teléfono debe contener <strong>mínimo 8 dígitos</strong>
+            </mat-error>
+            <mat-error *ngIf="phone?.errors?.['digitsOnly'] ">
+              Número de teléfono debe contener dígitos <strong>únicamente</strong>
+            </mat-error>
+          </mat-form-field>
+    
+          <mat-form-field appearance="outline" class="field-full-width pt-2">
+            <mat-label>Correo electrónico</mat-label>
+            <input
+              type="email"
+              matInput
+              formControlName="email"
+              placeholder="jon@email.com"
+            />
+            <mat-error *ngIf="email?.errors?.['required']">
+              Correo electrónico es <strong>requerido</strong>
+            </mat-error>
+            <mat-error *ngIf="email?.errors?.['email']">
+              Correo electrónico <strong>inválido</strong>
+            </mat-error>
+          </mat-form-field>
+    
+          <!-- Agrega el resto de los campos según sea necesario -->
+    
+          <div class="d-flex justify-content-between mt-3">
+            <button
+              type="button"
+              mat-raised-button
+              color="warn"
+              class="btn_login"
+            >
+              <mat-icon iconPositionEnd>close</mat-icon>
+              CANCELAR
+            </button>
+            <button
+              mat-raised-button
+              class="btn_login sky-blue-darker-bg white-text"
+            >
+              <mat-icon iconPositionEnd>chevron_right</mat-icon>
+              CONFIRMAR
+            </button>
+          </div>
+        </form>
       </div>
-    </form>
+    </div>
   </div>
-  <div class="container rounded border mt-4 mb-4">
-    <h1>Cambio de contraseña</h1>
-    <form
-      class="d-flex flex-column w-100"
-      [formGroup]="passwordForm"
-    >
-      <mat-form-field appearance="outline" class="field-full-width pt-3">
-        <mat-label>Contraseña</mat-label>
-        <input
-          [type]="hide ? 'password' : 'text'"
-          matInput
-          formControlName="password"
-          PasswordValidator
-        />
-        <button
-          mat-icon-button
-          matSuffix
-          (click)="hide = !hide"
-          [attr.aria-label]="'Hide password'"
-          [attr.aria-pressed]="hide"
-        >
-          <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-        </button>
-        <mat-error
-          *ngIf="passwordForm.get('password')?.hasError('passwordInvalid') "
-        >
-          La contraseña debe contener al menos 8 caracteres, un número, un
-          carácter especial y una letra mayúscula.
-        </mat-error>
-      </mat-form-field>
 
-      <div class="d-flex justify-content-between mb-3">
-        <button
-          type="button"
-          mat-raised-button
-          color="warn"
-          class="btn_login mt-3"
-          (click)="limpiarContrasena()"
-        >
-          <mat-icon iconPositionEnd>close</mat-icon>
-          CANCELAR CAMBIO DE CONTRASEÑA
-        </button>
-
-        <button
-          mat-raised-button
-          class="btn_login mt-3 sky-blue-darker-bg white-text"
-          type="submit"
-          (click)="onSubmitPassword()"
-        >
-          <mat-icon iconPositionEnd>chevron_right</mat-icon>
-          CONFIRMAR CAMBIO DE CONTRASENA
-        </button>
+    </mat-tab>
+    <mat-tab label="Cambio de contraseña">
+      <div class="container mb-4 d-flex justify-content-center align-items-center mt-4">
+        <!-- vh-100 establece la altura del contenedor al 100% de la altura de la ventana -->
+        <div class="w-50">
+          <h1 class="titulo-1 text-center">Cambio de contraseña</h1>
+          <form class="d-flex flex-column" [formGroup]="passwordForm">
+            <mat-form-field appearance="outline" class="field-full-width pt-3">
+              <mat-label>Contraseña</mat-label>
+              <input
+                [type]="hide ? 'password' : 'text'"
+                matInput
+                formControlName="password"
+                PasswordValidator
+              />
+              <button
+                mat-icon-button
+                matSuffix
+                (click)="hide = !hide"
+                [attr.aria-label]="'Hide password'"
+                [attr.aria-pressed]="hide"
+              >
+                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+              </button>
+              <mat-error
+                *ngIf="passwordForm.get('password')?.hasError('passwordInvalid') "
+              >
+                La contraseña debe contener al menos 8 caracteres, un número, un
+                carácter especial y una letra mayúscula.
+              </mat-error>
+            </mat-form-field>
+      
+            <div class="d-flex justify-content-between mb-3">
+              <button
+                type="button"
+                mat-raised-button
+                color="warn"
+                class="btn_login mt-3"
+                (click)="limpiarContrasena()"
+              >
+                <mat-icon iconPositionEnd>close</mat-icon>
+                CANCELAR
+              </button>
+      
+              <button
+                mat-raised-button
+                class="btn_login mt-3 sky-blue-darker-bg white-text"
+                type="submit"
+                (click)="onSubmitPassword()"
+              >
+                <mat-icon iconPositionEnd>chevron_right</mat-icon>
+                CONFIRMAR
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-    </form>
-  </div>
+      
+
+    </mat-tab>
+
+  </mat-tab-group>
+
+  
+  
 </div>

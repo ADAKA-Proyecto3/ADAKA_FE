@@ -6,6 +6,9 @@ import {
   loadActiveUser,
   loadActiveUserFailure,
   loadActiveUserSuccess,
+  updateActiveUser,
+  updateActiveUserFailure,
+  updateActiveUserSuccess
 } from '../actions/activeUser.actions';
 
 export interface ActiveUserState {
@@ -48,5 +51,20 @@ export const activeUserReducer = createReducer(
     status: ActionStatus.ERROR,
   })),
 
-  on(activeUserReset, () => initialState) 
+  on(updateActiveUserSuccess, (state, { id, content }) => ({
+    ...state,
+    activeUser: content,
+    status: ActionStatus.SUCCESS,
+    })),
+
+  on(updateActiveUserFailure, (state, action) => {
+    return {
+      ...state,
+      error: action.error,
+      status: ActionStatus.ERROR,
+    };
+  }),
+  })),
+
+  on(activeUserReset, () => initialState)
 );

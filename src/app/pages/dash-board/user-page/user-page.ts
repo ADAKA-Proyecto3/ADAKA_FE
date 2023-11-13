@@ -9,7 +9,12 @@ import {
 import { Store } from '@ngrx/store';
 import { filter, take } from 'rxjs';
 import { User } from 'src/app/models/user.interface';
+import { updateActiveUser } from 'src/app/store/actions/activeUser.actions';
 import { AppState } from 'src/app/store/app.state';
+import { UserHttpService } from 'src/app/services/http-service/user-http.service';
+import { DebugerService } from 'src/app/services/debug-service/debug.service';
+import { DialogService } from 'src/app/services/dialog-service/dialog.service';
+import { Utils } from 'src/app/common/utils/app-util';
 
 @Component({
   selector: 'app-user-page',
@@ -25,7 +30,9 @@ export class UserPage implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private readonly store: Store<AppState>
+    private readonly store: Store<AppState>,
+    private readonly userHttpService: UserHttpService,
+    private readonly dialogService: DialogService,
   ) {}
 
   ngOnInit() {
@@ -78,19 +85,45 @@ export class UserPage implements OnInit {
       phone: this.userForm.value.phone,
       email: this.userForm.value.email,
     };
+
     console.log(user, this.activeUser);
-    //Aqui la llamada a la api
+    this.store.dispatch(updateActiveUser({ id: this.activeUser, content: user }));
+
   }
 
   onSubmitPassword() {
     if (this.passwordForm.invalid) {
       return;
     }
-    const password = this.passwordForm.value.password;
 
-    console.log(password, this.activeUser);
-    //Aqui la llamada a la api
+    const user: User = {
+      name: '',
+      phone: '',
+      email: '',
+      password: this.passwordForm.value.password,
+    };
+    
+    this.modPassword(user);
+
   }
+
+
+
+  async modPassword(user:User): Promise<any> {
+    try {
+      DebugerService.log('Requesting HTTP PUT change password');
+      const result = await this.userHttpService.editUserPassword(this.activeUser,user);
+        this.dialogService.showToast('Contraseña modificada con éxito');
+    } catch (error) {
+      Utils.showNotification({
+        icon: 'error',
+        title: 'Error',
+        text: 'Ha ocurrido un error al registrar la suscripción',
+      });
+    } finally {
+    }
+  }
+
 
   get name() {
     return this.userForm.get('name');

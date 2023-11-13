@@ -12,6 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {FormsModule} from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
+import {MatTabsModule} from '@angular/material/tabs';
 
 import { UserPage } from './user-page';
 import { UserPageRoutingModule } from './user-page-routing.module';
@@ -31,7 +32,8 @@ import { UserPageRoutingModule } from './user-page-routing.module';
     MatIconModule,
     MatTooltipModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatTabsModule
 
   ],
   providers: [{ provide: MatPaginatorIntl, useValue: getSpanishPaginatorIntl() }],

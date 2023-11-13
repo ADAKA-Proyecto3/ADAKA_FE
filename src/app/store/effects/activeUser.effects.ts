@@ -5,8 +5,11 @@ import {
   loadActiveUser,
   loadActiveUserFailure,
   loadActiveUserSuccess,
+  updateActiveUser,
+  updateActiveUserFailure,
+  updateActiveUserSuccess
 } from '../actions/activeUser.actions';
-import { catchError, from, map, of, switchMap } from 'rxjs';
+import { catchError, from, map, mergeMap, of, switchMap } from 'rxjs';
 import { User } from 'src/app/models/user.interface';
 
 @Injectable()
@@ -27,4 +30,23 @@ loadActiveUser$ = createEffect(() =>
         )
     )
 );
+
+
+updateActiveUser$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(updateActiveUser),
+      mergeMap((action) =>
+      this.userService.editUser(action.id, action.content).pipe(
+          map(() =>
+            updateActiveUserSuccess({
+              id: action.id,
+              content: action.content,
+            })
+          ),
+          catchError((error) => of(updateActiveUserFailure({ error })))
+        )
+      )
+    )
+  );
+
 }
