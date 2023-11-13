@@ -49,6 +49,8 @@ export class MapPage implements AfterViewInit {
   ];
 
   ngOnInit(): void {
+    this.createMap();
+
     this.getMapInfoaqicn();
     this.store.dispatch(loadMapInfo());
     this.loadInfo();
@@ -124,7 +126,7 @@ export class MapPage implements AfterViewInit {
         take(1)
       )
       .subscribe((mapInfo) => {
-        this.createMap();
+       // this.createMap();
       });
   }
 
