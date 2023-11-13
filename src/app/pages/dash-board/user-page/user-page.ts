@@ -113,23 +113,42 @@ export class UserPage implements OnInit {
     this.modPassword(user);
   }
 
+
+
   async modPassword(user: User): Promise<any> {
     try {
       DebugerService.log('Requesting HTTP PUT change password');
-      const result = await this.userHttpService.editUserPassword(
-        this.activeUser,
-        user
+      console.log(user);
+  
+      // Realizar la solicitud HTTP y obtener el Observable
+      const result$ = this.userHttpService.editUserPassword(this.activeUser, user);
+  
+      // Suscribirse a la respuesta del servidor
+      result$.subscribe(
+        (result) => {
+          console.log(result);
+          // Aquí puedes manejar la respuesta exitosa
+          this.dialogService.showToast('Contraseña modificada con éxito');
+        },
+        (error) => {
+          // Aquí puedes manejar el error
+          Utils.showNotification({
+            icon: 'error',
+            title: 'Error',
+            text: 'Ha ocurrido un error al registrar la suscripción',
+          });
+        },
+        () => {
+          // Este bloque se ejecutará después de que la solicitud se complete
+        }
       );
-      this.dialogService.showToast('Contraseña modificada con éxito');
     } catch (error) {
-      Utils.showNotification({
-        icon: 'error',
-        title: 'Error',
-        text: 'Ha ocurrido un error al registrar la suscripción',
-      });
+      console.error(error);
     } finally {
+      // Cualquier código que desees ejecutar después de la solicitud (puede estar vacío)
     }
   }
+
 
   get name() {
     return this.userForm.get('name');
