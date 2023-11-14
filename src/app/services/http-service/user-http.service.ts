@@ -87,6 +87,18 @@ export class UserHttpService {
       );
   }
 
+  editUserInfo(id: number, user: User) {
+    return this.httpClient
+      .put(`${this.url}/${id}/updateUser`, user, Utils.getHttpHeaders())
+      .pipe(
+        map((resp) => {
+          this.loader.dismiss();
+          DebugerService.log('resp' + JSON.stringify(resp));
+          return resp as User;
+        })
+      );
+  }
+
   editUserPassword(id: number, user: User) {
     return this.httpClient
       .put(`${this.url}/password/${id}`, user, Utils.getHttpHeaders())
