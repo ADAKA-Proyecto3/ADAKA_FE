@@ -39,7 +39,6 @@ export class RoomHttpService {
       .get<Response<Room>>(`${this.url}/all/${id}`, Utils.getHttpHeaders())
       .pipe(
         map((resp) => {
-          console.log('resp: ' + JSON.stringify(resp));
           DebugerService.log("getRoomsByMedicalCenter");
           this.loader.dismiss();
           console.log('resp', resp.data);
