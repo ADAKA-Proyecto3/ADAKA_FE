@@ -21,7 +21,7 @@ export class MapInfoHttpService {
   getMapInfo() {
     const urlWithId = `${this.url}/all`;
     return this.httpClient
-      .get<Response<MapInfo>>(urlWithId)
+      .get<Response<any>>(urlWithId)
       .pipe(
         map((resp) => {
           console.log('resp', resp);

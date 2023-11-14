@@ -58,6 +58,7 @@ export class LayoutPage implements OnInit {
   ];
 
   activeUser: any;
+  expiredPassword:boolean = false;
 
   constructor(
     private readonly authService: AuthService,
@@ -76,6 +77,7 @@ export class LayoutPage implements OnInit {
       .select((state) => state.user.activeUser)
       .subscribe((user) => {
         this.activeUser = user;
+        this.expiredPassword = user.status === 'FREEZE' ? true : false;
       });
   }
 
@@ -95,6 +97,7 @@ export class LayoutPage implements OnInit {
   }
 
   goToMain() {
+    if(this.expiredPassword) return;
     this.pageRouter.route(`${UrlPages.DASHBOARD}/${UrlPages.MAIN}`);
   }
 
