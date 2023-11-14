@@ -15,5 +15,3 @@ export const selectDeviceStatus = createSelector(
   selectDeviceState,
   (state: DeviceState) => state.status
 );
-
-console.log("entro al selector");
