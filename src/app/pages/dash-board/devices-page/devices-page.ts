@@ -29,6 +29,8 @@ export class DevicesPage  implements AfterViewInit, OnInit{
   private statusSubscription: Subscription = new Subscription();
   activeUser: any;
   idAdmin: any = 0;
+  aut: any;
+  pageRouter: any;
   constructor(
     private store: Store<AppState>, 
     private dialog: MatDialog,

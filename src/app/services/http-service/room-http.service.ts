@@ -36,7 +36,7 @@ export class RoomHttpService {
   getRoomsByMedicalCenter(id: number): Observable<Room[]> {
     this.loader.showLoadingModal();
     return this.httpClient
-      .get<Response<Room>>(`${this.url}/allUser/${id}`, Utils.getHttpHeaders())
+      .get<Response<Room>>(`${this.url}/all/${id}`, Utils.getHttpHeaders())
       .pipe(
         map((resp) => {
           console.log('resp: ' + JSON.stringify(resp));
