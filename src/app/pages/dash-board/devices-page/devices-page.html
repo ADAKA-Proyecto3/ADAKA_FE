@@ -35,9 +35,9 @@
     </ng-container>
   
   
-    <ng-container matColumnDef="installationDate">
+    <ng-container matColumnDef="date">
       <th mat-header-cell *matHeaderCellDef class="text-center"> Fecha de Instalación </th>
-      <td mat-cell *matCellDef="let element" class="text-center"> {{element.installationDate}} </td>
+      <td mat-cell *matCellDef="let element" class="text-center"> {{ formatDate(element.date) }} </td>
     </ng-container>
   
    

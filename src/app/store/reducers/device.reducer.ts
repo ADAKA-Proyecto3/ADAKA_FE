@@ -16,6 +16,9 @@ import {
 import { Device } from 'src/app/models/devices.interface';
 import { ActionStatus } from 'src/app/common/enums/action-status.enum';
 
+
+console.log("entro al reducer");
+
 export interface DeviceState {
   devices: Device[];
   error: any;
@@ -58,7 +61,7 @@ export const deviceReducer = createReducer(
   on(updateDeviceSuccess, (state, { id, content }) => ({
     ...state,
     devices: state.devices.map((device) => {
-      if (device.id === id) {
+      if (device.deviceId === id) {
         return {
           ...device,
           ...content,
@@ -84,7 +87,7 @@ export const deviceReducer = createReducer(
 
   on(removeDeviceSuccess, (state, { id }) => ({
     ...state,
-    Devices: state.devices.filter((devices) => devices.id !== id),
+    Devices: state.devices.filter((devices) => devices.deviceId !== id),
     status: ActionStatus.SUCCESS,
   })),
 

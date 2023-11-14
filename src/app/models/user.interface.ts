@@ -1,3 +1,4 @@
+import { Device } from "./devices.interface";
 import { MedicalCenter } from "./medical-center.interface";
 import { Suscription } from "./suscription.interface";
 
