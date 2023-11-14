@@ -3,9 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UrlPages } from 'src/app/common/enums/url-pages.enum';
-import { EmailSenderHttpService } from 'src/app/services/http-service/email_sender-http.service';
-import { PageRouterService } from 'src/app/services/page-router-service/page-router.service';
-import Swal from 'sweetalert2';
+import { PasswordRecoveryPageController } from './password-recovery-page.controller';
  // Asegúrate de especificar la ruta correcta
 
 @Component({
@@ -22,7 +20,7 @@ export class PasswordRecoveryPage implements OnInit{
   constructor(
     private formBuilder: FormBuilder,
     private readonly router: Router,
-    private emailSenderService: EmailSenderHttpService // Inyecta el servicio aquí
+    private readonly passwordRecoveryPageController: PasswordRecoveryPageController,
   ) {
     this.recoveryForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
@@ -44,30 +42,11 @@ export class PasswordRecoveryPage implements OnInit{
     }
 
     const email: string =  this.recoveryForm.value.email;
-      
-    this.emailSenderService.sendPasswordRecoveryInstructions(email)
-    .subscribe({
-      next: (response) => {
-        console.log('Correo electrónico enviado con éxito', response);
-        this.codeSent = true;
-  
-        Swal.fire({
-          icon: 'success',
-          title: 'Éxito',
-          text: 'Se han enviado instrucciones a su correo',
-          confirmButtonText: 'Ir a login',
-        }).then((result) => {
-          if (result.isConfirmed) {
-            this.router.navigateByUrl('auth/login'); 
-          }
-        });
-      },
-      error: (error) => {
-        console.error('Error al enviar el correo electrónico', error);
-      }
-    });
+    
+    this.passwordRecoveryPageController.sendPasswordRecoveryEmail(email);
   
     }
+
   public error = (controlName: string, errorName: string) => {
     return this.recoveryForm.controls[controlName].hasError(errorName);
   };

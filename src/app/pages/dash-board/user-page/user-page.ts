@@ -9,12 +9,14 @@ import {
 import { Store } from '@ngrx/store';
 import { filter, take } from 'rxjs';
 import { User } from 'src/app/models/user.interface';
-import { updateActiveUser } from 'src/app/store/actions/activeUser.actions';
+import { loadActiveUser, loadActiveUserSuccess, updateActiveUser } from 'src/app/store/actions/activeUser.actions';
 import { AppState } from 'src/app/store/app.state';
 import { UserHttpService } from 'src/app/services/http-service/user-http.service';
 import { DebugerService } from 'src/app/services/debug-service/debug.service';
 import { DialogService } from 'src/app/services/dialog-service/dialog.service';
 import { Utils } from 'src/app/common/utils/app-util';
+import { PageRouterService } from 'src/app/services/page-router-service/page-router.service';
+import { UrlPages } from 'src/app/common/enums/url-pages.enum';
 
 @Component({
   selector: 'app-user-page',
@@ -35,7 +37,8 @@ export class UserPage implements OnInit {
     private fb: FormBuilder,
     private readonly store: Store<AppState>,
     private readonly userHttpService: UserHttpService,
-    private readonly dialogService: DialogService
+    private readonly dialogService: DialogService,
+    private readonly pageRouter: PageRouterService
   ) {}
 
   ngOnInit() {
@@ -119,16 +122,18 @@ export class UserPage implements OnInit {
     try {
       DebugerService.log('Requesting HTTP PUT change password');
       console.log(user);
-  
+
       // Realizar la solicitud HTTP y obtener el Observable
       const result$ = this.userHttpService.editUserPassword(this.activeUser, user);
-  
+
       // Suscribirse a la respuesta del servidor
       result$.subscribe(
         (result) => {
           console.log(result);
           // Aquí puedes manejar la respuesta exitosa
+          this.store.dispatch(loadActiveUserSuccess({user : result} ));
           this.dialogService.showToast('Contraseña modificada con éxito');
+          this.pageRouter.route(`/${UrlPages.DASHBOARD}/${UrlPages.MAIN}`);
         },
         (error) => {
           // Aquí puedes manejar el error
