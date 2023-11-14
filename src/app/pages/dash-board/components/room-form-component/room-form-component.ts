@@ -22,7 +22,7 @@ export class RoomFormComponent implements OnInit {
   dataSource: any;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public room: any | undefined,
+    @Inject(MAT_DIALOG_DATA) public room: Room | undefined,
     private matDialogRef: MatDialogRef<RoomFormComponent>,
     private readonly store: Store<AppState>
   ) {
@@ -67,11 +67,11 @@ export class RoomFormComponent implements OnInit {
       this.editing = true;
 
       this.registerForm.patchValue({
-        name: this.room.roomToEdit.name || '',
-        length: this.room.roomToEdit.length || '',
-        width: this.room.roomToEdit.width || '',
-        height: this.room.roomToEdit.height || '',
-        medicalCenter: this.room.roomToEdit.assignedMedicalCenter || '',
+        name: this.room.name || '',
+        length: this.room.length || '',
+        width: this.room.width || '',
+        height: this.room.height || '',
+        medicalCenter: this.room.medicalCenterId || '',
       });
     }
   }
@@ -91,7 +91,7 @@ export class RoomFormComponent implements OnInit {
 
     if (this.editing) {
       this.matDialogRef.close({
-        id: this.room?.roomToEdit.id,
+        id: this.room?.id,
         room: room,
         newMedicalCenter: this.registerForm.value.medicalCenter,
       });
@@ -111,4 +111,6 @@ export class RoomFormComponent implements OnInit {
   error(controlName: string, errorName: string) {
     return this.registerForm.get(controlName)?.hasError(errorName);
   }
+
+  
 }

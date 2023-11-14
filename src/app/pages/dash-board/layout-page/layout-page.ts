@@ -6,6 +6,9 @@ import { UrlPages } from 'src/app/common/enums/url-pages.enum';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/app.state';
 import { loadActiveUser } from '../../../store/actions/activeUser.actions';
+import { PageRouterService } from 'src/app/services/page-router-service/page-router.service';
+import { UserRoles } from 'src/app/common/enums/user-roles.enum';
+import { DebugerService } from 'src/app/services/debug-service/debug.service';
 
 @Component({
   selector: 'app-layout-page',
@@ -13,7 +16,7 @@ import { loadActiveUser } from '../../../store/actions/activeUser.actions';
   styleUrls: ['./layout-page.scss'],
 })
 export class LayoutPage implements OnInit {
-  public sideBarItems = [
+  public adminSideBarItems = [
     {
       label: 'Usuarios',
       icon: 'people',
@@ -21,12 +24,12 @@ export class LayoutPage implements OnInit {
     },
     {
       label: 'Centros',
-      icon: 'apartment',
+      icon: 'home_health',
       url: `/${UrlPages.DASHBOARD}/${UrlPages.MEDICAL_CENTERS}`,
     },
     {
       label: 'Salas',
-      icon: 'bedroom_child',
+      icon: 'bed',
       url: `/${UrlPages.DASHBOARD}/${UrlPages.ROOMS}`,
     },
     {
@@ -34,14 +37,34 @@ export class LayoutPage implements OnInit {
       icon: 'devices',
       url: `/${UrlPages.DASHBOARD}/${UrlPages.DEVICES}`,
     },
+    {
+      label: 'Lecturas',
+      icon: 'bar_chart',
+      url: `/${UrlPages.DASHBOARD}/${UrlPages.ZHENAIR_STATS}`,
+    },
   ];
 
-  activeUser: String = '';
+  public userSideBarItems = [
+    {
+      label: 'Salas',
+      icon: 'bed',
+      url: `/${UrlPages.DASHBOARD}/${UrlPages.ROOMS}`,
+    },
+    {
+      label: 'Lecturas',
+      icon: 'bar_chart',
+      url: `/${UrlPages.DASHBOARD}/${UrlPages.ZHENAIR_STATS}`,
+    },
+  ];
+
+  activeUser: any;
+  expiredPassword:boolean = false;
 
   constructor(
     private readonly authService: AuthService,
-    private readonly router: Router,
-    private readonly store: Store<AppState>
+
+    private readonly store: Store<AppState>,
+    private readonly pageRouter: PageRouterService
   ) {}
 
   ngOnInit(): void {
@@ -49,21 +72,36 @@ export class LayoutPage implements OnInit {
       this.authService.checkSignedInUser();
     }
     this.loadActiveUser();
+
+    this.store
+      .select((state) => state.user.activeUser)
+      .subscribe((user) => {
+        this.activeUser = user;
+        this.expiredPassword = user.status === 'FREEZE' ? true : false;
+      });
   }
 
- 
   manageProfile(): void {
-    //this.router.navigate([`/${UrlPages.DASHBOARD}/${UrlPages.PROFILE}`]);
+    this.pageRouter.route(`/${UrlPages.DASHBOARD}/${UrlPages.PROFILE}`);
   }
 
   onLogout(): void {
     this.authService.logout();
-    this.router.navigate([`/${UrlPages.AUTH}/${UrlPages.LOGIN}`]);
+    this.pageRouter.route(`/${UrlPages.AUTH}/${UrlPages.LOGIN}`);
   }
 
   private loadActiveUser() {
     this.store.select('user').subscribe((activeUser) => {
       this.activeUser = activeUser.activeUser?.name;
     });
+  }
+
+  goToMain() {
+    if(this.expiredPassword) return;
+    this.pageRouter.route(`${UrlPages.DASHBOARD}/${UrlPages.MAIN}`);
+  }
+
+  checkAdmin(): boolean {
+    return this.authService.isAdmin();
   }
 }

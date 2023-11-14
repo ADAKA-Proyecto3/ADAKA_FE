@@ -13,6 +13,9 @@ import {
   addMedicalCenter,
   addMedicalCenterSuccess,
   addMedicalCenterFailure,
+  loadMedicalCenterForSubUser,
+  loadMedicalCenterForSubUserFailure,
+  loadMedicalCenterForSubUserSuccess,
 } from '../actions/medicalCenter.actions';
 import { of, from } from 'rxjs';
 import { switchMap, map, catchError, mergeMap } from 'rxjs/operators';
@@ -21,6 +24,7 @@ import { MedicalCenterHttpService } from 'src/app/services/http-service/medicalC
 
 @Injectable()
 export class MedicalCenterEffects {
+  
   constructor(
     private actions$: Actions,
     private medicalService: MedicalCenterHttpService
@@ -44,6 +48,24 @@ export class MedicalCenterEffects {
       )
     )
   );
+
+  loadMedicalCenterForSubUser$ = createEffect(() =>
+  this.actions$.pipe(
+    ofType(loadMedicalCenterForSubUser),
+    switchMap((action) =>
+
+      // Call the get method, convert it to an observable
+      from(this.medicalService.getAssignedMedicalCenterForSubUser(action.id)).pipe(
+        // Take the returned value and return a new success action containing the todos
+        map((medicalCenter) =>
+          loadMedicalCenterForSubUserSuccess({ medicalCenter: medicalCenter })
+        ),
+        // Or... if it errors return a new failure action containing the error
+        catchError((error) => of(loadMedicalCenterForSubUserFailure({ error })))
+      )
+    )
+  )
+);
 
   deleteMedicalCenter$ = createEffect(() =>
     this.actions$.pipe(

@@ -5,4 +5,7 @@ import { ActiveUserEffects } from './activeUser.effects';
 import { DeviceEffects } from './device.effects';
 
 
-export const EffectsArray: any[] = [UserEffects,RoomEffects, MedicalCenterEffects,ActiveUserEffects, DeviceEffects ];
+import { MapInfoEffects } from './mapInfo.effects';
+
+
+export const EffectsArray: any[] = [UserEffects,RoomEffects, MedicalCenterEffects,ActiveUserEffects, MapInfoEffects, DeviceEffects ];

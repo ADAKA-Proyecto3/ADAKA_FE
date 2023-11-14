@@ -16,12 +16,16 @@ import { DebugerService } from 'src/app/services/debug-service/debug.service';
 import { MedicalCenter } from 'src/app/models/medical-center.interface';
 import { SelectOption } from 'src/app/common/interfaces/option.interface';
 import { FormControl } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Subscription, of, switchMap, take } from 'rxjs';
 import { selectRoomStatus } from 'src/app/store/selectors/room.selector';
 import { ActionStatus } from 'src/app/common/enums/action-status.enum';
 import { Utils } from 'src/app/common/utils/app-util';
 import { DialogService } from 'src/app/services/dialog-service/dialog.service';
 import Swal from 'sweetalert2';
+import { RoomStatsVisualComponent } from '../components/room-stats-visual-component/room-stats-visual-component';
+import { PageRouterService } from 'src/app/services/page-router-service/page-router.service';
+import { UrlPages } from 'src/app/common/enums/url-pages.enum';
+import { loadMedicalCenterForSubUser } from 'src/app/store/actions/medicalCenter.actions';
 
 @Component({
   templateUrl: './rooms-page.html',
@@ -30,29 +34,21 @@ import Swal from 'sweetalert2';
 export class RoomsPage implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  displayedColumns: string[] = [
-    'id',
-    'name',
-    'length',
-    'width',
-    'height',
-    'actions',
-  ];
-  dataSource = new MatTableDataSource<Room>();
+  displayedColumns: string[] = [];
 
   medicalCenters: MedicalCenter[] = [];
   medicalCenterOptions: SelectOption[] = [];
-
-  assignedMedicalCenterOnEdit: number = 0;
-
-  selectedMedicalCenter = new FormControl();
+  dataSource = new MatTableDataSource<Room>();
+  isAdmin: boolean = true;
+  assignedMedical: number = 0;
 
   private statusSubscription: Subscription = new Subscription();
-
+  activeUser: any;
   constructor(
     private store: Store<AppState>,
     private dialog: MatDialog,
-    private readonly dialogService: DialogService
+    private readonly dialogService: DialogService,
+    private readonly pageRouter: PageRouterService
   ) {}
 
   applyFilter(event: Event) {
@@ -62,15 +58,46 @@ export class RoomsPage implements OnInit {
 
   ngOnInit(): void {
     this.store
-      .select((state) => state.user.activeUser.medicalCenters)
-      .subscribe((mc) => {
-        if (mc) {
-          this.medicalCenters = mc;
-          this.medicalCenterOptions = this.medicalCenters.map((mc) => {
-            return { value: mc.id!, viewValue: mc.name };
-          });
-        }
+      .select((state) => state.user)
+      .subscribe((user) => {
+        if (user.activeUser.id !== 0) this.activeUser = user.activeUser;
+       
+        this.preLoadRooms();
       });
+      
+  }
+
+  preLoadRooms() {
+    const login = JSON.parse(sessionStorage.getItem('login') || '{}');
+    const isAdmin = login ? login.isAdmin : false;
+
+    this.medicalCenters = this.activeUser.medicalCenters;
+    this.medicalCenterOptions = this.medicalCenters.map((mc) => {
+      return { value: mc.id!, viewValue: mc.name };
+    });
+
+    if (isAdmin) {
+      this.isAdmin = false;
+      this.displayedColumns = [
+        'id',
+        'name',
+        'medicalCenter',
+        'zhenair',
+        'actions',
+      ];
+    } else {
+      this.displayedColumns = ['id', 'name', 'medicalCenter', 'zhenair'];
+    }
+    this.store.dispatch(loadRooms({ id: this.activeUser.id }));
+    this.loadRoomsTable();
+  }
+
+  loadRoomsTable(): void {
+    this.store.select('rooms').subscribe(({ rooms }) => {
+      this.dataSource.data = rooms;
+      this.dataSource.paginator = this.paginator;
+    });
+   
   }
 
   editRoomDialog(room: Room) {
@@ -79,28 +106,15 @@ export class RoomsPage implements OnInit {
 
   onSelectChange(event: any) {
     const selectedValue = event.value;
-    this.assignedMedicalCenterOnEdit = selectedValue;
     this.store.dispatch(loadRooms({ id: selectedValue }));
-    this.loadRoomsTable();
   }
 
   updateMedicalCenterSelectionOnSave(id: number) {
-    this.selectedMedicalCenter.setValue(id);
     this.store.dispatch(loadRooms({ id: id }));
-    this.loadRoomsTable();
-  }
-
-  loadRoomsTable(): void {
-    this.store.select('rooms').subscribe(({ rooms }) => {
-      this.dataSource.data = rooms;
-    });
-
-    this.dataSource.paginator = this.paginator;
   }
 
   registerRoom(id: number, room: Room) {
     this.store.dispatch(addRoom({ id: id, content: room }));
-    this.updateMedicalCenterSelectionOnSave(id);
     this.checkStatusRequest(
       'Sala registrada con éxito',
       'Ha sucedido un error, por favor intente de nuevo'
@@ -111,7 +125,6 @@ export class RoomsPage implements OnInit {
     this.store.dispatch(
       updateRoom({ id: id, medicalCenterId: newMedicalCenterId, content: room })
     );
-    this.updateMedicalCenterSelectionOnSave(newMedicalCenterId);
     this.checkStatusRequest(
       'Sala actualizado con éxito',
       'Ha sucedido un error, por favor intente de nuevo'
@@ -145,13 +158,9 @@ export class RoomsPage implements OnInit {
   }
 
   openRoomEditDialog(room: Room): void {
-    const roomToEdit = {
-      ...room,
-      assignedMedicalCenter: this.assignedMedicalCenterOnEdit,
-    };
     const dialogRef = this.dialog.open(RoomFormComponent, {
       width: '60%',
-      data: { roomToEdit },
+      data: room,
     });
 
     dialogRef.afterClosed().subscribe(async (result) => {
@@ -175,6 +184,13 @@ export class RoomsPage implements OnInit {
     });
   }
 
+  showRoomStats(id: number): void {
+    const dialogRef = this.dialog.open(RoomStatsVisualComponent, {
+      width: '80%',
+      data: id,
+    });
+  }
+
   private checkStatusRequest(successMessage: string, errorMessage: string) {
     this.statusSubscription = this.store
       .pipe(select(selectRoomStatus))
@@ -193,5 +209,16 @@ export class RoomsPage implements OnInit {
           this.statusSubscription.unsubscribe();
         }
       });
+  }
+
+  returnMedicalCenterViewValue(medicalCenterId: number) {
+    const viewValue = this.medicalCenters.find(
+      (mc) => mc.id === medicalCenterId
+    )?.name;
+    return viewValue;
+  }
+
+  goToMain() {
+    this.pageRouter.route(`${UrlPages.DASHBOARD}/${UrlPages.MAIN}`);
   }
 }

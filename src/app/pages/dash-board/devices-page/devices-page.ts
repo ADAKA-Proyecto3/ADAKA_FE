@@ -16,6 +16,8 @@ import { Utils } from 'src/app/common/utils/app-util';
 import Swal from 'sweetalert2';
 import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/auth/services/auth.service';
+import { UrlPages } from 'src/app/common/enums/url-pages.enum';
+import { PageRouterService } from 'src/app/services/page-router-service/page-router.service';
 
 @Component({
   selector: 'app-devices-page',
@@ -30,9 +32,7 @@ export class DevicesPage  implements AfterViewInit, OnInit{
   constructor(
     private store: Store<AppState>, 
     private dialog: MatDialog,
-    private readonly dialogService: DialogService,
-    private readonly aut: AuthService
-    ) {}
+    private readonly dialogService: DialogService) {}
 
     
   devices$: Observable<Device[]> | undefined;
@@ -184,4 +184,8 @@ export class DevicesPage  implements AfterViewInit, OnInit{
       }
     });
   }
+
+  goToMain(){
+    this.pageRouter.route(`${UrlPages.DASHBOARD}/${UrlPages.MAIN}`)
+      }
 }
