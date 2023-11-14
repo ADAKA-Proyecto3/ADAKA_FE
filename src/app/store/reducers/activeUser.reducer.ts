@@ -65,6 +65,5 @@ export const activeUserReducer = createReducer(
     };
   }),
 
-
   on(activeUserReset, () => initialState)
 );

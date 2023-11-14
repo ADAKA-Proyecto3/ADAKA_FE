@@ -30,6 +30,9 @@ export class UserPage implements OnInit {
   activeUser: any;
   hide = true;
 
+  expiredPassword = false;
+  selectedTabIndex = 0;
+
   constructor(
     private fb: FormBuilder,
     private readonly store: Store<AppState>,
@@ -48,6 +51,9 @@ export class UserPage implements OnInit {
       )
       .subscribe((activeUser) => {
         this.activeUser = activeUser.activeUser.id;
+
+        this.expiredPassword =
+          activeUser.activeUser.status === 'FREEZE' ? true : false;
 
         this.userForm.patchValue({
           name: activeUser.activeUser.name || '',
@@ -90,8 +96,9 @@ export class UserPage implements OnInit {
     };
 
     console.log(user, this.activeUser);
-    this.store.dispatch(updateActiveUser({ id: this.activeUser, content: user }));
-
+    this.store.dispatch(
+      updateActiveUser({ id: this.activeUser, content: user })
+    );
   }
 
   onSubmitPassword() {
@@ -105,9 +112,8 @@ export class UserPage implements OnInit {
       email: '',
       password: this.passwordForm.value.password,
     };
-    
-    this.modPassword(user);
 
+    this.modPassword(user);
   }
 
 
@@ -116,18 +122,16 @@ export class UserPage implements OnInit {
     try {
       DebugerService.log('Requesting HTTP PUT change password');
       console.log(user);
-  
+
       // Realizar la solicitud HTTP y obtener el Observable
       const result$ = this.userHttpService.editUserPassword(this.activeUser, user);
-  
+
       // Suscribirse a la respuesta del servidor
       result$.subscribe(
         (result) => {
           console.log(result);
           // Aquí puedes manejar la respuesta exitosa
-          this.store.dispatch(loadActiveUserSuccess({user:result}));
           this.dialogService.showToast('Contraseña modificada con éxito');
-          this.pageRouter.route(`/${UrlPages.DASHBOARD}/${UrlPages.MAIN}`);
         },
         (error) => {
           // Aquí puedes manejar el error
@@ -147,7 +151,6 @@ export class UserPage implements OnInit {
       // Cualquier código que desees ejecutar después de la solicitud (puede estar vacío)
     }
   }
-  
 
 
   get name() {
@@ -188,5 +191,11 @@ export class UserPage implements OnInit {
 
   limpiarContrasena() {
     this.passwordForm.reset();
+  }
+
+  expiredPasswordChange() {
+    if (this.expiredPassword) return (this.selectedTabIndex = 2);
+
+    return this.selectedTabIndex;
   }
 }
