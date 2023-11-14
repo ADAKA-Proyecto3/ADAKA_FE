@@ -36,7 +36,7 @@ updateActiveUser$ = createEffect(() =>
     this.actions$.pipe(
       ofType(updateActiveUser),
       mergeMap((action) =>
-      this.userService.editUser(action.id, action.content).pipe(
+      this.userService.editUserInfo(action.id, action.content).pipe(
           map((response) =>
             updateActiveUserSuccess({
               content: response,
