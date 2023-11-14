@@ -10,6 +10,7 @@ import {
   loadActiveUser,
 } from 'src/app/store/actions/activeUser.actions';
 
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private baseUrl = Config.BASE_URL;
@@ -17,7 +18,30 @@ export class AuthService {
   constructor(
     private readonly httpClient: HttpClient,
     private readonly store: Store<AppState>
-  ) {}
+  ) { }
+
+
+
+  async sendPasswordRecoveryInstructions(email: string): Promise<any> {
+    const emailObj = { email };
+    return new Promise<any>((resolve, reject) => {
+      this.httpClient.post(`${this.baseUrl}/user/recover`, emailObj).subscribe({
+        next: (response) => {
+
+          if (response) {
+            resolve(response);
+          } else {
+            reject(response);
+          }
+        },
+        error: (error) => {
+          reject(error);
+          console.error(error);
+        },
+      });
+    });
+  }
+
 
   async login(loginRequest: any): Promise<any> {
     return new Promise((resolve, reject) => {
