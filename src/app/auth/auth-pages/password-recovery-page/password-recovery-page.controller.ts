@@ -33,7 +33,7 @@ export class PasswordRecoveryPageController {
       Utils.showNotification({
         icon: 'error',
         title: 'Error',
-        text: 'Ha ocurrido un error al enviar la contraseña',
+        text: 'No se ha encontrado una cuenta asociada a ese correo',
       });
       console.error(error);
     } finally {
