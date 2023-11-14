@@ -20,7 +20,7 @@ export class PasswordRecoveryPageController {
   async sendPasswordRecoveryEmail(email: string): Promise<any> {
     this.loadingService.showLoadingModal();
     try {
-      DebugerService.log('Requesting HTTP POST Send Recovery Password');
+
       const result = await this.authHttpService.sendPasswordRecoveryInstructions(email);
 
       if (result) {
