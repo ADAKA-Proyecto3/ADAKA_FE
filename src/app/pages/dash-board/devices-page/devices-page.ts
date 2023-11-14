@@ -113,7 +113,7 @@ export class DevicesPage  implements AfterViewInit, OnInit{
 
   getDeleteDeviceConfirmation(device: Device) {
     Swal.fire({
-      title: `¿Está seguro de eliminar el dispositivo:  ${device.deviceId} ${device.model}, de la sala: ${device.room}?`,
+      title: `¿Está seguro de eliminar el dispositivo:  ${device.deviceId} ${device.model}, de la sala: ${device.assignedRoomId}?`,
       text: 'Esta acción no se puede revertir',
       icon: 'warning',
       showCancelButton: true,

@@ -56,7 +56,7 @@ export class DeviceFormComponent implements OnInit {
       deviceId: this.device.assignedRoomId || '',
       model: this.device.model || '',
       date: this.device.installation || '',
-      room: this.device.room || '',
+      room: this.device.assignedRoomId || '',
      });
   }
   }
@@ -94,9 +94,8 @@ export class DeviceFormComponent implements OnInit {
     const device: Device = {
       deviceId: this.registerForm.value.deviceId,
       model: this.registerForm.value.model,
-      installation: this.registerForm.value.date,  // Asegúrate de que esta propiedad coincida con el nombre "installation" en tu objeto JSON
-      user: { id: this.activeUser }, // Asigna el ID del usuario activo
-      room: this.registerForm.value.room, 
+      installation: this.registerForm.value.date,  // Asegúrate de que esta propiedad coincida con el nombre "installation" en tu objeto JSON // Asigna el ID del usuario activo
+      assignedRoomId: this.registerForm.value.room, 
     };
   
     console.log('Device:', device);
@@ -106,7 +105,7 @@ export class DeviceFormComponent implements OnInit {
       this.matDialogRef.close({ deviceId: this.device?.deviceId, device: device });
     } else {
       DebugerService.log('NO EDITING');
-      this.matDialogRef.close({userId: this.activeUser, device: device, roomId: device.room});
+      this.matDialogRef.close({userId: this.activeUser, device: device, roomId: device.assignedRoomId});
     }
   }
 
