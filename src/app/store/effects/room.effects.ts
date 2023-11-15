@@ -44,20 +44,20 @@ export class RoomEffects {
     )
   );
 
-  loadRoomsByMedicalCenter$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(loadRoomsByMedicalCenter),
-      switchMap((action) =>
+  // loadRoomsByMedicalCenter$ = createEffect(() =>
+  //   this.actions$.pipe(
+  //     ofType(loadRoomsByMedicalCenter),
+  //     switchMap((action) =>
        
-        from(this.roomService.getRoomsByMedicalCenter(action.id)).pipe(
+  //       from(this.roomService.getRoomsByMedicalCenter(action.id)).pipe(
          
-          map((room) => loadRoomsByMedicalCenterSuccess({ rooms: room })),
+  //         map((room) => loadRoomsByMedicalCenterSuccess({ rooms: room })),
          
-          catchError((error) => of(loadRoomsByMedicalCenterFailure({ error })))
-        )
-      )
-    )
-  );
+  //         catchError((error) => of(loadRoomsByMedicalCenterFailure({ error })))
+  //       )
+  //     )
+  //   )
+  // );
 
   deleteRoom$ = createEffect(() =>
     this.actions$.pipe(

@@ -26,6 +26,9 @@ import { RoomStatsVisualComponent } from '../components/room-stats-visual-compon
 import { PageRouterService } from 'src/app/services/page-router-service/page-router.service';
 import { UrlPages } from 'src/app/common/enums/url-pages.enum';
 import { loadMedicalCenterForSubUser } from 'src/app/store/actions/medicalCenter.actions';
+import { Device } from 'src/app/models/devices.interface';
+import { loadDevices } from 'src/app/store/actions/device.actions';
+import { AssignRoomDeviceFormComponent } from '../components/assign-room-device-component/assign-room-device-component';
 
 @Component({
   templateUrl: './rooms-page.html',
@@ -41,6 +44,9 @@ export class RoomsPage implements OnInit {
   dataSource = new MatTableDataSource<Room>();
   isAdmin: boolean = true;
   assignedMedical: number = 0;
+  devices: Device[] = [];
+  devicesOptions: SelectOption[] = [];
+  requestDeviceId: number = 0;
 
   private statusSubscription: Subscription = new Subscription();
   activeUser: any;
@@ -58,36 +64,35 @@ export class RoomsPage implements OnInit {
 
   ngOnInit(): void {
     this.store
-      .select((state) => state.user)
+      .select((state) => state.user.activeUser)
       .subscribe((user) => {
-        if (user.activeUser.id !== 0) this.activeUser = user.activeUser;
+
+        if(user.id !== 0){
+          const login = JSON.parse(sessionStorage.getItem('login') || '{}');
+          this.isAdmin = login ? login.isAdmin : false;
+          this.activeUser = user;
+          this.preLoadRooms();
+        }
        
-        this.preLoadRooms();
       });
       
   }
 
   preLoadRooms() {
-    const login = JSON.parse(sessionStorage.getItem('login') || '{}');
-    const isAdmin = login ? login.isAdmin : false;
-
-    this.medicalCenters = this.activeUser.medicalCenters;
-    this.medicalCenterOptions = this.medicalCenters.map((mc) => {
-      return { value: mc.id!, viewValue: mc.name };
-    });
-
-    if (isAdmin) {
-      this.isAdmin = false;
-      this.displayedColumns = [
-        'id',
-        'name',
-        'medicalCenter',
-        'zhenair',
-        'actions',
-      ];
-    } else {
-      this.displayedColumns = ['id', 'name', 'medicalCenter', 'zhenair'];
+    if(this.isAdmin){
+      this.displayedColumns = [ 'id', 'name','medicalCenter', 'zhenair', 'device', 'actions' ];
+      this.store.dispatch(loadDevices({ adminId: this.activeUser.id }));
+    }else{
+      this.displayedColumns = [ 'id', 'name', 'medicalCenter', 'zhenair', 'device' ];
+      this.store.dispatch(loadDevices({ adminId: this.activeUser.manager }));
     }
+    this.medicalCenters = this.activeUser.medicalCenters;
+    // this.medicalCenterOptions = this.medicalCenters.map((mc) => {
+    // return { value: mc.id!, viewValue: mc.name };
+    //  });
+
+     
+
     this.store.dispatch(loadRooms({ id: this.activeUser.id }));
     this.loadRoomsTable();
   }
@@ -104,14 +109,24 @@ export class RoomsPage implements OnInit {
     this.openRoomEditDialog(room);
   }
 
-  onSelectChange(event: any) {
-    const selectedValue = event.value;
-    this.store.dispatch(loadRooms({ id: selectedValue }));
+  // onSelectChange(event: any) {
+  //   const selectedValue = event.value;
+  //   this.store.dispatch(loadRooms({ id: selectedValue }));
+  // }
+
+  // updateMedicalCenterSelectionOnSave(id: number) {
+  //   this.store.dispatch(loadRooms({ id: id }));
+  // }
+
+  assignDevice(){
+
   }
 
-  updateMedicalCenterSelectionOnSave(id: number) {
-    this.store.dispatch(loadRooms({ id: id }));
+  editDevice(){
+
   }
+
+
 
   registerRoom(id: number, room: Room) {
     this.store.dispatch(addRoom({ id: id, content: room }));
@@ -155,6 +170,20 @@ export class RoomsPage implements OnInit {
       'Sala eliminada con éxito',
       'Ha sucedido un error, por favor intente de nuevo'
     );
+  }
+
+  openAssignDeviceEditDialog(room: Room): void {
+    const dialogRef = this.dialog.open(AssignRoomDeviceFormComponent, {
+      width: '50%',
+      data: room,
+  
+    });
+  }
+
+  openAssignDeviceRegisterDialog(): void {
+    const dialogRef = this.dialog.open(AssignRoomDeviceFormComponent, {
+      width: '50%',
+    });
   }
 
   openRoomEditDialog(room: Room): void {
@@ -220,5 +249,9 @@ export class RoomsPage implements OnInit {
 
   goToMain() {
     this.pageRouter.route(`${UrlPages.DASHBOARD}/${UrlPages.MAIN}`);
+  }
+
+  showRegisterButton(): boolean {
+    return this.isAdmin;
   }
 }

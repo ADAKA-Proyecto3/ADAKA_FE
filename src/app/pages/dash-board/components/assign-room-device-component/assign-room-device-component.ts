@@ -9,11 +9,11 @@ import { loadMedicalCenter } from 'src/app/store/actions/medicalCenter.actions';
 import { AppState } from 'src/app/store/app.state';
 
 @Component({
-  selector: 'app-room-form-component',
-  templateUrl: './room-form-component.html',
-  styleUrls: ['./room-form-component.scss'],
+  selector: 'app-assign-room-form',
+  templateUrl: './assign-room-device-component.html',
+  styleUrls: ['./assign-room-device-component.scss'],
 })
-export class RoomFormComponent implements OnInit {
+export class AssignRoomDeviceFormComponent implements OnInit {
   public registerForm: FormGroup = {} as FormGroup;
 
   activeUser: any;
@@ -24,7 +24,7 @@ export class RoomFormComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public room: Room | undefined,
-    private matDialogRef: MatDialogRef<RoomFormComponent>,
+    private matDialogRef: MatDialogRef<AssignRoomDeviceFormComponent>,
     private readonly store: Store<AppState>
   ) {
     matDialogRef.disableClose = true;
@@ -65,11 +65,11 @@ export class RoomFormComponent implements OnInit {
   initializeProperties() {
     this.registerForm = new FormGroup({
       name: new FormControl('', [Validators.required,Validators.maxLength(30),]),
-      length: new FormControl('', [Validators.required]),
-      width: new FormControl('', [Validators.required]),
-      height: new FormControl('', [Validators.required]),
+     // length: new FormControl('', [Validators.required]),
+      //width: new FormControl('', [Validators.required]),
+      //height: new FormControl('', [Validators.required]),
       medicalCenter: new FormControl('', [Validators.required]),
-      //device: new FormControl(''),
+      device: new FormControl(''),
     });
 
     if (this.room) {
@@ -77,11 +77,11 @@ export class RoomFormComponent implements OnInit {
 
       this.registerForm.patchValue({
         name: this.room.name || '',
-        length: this.room.length || '',
-        width: this.room.width || '',
-        height: this.room.height || '',
+       // length: this.room.length || '',
+        //width: this.room.width || '',
+        //height: this.room.height || '',
         medicalCenter: this.room.medicalCenterId || '',
-        //device: this.room.device?.id || '',
+        device: this.room.device?.id || '',
       });
     }
   }

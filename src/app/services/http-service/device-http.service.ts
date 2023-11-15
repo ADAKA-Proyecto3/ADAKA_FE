@@ -5,6 +5,7 @@ import { Config } from 'src/app/config/config';
 import { catchError, map } from 'rxjs';
 import { LoadingService } from '../loading-service/loading.service';
 import { Utils } from 'src/app/common/utils/app-util';
+import { DebugerService } from '../debug-service/debug.service';
 
 
 
@@ -19,15 +20,18 @@ export class DeviceHttpService {
     private loader: LoadingService
     ) {}
 
-  registerDevice(userId: number, content: Device, roomId: number = 1){
+  registerDevice(adminId: number, device: Device){
+    this.loader.showLoadingModal();
     return this.httpClient
-      .post(`${this.url}/save/${userId}/${roomId}`, content, Utils.getHttpHeaders())
+      .post(`${this.url}/${adminId}/save`, device, Utils.getHttpHeaders())
       .pipe(
         map((resp: any) => {
           this.loader.dismiss();
+          DebugerService.log('Register Device: ' + JSON.stringify(resp));
           return resp;
         }),
         catchError((error) => {
+          this.loader.dismiss();
           console.error('Error en la petición:', error);
           throw(error.error);
         })
@@ -36,42 +40,49 @@ export class DeviceHttpService {
 
 
 
-  getDevices(userId: number) {
-    console.log("entro al http service ");
+  getDevices(adminId: number) {
     this.loader.showLoadingModal();
-    return this.httpClient.get(`${this.url}/all/${userId}`, Utils.getHttpHeaders())
+    return this.httpClient.get(`${this.url}/all/${adminId}`, Utils.getHttpHeaders())
     .pipe(
-      map(resp => {
-        console.log("resp", resp);
+      map((resp:any) => {
         this.loader.dismiss();
-        return resp as Device[];
+        DebugerService.log('Get Devices: ' + JSON.stringify(resp.data));
+        return resp.data as Device[];
+      }),
+      catchError((error) => {
+        this.loader.dismiss();
+        console.error('Error en la petición:', error);
+        throw(error.error);
       })
     );
   }
 
   deleteDevice( deviceId: number){
-    return this.httpClient.delete(`${this.url}/${deviceId}`, Utils.getHttpHeaders())
-    .pipe(catchError((error) => {
-      throw error;
-     }),
-     map((resp: any) => {
-       this.loader.dismiss();
-       const response: any = "Deleted device" + resp;
-       return response;
-     })
+    return this.httpClient.delete(`${this.url}/delete/${deviceId}`, Utils.getHttpHeaders());
+    // this.loader.showLoadingModal();
+    // return this.httpClient.delete(`${this.url}/${deviceId}`, Utils.getHttpHeaders())
+    // .pipe(catchError((error) => {
+    //   this.loader.dismiss();
+    //   throw error;
+    //  }),
+    //  map((resp: any) => {
+    //    this.loader.dismiss();
+    //    const response: any = "Deleted device" + resp;
+    //    return response;
+    //  })
 
-    )
+    // )
   }
 
-  editDevice(deviceId: number, device: Device) {
-    this.loader.showLoadingModal();
-    return this.httpClient.put(`${this.url}/${deviceId}`, device)
-    .pipe(
-      map(resp => {
-        this.loader.dismiss();
-        return resp as Device;
-      })
-    );
-  }
+  // editDevice(deviceId: number, device: Device) {
+  //   this.loader.showLoadingModal();
+  //   return this.httpClient.put(`${this.url}/${deviceId}`, device)
+  //   .pipe(
+  //     map(resp => {
+  //       this.loader.dismiss();
+  //       return resp as Device;
+  //     })
+  //   );
+  // }
   
 }

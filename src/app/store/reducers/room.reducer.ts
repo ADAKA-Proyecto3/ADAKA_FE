@@ -117,20 +117,20 @@ export const roomReducer = createReducer(
     status: ActionStatus.ERROR,
   })),
 
-  on(loadRoomsByMedicalCenter, (state) => ({
-    ...state,
-    status: ActionStatus.LOADING,
-  })),
+  // on(loadRoomsByMedicalCenter, (state) => ({
+  //   ...state,
+  //   status: ActionStatus.LOADING,
+  // })),
 
-  on(loadRoomsByMedicalCenterSuccess, (state, { rooms }) => ({
-    ...state,
-    rooms: rooms,
-    status: ActionStatus.SUCCESS,
-  })),
+  // on(loadRoomsByMedicalCenterSuccess, (state, { rooms }) => ({
+  //   ...state,
+  //   rooms: rooms,
+  //   status: ActionStatus.SUCCESS,
+  // })),
 
-  on(loadRoomsByMedicalCenterFailure, (state, { error }) => ({
-    ...state,
-    error: error,
-    status: ActionStatus.ERROR,
-  }))
+  // on(loadRoomsByMedicalCenterFailure, (state, { error }) => ({
+  //   ...state,
+  //   error: error,
+  //   status: ActionStatus.ERROR,
+  // }))
 );

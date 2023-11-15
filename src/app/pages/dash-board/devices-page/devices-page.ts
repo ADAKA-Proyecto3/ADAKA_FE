@@ -7,7 +7,7 @@ import { Device } from 'src/app/models/devices.interface';
 import { AppState } from 'src/app/store/app.state';
 import { DeviceFormComponent } from '../components/device-form-component/device-form-component';
 import { DebugerService } from 'src/app/services/debug-service/debug.service';
-import { addDevice, loadDevices, removeDevice, updateDevice } from 'src/app/store/actions/device.actions';
+import { addDevice, loadDevices, removeDevice } from 'src/app/store/actions/device.actions';
 import { Subscription, filter, map, take } from 'rxjs';
 import { selectDeviceStatus } from 'src/app/store/selectors/device.selector';
 import { ActionStatus } from 'src/app/common/enums/action-status.enum';
@@ -29,21 +29,23 @@ export class DevicesPage  implements AfterViewInit, OnInit{
   private statusSubscription: Subscription = new Subscription();
   activeUser: any;
   idAdmin: any = 0;
-  aut: any;
-  pageRouter: any;
+  //aut: any;
+  //pageRouter: any;
   constructor(
     private store: Store<AppState>, 
     private dialog: MatDialog,
-    private readonly dialogService: DialogService) {}
+    private readonly dialogService: DialogService,
+    private readonly pageRouterService: PageRouterService,
+    ) {}
 
     
   devices$: Observable<Device[]> | undefined;
 
   displayedColumns: string[] = [
-    'id',
+    
+    'deviceId',
     'model',
-    'room',
-    'date',
+    'installationDate',
     'actions',
   ];
 
@@ -55,10 +57,31 @@ export class DevicesPage  implements AfterViewInit, OnInit{
   }
 
   ngOnInit(): void {
-    if (this.idAdmin === 0) {
-      this.aut.checkSignedInUser();
-    }
-    this.loadUser();
+    this.store
+    .select((state) => state.user.activeUser.id)
+    .subscribe((id) => {
+      this.activeUser = id;
+      console.log("ACTIVE USER: ", this.activeUser);
+      this.store.dispatch(loadDevices({ adminId: this.activeUser }));
+     // this.store.dispatch(loadMedicalCenter({ id: this.activeUser }));
+    });
+  this.loadDevicesTable();
+
+
+
+
+    // if (this.idAdmin === 0) {
+    //   this.aut.checkSignedInUser();
+    // }
+    // this.loadUser();
+  }
+
+  loadDevicesTable(): void {
+    this.store.select('devices').subscribe(({ devices }) => {
+      console.log("DEVICES: ", devices);
+      this.dataSource.data = devices;
+    });
+    this.dataSource.paginator = this.paginator;
   }
 
   private loadUser() {
@@ -73,7 +96,7 @@ export class DevicesPage  implements AfterViewInit, OnInit{
       )
       .subscribe((activeUser) => {
         this.idAdmin = activeUser.activeUser.id;
-        this.store.dispatch(loadDevices({ userId: this.idAdmin }));
+        this.store.dispatch(loadDevices({ adminId: this.idAdmin }));
 
       });
   }
@@ -87,12 +110,11 @@ export class DevicesPage  implements AfterViewInit, OnInit{
   }
 
   //CRUD
-  registerDevice(userId: number, device: Device, roomId: number) {
+  registerDevice(userId: number, device: Device) {
     this.store.dispatch(
       addDevice({
-        userId: userId,
+        adminId: userId,
         content: device,
-        roomId: roomId,
       })
     );
     this.checkStatusRequest(
@@ -102,18 +124,18 @@ export class DevicesPage  implements AfterViewInit, OnInit{
     }
 
 
-  editDevice(deviceId: number, device: Device) {
-    this.store.dispatch(updateDevice({ id: deviceId, content: device }));
-    this.checkStatusRequest(
-      'Dispostivo actualizado con éxito',
-      'Ha sucedido un error, por favor intente de nuevo'
-    );
-  }
+  // editDevice(deviceId: number, device: Device) {
+  //   this.store.dispatch(updateDevice({ id: deviceId, content: device }));
+  //   this.checkStatusRequest(
+  //     'Dispostivo actualizado con éxito',
+  //     'Ha sucedido un error, por favor intente de nuevo'
+  //   );
+  // }
 
 
   getDeleteDeviceConfirmation(device: Device) {
     Swal.fire({
-      title: `¿Está seguro de eliminar el dispositivo:  ${device.deviceId} ${device.model}, de la sala: ${device.assignedRoomId}?`,
+      title: `¿Está seguro de eliminar el dispositivo: ${device.deviceId} ?`,
       text: 'Esta acción no se puede revertir',
       icon: 'warning',
       showCancelButton: true,
@@ -128,32 +150,34 @@ export class DevicesPage  implements AfterViewInit, OnInit{
     });
   }
 
-  formatDate(date: Date): string {
-    return date ? date.toISOString() : '';
-  }
+  // formatDate(date: Date): string {
+  //   return date ? date.toISOString() : '';
+  // }
 
   deleteDevice(device: Device) {
-    const deviceId = device.deviceId!;
-    this.store.dispatch(removeDevice({id: deviceId}));
-    this.checkStatusRequest(
-      'Dispositivo eliminado con éxito',
-      'Ha sucedido un error, por favor intente de nuevo'
-    );
+    if (device.id !== undefined) {
+      console.log("DEVICE ID: ", device.id);
+      this.store.dispatch(removeDevice({deviceId: device.id}));
+      this.checkStatusRequest(
+        'Dispositivo eliminado con éxito',
+        'Ha sucedido un error, por favor intente de nuevo'
+      );
+    }
   }
 
   // Dialog | Modal Control
-  openDeviceEditDialog(device: Device): void {
-    const dialogRef = this.dialog.open(DeviceFormComponent, {
-      width: '60%',
-      data: device,
-    });
+  //openDeviceEditDialog(device: Device): void {
+  //   const dialogRef = this.dialog.open(DeviceFormComponent, {
+  //     width: '60%',
+  //     data: device,
+  //   });
 
-    dialogRef.afterClosed().subscribe(async (result) => {
-      if (result && result.id) {
-        this.editDevice(result.id, result.device);
-      }
-    });
-  }
+  //   dialogRef.afterClosed().subscribe(async (result) => {
+  //     if (result && result.id) {
+  //       this.editDevice(result.id, result.device);
+  //     }
+  //   });
+  // }
 
   openDeviceRegisterDialog(): void {
     const dialogRef = this.dialog.open(DeviceFormComponent, {
@@ -164,7 +188,7 @@ export class DevicesPage  implements AfterViewInit, OnInit{
       DebugerService.log('DEVICE REGISTRATION DIALOG CLOSED');
     
       if (result && result.device) {
-        this.registerDevice(result.userId, result.device, result.roomId);
+        this.registerDevice(result.adminId, result.device);
         console.log("RESULT.DEVICE: ", result.device);
       }
     });
@@ -188,6 +212,6 @@ export class DevicesPage  implements AfterViewInit, OnInit{
   }
 
   goToMain(){
-    this.pageRouter.route(`${UrlPages.DASHBOARD}/${UrlPages.MAIN}`)
+    this.pageRouterService.route(`${UrlPages.DASHBOARD}/${UrlPages.MAIN}`)
       }
 }

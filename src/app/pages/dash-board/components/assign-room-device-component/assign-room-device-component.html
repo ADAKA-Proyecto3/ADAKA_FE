@@ -1,42 +1,16 @@
 <h1 class="titulo-2 container text-center pt-3">
-    {{ editing ? 'Editar sala' : 'Registrar sala' }}
+    {{ editing ? 'Administrar dispositivo de sala' : 'Asignar dispositivo' }}
 </h1>
 <div class="container white-bg pb-5 d-flex justify-content-center">
     <form class="d-flex flex-column w-75" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-        <mat-form-field appearance="outline" class="pt-3">
-            <mat-label>Nombre</mat-label>
-            <input type="text" matInput formControlName="name">
-            <mat-error *ngIf="error('name','required')">
-                Nombre es <strong>requerido</strong>
-            </mat-error>
-            <mat-error *ngIf="error('name','maxLength')">
-                Nombre debe tener <strong>máximo 30 caracteres</strong>
-            </mat-error>
-        </mat-form-field>
 
-        <mat-form-field appearance="outline" class="pt-3">
-            <mat-label>Largo (m2)</mat-label>
-            <input type="number" matInput formControlName="length">
-            <mat-error *ngIf="error('length','required')">
-                Largo de sala es <strong>requerido</strong>
-            </mat-error>
-        </mat-form-field>
 
-        <mat-form-field appearance="outline" class="pt-3">
-            <mat-label>Ancho (m2)</mat-label>
-            <input type="number" matInput formControlName="width">
-            <mat-error *ngIf="error('width','required')">
-                Ancho de sala es <strong>requerido</strong>
-            </mat-error>
-        </mat-form-field>
 
-        <mat-form-field appearance="outline" class="pt-3">
-            <mat-label>Alto (m2)</mat-label>
-            <input type="number" matInput formControlName="height">
-            <mat-error *ngIf="error('height','required')">
-                Alto de sala es <strong>requerido</strong>
-            </mat-error>
+        <!-- <mat-form-field appearance="outline" class="pt-3">
+            <mat-label>Nombre de Sala</mat-label>
+            <input type="text" matInput formControlName="name" [readonly]="true" [disabled]="true" (focus)="false">
         </mat-form-field>
+        
 
         <mat-form-field appearance="outline" class="pt-3">
             <mat-label>Centro Médico</mat-label>
@@ -49,13 +23,9 @@
             <mat-error *ngIf="error('status','required')">
                 Centro médico es <strong>requerido</strong>
             </mat-error>
-        </mat-form-field>
+        </mat-form-field> -->
 
-        <div>
-            Dispositivo ZhenAir: xxx
-        </div>
-
-        <!-- <mat-form-field appearance="outline" class="pt-3">
+        <mat-form-field appearance="outline" class="pt-3">
             <mat-label>Asignar Dispositivo</mat-label>
             <mat-select formControlName="device">
                 <mat-option value="" disabled>Seleccione un dispositivo</mat-option>
@@ -63,7 +33,7 @@
                     {{d.viewValue}}
                 </mat-option>
             </mat-select>
-        </mat-form-field> -->
+        </mat-form-field>
 
         <div class="d-flex justify-content-between">
             <button type="button" mat-raised-button color="warn" class="btn_login mt-3" (click)="closeDialog()">

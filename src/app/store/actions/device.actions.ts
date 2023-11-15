@@ -4,7 +4,7 @@ import { Device } from 'src/app/models/devices.interface';
 // Create device
 export const addDevice = createAction(
   '[Device Page] Add Device',
-  props<{ userId: number, content: Device, roomId: number }>()
+  props<{ adminId: number, content: Device }>()
 );
 
 export const addDeviceSuccess = createAction(
@@ -18,30 +18,30 @@ export const addDeviceFailure = createAction(
 );
 
 //Updating device
-export const updateDevice = createAction(
-  '[Device Page] Update Device',
-  props<{ id: number; content: Device }>()
-);
+// export const updateDevice = createAction(
+//   '[Device Page] Update Device',
+//   props<{ id: number; content: Device }>()
+// );
 
-export const updateDeviceSuccess = createAction(
-  '[Device Page] Update Device Success',
-  props<{ id: number; content: Device  }>()
-);
+// export const updateDeviceSuccess = createAction(
+//   '[Device Page] Update Device Success',
+//   props<{ id: number; content: Device  }>()
+// );
 
-export const updateDeviceFailure = createAction(
-  '[Device Page] Update device Failure',
-  props<{ error: any }>()
-);
+// export const updateDeviceFailure = createAction(
+//   '[Device Page] Update device Failure',
+//   props<{ error: any }>()
+// );
 
 //Deleting device
 export const removeDevice = createAction(
   '[Device Page] Remove device',
-  props<{ id: number }>()
+  props<{ deviceId: number }>()
 );
 
 export const removeDeviceSuccess = createAction(
   '[Device Page] Remove device Success',
-  props<{ id: number }>()
+  props<{ deviceId: number }>()
 );
 
 export const removeDeviceFailure = createAction(
@@ -50,12 +50,10 @@ export const removeDeviceFailure = createAction(
 );
 
 
-console.log("entro al action");
-
 //Loading devices
 export const loadDevices = createAction(
   '[Device Page] Load devices',
-  props<{ userId: number }>()
+  props<{ adminId: number }>()
 );
 
 export const loadDevicesSuccess = createAction(
