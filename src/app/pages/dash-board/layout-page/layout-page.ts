@@ -68,17 +68,8 @@ export class LayoutPage implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (this.activeUser === '' || this.activeUser === undefined) {
-      this.authService.checkSignedInUser();
-    }
+    this.authService.checkSignedInUser();
     this.loadActiveUser();
-
-    this.store
-      .select((state) => state.user.activeUser)
-      .subscribe((user) => {
-        this.activeUser = user;
-        this.expiredPassword = user.status === 'FREEZE' ? true : false;
-      });
   }
 
   manageProfile(): void {
@@ -90,10 +81,14 @@ export class LayoutPage implements OnInit {
     this.pageRouter.route(`/${UrlPages.AUTH}/${UrlPages.LOGIN}`);
   }
 
-  private loadActiveUser() {
-    this.store.select('user').subscribe((activeUser) => {
-      this.activeUser = activeUser.activeUser?.name;
-    });
+
+  loadActiveUser() {
+    this.store
+      .select((state) => state.user.activeUser)
+      .subscribe((user) => {
+        this.activeUser = user;
+        this.expiredPassword = user?.status === 'FREEZE';
+      });
   }
 
   goToMain() {
