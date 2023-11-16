@@ -24,7 +24,6 @@ export class MapInfoHttpService {
       .get<Response<any>>(urlWithId)
       .pipe(
         map((resp) => {
-          console.log('resp', resp);
           return resp.data as MapInfo[];
         })
       );
