@@ -7,7 +7,6 @@ import { Map, circle, marker, tileLayer } from 'leaflet';
 import { filter, take } from 'rxjs';
 import { MapInfo } from 'src/app/models/map-info.interface';
 import { MapInfoHttpService } from 'src/app/services/http-service/mapInfo-http.service';
-import { loadMapInfo } from 'src/app/store/actions/mapInfo.actions';
 import { AppState } from 'src/app/store/app.state';
 
 export interface InfoData {
@@ -22,7 +21,7 @@ export interface InfoData {
   templateUrl: './map.page.html',
   styleUrls: ['./map.page.scss'],
 })
-export class MapPage implements AfterViewInit {
+export class MapPage {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   private MapInfoList: MapInfo[] = [];
@@ -49,25 +48,14 @@ export class MapPage implements AfterViewInit {
   ];
 
   ngOnInit(): void {
-    this.createMap();
-
-    this.getMapInfoaqicn();
-    this.store.dispatch(loadMapInfo());
-    this.loadInfo();
-  }
-
-  ngAfterViewInit(): void {
-    this.store.select('mapInfo').subscribe(({ mapInfo }) => {
-      const listaCombinada = this.MapInfoList.concat(mapInfo);
-      this.MapInfoList = listaCombinada;
-      this.dataSource.data = this.MapInfoList;
-    });
-    this.dataSource.paginator = this.paginator;
     this.initializeInfoData();
+    this.createMap();
+    this.getMapInfoaqicn();
+    this.loadInfoMedicalCenters();
   }
 
   private initializeInfoData(): void {
-    console.log()
+    console.log();
     this.dataSourceInfo = new MatTableDataSource<InfoData>([
       {
         range: '0 - 50',
@@ -118,16 +106,30 @@ export class MapPage implements AfterViewInit {
     ]);
   }
 
-  private loadInfo() {
-    this.store
-      .select('mapInfo')
-      .pipe(
-        filter((mapInfo) => mapInfo.status === 'success'),
-        take(1)
-      )
-      .subscribe((mapInfo) => {
-       // this.createMap();
-      });
+  private loadInfoMedicalCenters() {
+    this.mapInfoService.getMapInfo().subscribe(
+      (resp) => {
+        const mapInfoListAqicn: MapInfo[] = resp.map((item) => {
+          const valor: number = parseFloat(item.valor);
+          const status = this.calculateStatus(valor);
+
+          return {
+            name: item.name,
+            direction: item.direction,
+            latitude: item.latitude.toString(),
+            longitude: item.longitude.toString(),
+            status: status,
+            valor: item.valor,
+          };
+        });
+
+        this.updateMapInfoList(mapInfoListAqicn);
+        this.addZone(this.MapInfoList);
+      },
+      (error) => {
+        console.error('Error al obtener datos de getMapInfoaqicn:', error);
+      }
+    );
   }
 
   private createMap() {
@@ -137,12 +139,12 @@ export class MapPage implements AfterViewInit {
       minZoom: 0,
       maxZoom: 20,
       attribution:
-        '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
       ext: 'png',
     };
 
-    tileLayer(
-      'https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.{ext}',
+    L.tileLayer(
+      'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.{ext}',
       tileLayerOptions
     ).addTo(this.map);
 
@@ -151,7 +153,6 @@ export class MapPage implements AfterViewInit {
 
   cambiarVista(mapInfo: MapInfo) {
     if (this.map) {
-      // Asegúrate de que el mapa esté inicializado
       this.map.setView(
         [Number(mapInfo.latitude), Number(mapInfo.longitude)],
         17
@@ -183,7 +184,7 @@ export class MapPage implements AfterViewInit {
           color: color,
         })
           .addTo(this.map)
-          .bindPopup("Rango: " +element.valor);
+          .bindPopup('Rango: ' + element.valor);
       }
     });
   }
@@ -192,42 +193,31 @@ export class MapPage implements AfterViewInit {
     this.mapInfoService.getMapInfoaqicn().subscribe(
       (resp) => {
         const mapInfoListAqicn: MapInfo[] = resp.map((item) => {
-          let status: string;
-
-          if (item.aqi >= 0 && item.aqi <= 50) {
-            status = 'Bueno';
-          } else if (item.aqi <= 100) {
-            status = 'Moderado';
-          } else if (item.aqi <= 150) {
-            status = 'No saludable para grupos sensibles';
-          } else if (item.aqi <= 200) {
-            status = 'No saludable';
-          } else if (item.aqi <= 300) {
-            status = 'No muy saludable';
-          } else {
-            status = 'Peligrosos';
-          }
+          const status = this.calculateStatus(item.aqi);
 
           return {
-            name: item.station.name.replace(/,.*$/, ''), // Obtener el nombre sin la coma y el resto
-            direction: item.station.name.replace(/^[^,]*,\s*/, ''), // Obtener el resto sin el nombre
+            name: item.station.name.replace(/,.*$/, ''),
+            direction: item.station.name.replace(/^[^,]*,\s*/, ''),
             latitude: item.lat.toString(),
             longitude: item.lon.toString(),
             status: status,
-            valor: item.aqi
+            valor: item.aqi,
           };
         });
 
-        const listaCombinada = this.MapInfoList.concat(mapInfoListAqicn);
-        this.MapInfoList = listaCombinada;
-        this.dataSource.data = this.MapInfoList;
-        this.dataSource.paginator = this.paginator;
+        this.updateMapInfoList(mapInfoListAqicn);
         this.addZone(this.MapInfoList);
       },
       (error) => {
         console.error('Error al obtener datos de getMapInfoaqicn:', error);
       }
     );
+  }
+
+  private updateMapInfoList(newMapInfo: MapInfo[]): void {
+    const listaCombinada = this.MapInfoList.concat(newMapInfo);
+    this.MapInfoList = listaCombinada;
+    this.dataSource.data = this.MapInfoList;
   }
 
   getColorClass(status: string): string {
@@ -244,6 +234,22 @@ export class MapPage implements AfterViewInit {
         return 'purple';
       default:
         return 'brown';
+    }
+  }
+
+  private calculateStatus(valor: number): string {
+    if (valor >= 0 && valor <= 50) {
+      return 'Bueno';
+    } else if (valor <= 100) {
+      return 'Moderado';
+    } else if (valor <= 150) {
+      return 'No saludable para grupos sensibles';
+    } else if (valor <= 200) {
+      return 'No saludable';
+    } else if (valor <= 300) {
+      return 'No muy saludable';
+    } else {
+      return 'Peligrosos';
     }
   }
 }
