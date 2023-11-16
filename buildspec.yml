@@ -11,7 +11,7 @@ phases:
       - ng build --base-href /
   post_build:
     commands:
-      - aws s3 mv s3://adaka-front-end-prod/dist/ s3://adaka-front-end-prod/ --recursive
+      - aws s3 mv s3://zhenair.com/dist/ s3://zhenair.com/ --recursive
 artifacts:
   files:
     - 'dist/**/*'
