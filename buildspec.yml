@@ -8,7 +8,7 @@ phases:
       - yarn install
   build:
     commands:
-      - ng build --base-href / --output-path ./
+      - ng build --base-href / --output-path dist/
 artifacts:
   files:
     - '**/*'
