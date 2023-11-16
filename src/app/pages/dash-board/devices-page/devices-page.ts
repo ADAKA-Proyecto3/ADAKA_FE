@@ -1,49 +1,52 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { Store, select } from '@ngrx/store';
+import { Store, select, on } from '@ngrx/store';
 import { Device } from 'src/app/models/devices.interface';
 import { AppState } from 'src/app/store/app.state';
 import { DeviceFormComponent } from '../components/device-form-component/device-form-component';
 import { DebugerService } from 'src/app/services/debug-service/debug.service';
-import { addDevice, loadDevices, removeDevice, updateDevice } from 'src/app/store/actions/device.actions';
-import { Subscription, filter, map, take } from 'rxjs';
+import { addDevice, loadDevices, removeDevice } from 'src/app/store/actions/device.actions';
+import { Subscription } from 'rxjs';
 import { selectDeviceStatus } from 'src/app/store/selectors/device.selector';
 import { ActionStatus } from 'src/app/common/enums/action-status.enum';
 import { DialogService } from 'src/app/services/dialog-service/dialog.service';
 import { Utils } from 'src/app/common/utils/app-util';
 import Swal from 'sweetalert2';
 import { Observable } from 'rxjs';
-import { AuthService } from 'src/app/auth/services/auth.service';
+
 import { UrlPages } from 'src/app/common/enums/url-pages.enum';
 import { PageRouterService } from 'src/app/services/page-router-service/page-router.service';
+import { Suscription } from 'src/app/models/suscription.interface';
 
 @Component({
   selector: 'app-devices-page',
   templateUrl: './devices-page.html',
 })
 
-export class DevicesPage  implements AfterViewInit, OnInit{
+export class DevicesPage  implements AfterViewInit, OnInit, OnDestroy{
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   private statusSubscription: Subscription = new Subscription();
   activeUser: any;
   idAdmin: any = 0;
-  aut: any;
-  pageRouter: any;
+
+  private activeUserSuscription: Subscription = new Subscription();
   constructor(
     private store: Store<AppState>, 
     private dialog: MatDialog,
-    private readonly dialogService: DialogService) {}
+    private readonly dialogService: DialogService,
+    private readonly pageRouterService: PageRouterService,
+    ) {}
 
     
-  devices$: Observable<Device[]> | undefined;
+  //devices$: Observable<Device[]> | undefined;
 
   displayedColumns: string[] = [
-    'id',
+    
+    'deviceId',
     'model',
-    'room',
-    'date',
+    'installationDate',
     'actions',
   ];
 
@@ -55,29 +58,25 @@ export class DevicesPage  implements AfterViewInit, OnInit{
   }
 
   ngOnInit(): void {
-    if (this.idAdmin === 0) {
-      this.aut.checkSignedInUser();
-    }
-    this.loadUser();
+    this.activeUserSuscription = this.store
+    .select((state) => state.user.activeUser.id)
+    .subscribe((id) => {
+      this.activeUser = id;
+      this.store.dispatch(loadDevices({ adminId: this.activeUser }));
+    });
+  this.loadDevicesTable();
   }
 
-  private loadUser() {
-    this.store
-      .select('user')
-      .pipe(
-        filter(
-          (activeUser) =>
-          activeUser.status === "success"
-        ),
-        take(1)
-      )
-      .subscribe((activeUser) => {
-        this.idAdmin = activeUser.activeUser.id;
-        this.store.dispatch(loadDevices({ userId: this.idAdmin }));
-
-      });
+  ngOnDestroy(): void {
+    this.activeUserSuscription.unsubscribe();
   }
 
+  loadDevicesTable(): void {
+    this.store.select('devices').subscribe(({ devices }) => {
+      this.dataSource.data = devices;
+    });
+    this.dataSource.paginator = this.paginator;
+  }
 
   ngAfterViewInit(): void {
     this.store.select('devices').subscribe(({ devices  }) => {
@@ -87,12 +86,11 @@ export class DevicesPage  implements AfterViewInit, OnInit{
   }
 
   //CRUD
-  registerDevice(userId: number, device: Device, roomId: number) {
+  registerDevice(userId: number, device: Device) {
     this.store.dispatch(
       addDevice({
-        userId: userId,
+        adminId: userId,
         content: device,
-        roomId: roomId,
       })
     );
     this.checkStatusRequest(
@@ -101,19 +99,9 @@ export class DevicesPage  implements AfterViewInit, OnInit{
     );
     }
 
-
-  editDevice(deviceId: number, device: Device) {
-    this.store.dispatch(updateDevice({ id: deviceId, content: device }));
-    this.checkStatusRequest(
-      'Dispostivo actualizado con éxito',
-      'Ha sucedido un error, por favor intente de nuevo'
-    );
-  }
-
-
   getDeleteDeviceConfirmation(device: Device) {
     Swal.fire({
-      title: `¿Está seguro de eliminar el dispositivo:  ${device.deviceId} ${device.model}, de la sala: ${device.assignedRoomId}?`,
+      title: `¿Está seguro de eliminar el dispositivo: ${device.deviceId} ?`,
       text: 'Esta acción no se puede revertir',
       icon: 'warning',
       showCancelButton: true,
@@ -128,32 +116,18 @@ export class DevicesPage  implements AfterViewInit, OnInit{
     });
   }
 
-  formatDate(date: Date): string {
-    return date ? date.toISOString() : '';
-  }
 
   deleteDevice(device: Device) {
-    const deviceId = device.deviceId!;
-    this.store.dispatch(removeDevice({id: deviceId}));
-    this.checkStatusRequest(
-      'Dispositivo eliminado con éxito',
-      'Ha sucedido un error, por favor intente de nuevo'
-    );
+    if (device.id !== undefined) {
+      console.log("DEVICE ID: ", device.id);
+      this.store.dispatch(removeDevice({deviceId: device.id}));
+      this.checkStatusRequest(
+        'Dispositivo eliminado con éxito',
+        'Ha sucedido un error, por favor intente de nuevo'
+      );
+    }
   }
 
-  // Dialog | Modal Control
-  openDeviceEditDialog(device: Device): void {
-    const dialogRef = this.dialog.open(DeviceFormComponent, {
-      width: '60%',
-      data: device,
-    });
-
-    dialogRef.afterClosed().subscribe(async (result) => {
-      if (result && result.id) {
-        this.editDevice(result.id, result.device);
-      }
-    });
-  }
 
   openDeviceRegisterDialog(): void {
     const dialogRef = this.dialog.open(DeviceFormComponent, {
@@ -164,7 +138,7 @@ export class DevicesPage  implements AfterViewInit, OnInit{
       DebugerService.log('DEVICE REGISTRATION DIALOG CLOSED');
     
       if (result && result.device) {
-        this.registerDevice(result.userId, result.device, result.roomId);
+        this.registerDevice(result.adminId, result.device);
         console.log("RESULT.DEVICE: ", result.device);
       }
     });
@@ -188,6 +162,6 @@ export class DevicesPage  implements AfterViewInit, OnInit{
   }
 
   goToMain(){
-    this.pageRouter.route(`${UrlPages.DASHBOARD}/${UrlPages.MAIN}`)
+    this.pageRouterService.route(`${UrlPages.DASHBOARD}/${UrlPages.MAIN}`)
       }
 }

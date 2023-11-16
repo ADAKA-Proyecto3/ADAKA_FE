@@ -24,10 +24,11 @@
   
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
   
-    <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef class="text-center"> ID </th>
-        <td mat-cell *matCellDef="let element" class="text-center"> {{element.id}} </td>
-    </ng-container>
+
+    <ng-container matColumnDef="deviceId">
+      <th mat-header-cell *matHeaderCellDef class="text-center"> Identificador de Dispositivo </th>
+      <td mat-cell *matCellDef="let element" class="text-center"> {{element.deviceId}} </td>
+  </ng-container>
    
     <ng-container matColumnDef="model">
       <th mat-header-cell *matHeaderCellDef class="text-center"> Modelo </th>
@@ -35,25 +36,16 @@
     </ng-container>
   
   
-    <ng-container matColumnDef="date">
+    <ng-container matColumnDef="installationDate">
       <th mat-header-cell *matHeaderCellDef class="text-center"> Fecha de Instalación </th>
-      <td mat-cell *matCellDef="let element" class="text-center"> {{ formatDate(element.date) }} </td>
+      <td mat-cell *matCellDef="let element" class="text-center"> {{ element.installation | date }} </td>
     </ng-container>
-  
-   
-     <ng-container matColumnDef="room">
-      <th mat-header-cell *matHeaderCellDef class="text-center"> Sala </th>
-      <td mat-cell *matCellDef="let element" class="text-center"> {{element.room}} </td>
-    </ng-container>
-
-  
+    
      <ng-container matColumnDef="actions" >
       <th mat-header-cell *matHeaderCellDef class="text-center"> Acciones </th>
       <td mat-cell *matCellDef="let element" class="text-center">
-        <button  mat-icon-button color="primary" matTooltip="Editar" (click)="openDeviceEditDialog(element)">
-          <mat-icon>edit</mat-icon>
-        </button>
-        <button  mat-icon-button color="warn" matTooltip="Eliminar" (click)="deleteDevice(element)">
+
+        <button  mat-icon-button color="warn" matTooltip="Eliminar" (click)="getDeleteDeviceConfirmation(element)">
           <mat-icon>delete</mat-icon>
         </button>
       </td>

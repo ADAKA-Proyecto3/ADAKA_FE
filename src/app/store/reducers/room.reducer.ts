@@ -14,6 +14,9 @@ import {
   removeRoom,
   removeRoomFailure,
   removeRoomSuccess,
+  updateAddRoomDevice,
+  updateAddRoomDeviceFailure,
+  updateAddRoomDeviceSucess,
   updateRoom,
   updateRoomFailure,
   updateRoomSucess,
@@ -47,6 +50,33 @@ export const roomReducer = createReducer(
   })),
 
   on(addRoomFailure, (state, action) => {
+    return {
+      ...state,
+      error: action.error,
+      status: ActionStatus.ERROR,
+    };
+  }),
+
+  on(updateAddRoomDevice, (state) => ({
+    ...state,
+    status: ActionStatus.LOADING,
+  })),
+
+  on(updateAddRoomDeviceSucess, (state, { content }) => ({
+    ...state,
+    rooms: state.rooms.map((room) => {
+      if (room.id === content.id) {
+        return {
+          ...room,
+          ...content,
+        };
+      }
+      return room;
+    }),
+    status: ActionStatus.SUCCESS,
+  })),
+
+  on(updateAddRoomDeviceFailure, (state, action) => {
     return {
       ...state,
       error: action.error,
@@ -117,20 +147,20 @@ export const roomReducer = createReducer(
     status: ActionStatus.ERROR,
   })),
 
-  on(loadRoomsByMedicalCenter, (state) => ({
-    ...state,
-    status: ActionStatus.LOADING,
-  })),
+  // on(loadRoomsByMedicalCenter, (state) => ({
+  //   ...state,
+  //   status: ActionStatus.LOADING,
+  // })),
 
-  on(loadRoomsByMedicalCenterSuccess, (state, { rooms }) => ({
-    ...state,
-    rooms: rooms,
-    status: ActionStatus.SUCCESS,
-  })),
+  // on(loadRoomsByMedicalCenterSuccess, (state, { rooms }) => ({
+  //   ...state,
+  //   rooms: rooms,
+  //   status: ActionStatus.SUCCESS,
+  // })),
 
-  on(loadRoomsByMedicalCenterFailure, (state, { error }) => ({
-    ...state,
-    error: error,
-    status: ActionStatus.ERROR,
-  }))
+  // on(loadRoomsByMedicalCenterFailure, (state, { error }) => ({
+  //   ...state,
+  //   error: error,
+  //   status: ActionStatus.ERROR,
+  // }))
 );

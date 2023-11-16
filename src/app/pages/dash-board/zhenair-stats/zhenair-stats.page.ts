@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { EChartsOption } from 'echarts/types/dist/echarts';
@@ -16,7 +16,7 @@ import { Room } from 'src/app/models/rooms.interface';
 import { LoadingService } from 'src/app/services/loading-service/loading.service';
 import { loadRooms } from 'src/app/store/actions/room.actions';
 import { AppState } from 'src/app/store/app.state';
-import { from } from 'rxjs';
+import { Subscription, from } from 'rxjs';
 import { PageRouterService } from 'src/app/services/page-router-service/page-router.service';
 import { UrlPages } from 'src/app/common/enums/url-pages.enum';
 @Component({
@@ -24,12 +24,13 @@ import { UrlPages } from 'src/app/common/enums/url-pages.enum';
   templateUrl: './zhenair-stats.page.html',
   styleUrls: ['./zhenair-stats.page.scss'],
 })
-export class ZhenairStatsPage implements OnInit {
+export class ZhenairStatsPage implements OnInit, OnDestroy {
   constructor(
     private readonly loadingService: LoadingService,
     private readonly store: Store<AppState>,
     private readonly pageRouter: PageRouterService
   ) {}
+ 
 
   public submitForm: FormGroup = {} as FormGroup;
   mockdata = [
@@ -71,6 +72,8 @@ export class ZhenairStatsPage implements OnInit {
   y: EChartsOption = {};
 
   testBool: boolean = false;
+  private activeUserSuscription: Subscription = new Subscription();
+  private roomsSuscription: Subscription = new Subscription();
 
   ngOnInit(): void {
     this.submitForm = new FormGroup({
@@ -79,7 +82,7 @@ export class ZhenairStatsPage implements OnInit {
       room: new FormControl('', [Validators.required]),
     });
 
-    this.store
+   this.activeUserSuscription = this.store
       .select((state) => state.user.activeUser.id)
       .subscribe((id) => {
         this.activeUser = id;
@@ -327,8 +330,13 @@ export class ZhenairStatsPage implements OnInit {
     };
   }
 
+  ngOnDestroy(): void {
+    this.activeUserSuscription.unsubscribe();
+    this.roomsSuscription.unsubscribe();
+  }
+
   loadRoomOptions(): void {
-    this.store.select('rooms').subscribe(({ rooms }) => {
+    this.roomsSuscription = this.store.select('rooms').subscribe(({ rooms }) => {
       this.rooms = rooms;
       this.roomOptions = this.rooms.map((room) => {
         return { value: room.id!, viewValue: room.name };

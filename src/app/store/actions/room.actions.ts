@@ -33,6 +33,21 @@ export const updateRoomFailure = createAction(
   props<{ error: any }>()
 );
 
+export const updateAddRoomDevice = createAction(
+  '[Room Page] Update Add Room Device',
+  props<{ roomId: number; deviceId:number }>()
+);
+
+export const updateAddRoomDeviceSucess = createAction(
+  '[Room Page] Update Add Room Device Success',
+  props<{ roomId: number; content:Room }>()
+);
+
+export const updateAddRoomDeviceFailure = createAction(
+  '[Room Page] Update Add Room Device Failure',
+  props<{ error: any }>()
+);
+
 //Deleting room
 export const removeRoom = createAction(
   '[Room Page] Remove Room',
@@ -64,6 +79,20 @@ export const loadRoomsFailure = createAction(
   '[Rooms Page] Rooms Load Failure',
   props<{ error: any }>()
 );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export const loadRoomsByMedicalCenter = createAction(
   '[Room Page] Load Rooms ByMedicalCenter',

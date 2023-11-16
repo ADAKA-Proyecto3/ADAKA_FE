@@ -18,6 +18,7 @@ export class RoomFormComponent implements OnInit {
 
   activeUser: any;
   medicalCenterOptions: SelectOption[] = [];
+  deviceOptions: SelectOption[] = [];
   editing = false;
   dataSource: any;
 
@@ -30,11 +31,21 @@ export class RoomFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log(this.room?.device?.deviceId);
     this.store
       .select((state) => state.user.activeUser.id)
       .subscribe((id) => {
         this.activeUser = id;
         this.loadMedicalCenters(this.activeUser);
+      });
+
+      this.store
+      .select((state) => state.devices.devices)
+      .subscribe((devices) => {
+        console.log(devices);
+        this.deviceOptions = devices.map((d)=>{
+          return {value: d.id!, viewValue: d.deviceId.toString()}
+        })
       });
   }
 
@@ -53,14 +64,12 @@ export class RoomFormComponent implements OnInit {
 
   initializeProperties() {
     this.registerForm = new FormGroup({
-      name: new FormControl('', [
-        Validators.required,
-        Validators.maxLength(30),
-      ]),
+      name: new FormControl('', [Validators.required,Validators.maxLength(30),]),
       length: new FormControl('', [Validators.required]),
       width: new FormControl('', [Validators.required]),
       height: new FormControl('', [Validators.required]),
       medicalCenter: new FormControl('', [Validators.required]),
+      //device: new FormControl(''),
     });
 
     if (this.room) {
@@ -72,6 +81,7 @@ export class RoomFormComponent implements OnInit {
         width: this.room.width || '',
         height: this.room.height || '',
         medicalCenter: this.room.medicalCenterId || '',
+        //device: this.room.device?.id || '',
       });
     }
   }

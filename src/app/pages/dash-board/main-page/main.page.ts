@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { UrlPages } from 'src/app/common/enums/url-pages.enum';
 import { UserRoles } from 'src/app/common/enums/user-roles.enum';
@@ -11,9 +12,10 @@ import { AppState } from 'src/app/store/app.state';
   templateUrl: './main.page.html',
   styleUrls: ['./main.page.scss'],
 })
-export class MainPage implements OnInit {
+export class MainPage implements OnInit, OnDestroy {
   activeUser: any;
   isVisible: boolean = false;
+  private activeUserSuscription: Subscription = new Subscription();
 
   constructor(
     private readonly pageRouter: PageRouterService,
@@ -21,13 +23,18 @@ export class MainPage implements OnInit {
     private readonly authService: AuthService
   ) {}
 
+
   ngOnInit(): void {
-    this.store
+    this.activeUserSuscription = this.store
       .select((state) => state.user.activeUser)
       .subscribe((user) => {
         this.activeUser = user;
       });
   
+  }
+
+  ngOnDestroy(): void {
+    this.activeUserSuscription.unsubscribe();
   }
 
   goToUsers(): void {

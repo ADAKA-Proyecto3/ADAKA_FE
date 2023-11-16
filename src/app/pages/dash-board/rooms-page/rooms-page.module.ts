@@ -18,6 +18,7 @@ import { MatSelectModule } from '@angular/material/select';
 
 import { ReactiveFormsModule } from '@angular/forms';
 import { RoomStatsVisualComponentModule } from '../components/room-stats-visual-component/room-stats-visual-component.module';
+import { AssignRoomDeviceModule } from '../components/assign-room-device-component/assign-room-device.module';
 
 
 
@@ -38,7 +39,8 @@ import { RoomStatsVisualComponentModule } from '../components/room-stats-visual-
     MatTooltipModule,
     MatSelectModule,
     ReactiveFormsModule,
-    RoomStatsVisualComponentModule
+    RoomStatsVisualComponentModule,
+    AssignRoomDeviceModule
     
 
   ],
