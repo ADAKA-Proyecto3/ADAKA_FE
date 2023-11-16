@@ -39,13 +39,13 @@ export class AssignRoomDeviceFormComponent implements OnInit {
         this.loadMedicalCenters(this.activeUser);
       });
 
-      this.store
+    this.store
       .select((state) => state.devices.devices)
       .subscribe((devices) => {
         console.log(devices);
-        this.deviceOptions = devices.map((d)=>{
-          return {value: d.id!, viewValue: d.deviceId.toString()}
-        })
+        this.deviceOptions = devices.map((d) => {
+          return { value: d.id!, viewValue: d.deviceId.toString() };
+        });
       });
   }
 
@@ -64,11 +64,11 @@ export class AssignRoomDeviceFormComponent implements OnInit {
 
   initializeProperties() {
     this.registerForm = new FormGroup({
-      name: new FormControl('', [Validators.required,Validators.maxLength(30),]),
-     // length: new FormControl('', [Validators.required]),
+      // name: new FormControl('', [Validators.required,Validators.maxLength(30),]),
+      // length: new FormControl('', [Validators.required]),
       //width: new FormControl('', [Validators.required]),
       //height: new FormControl('', [Validators.required]),
-      medicalCenter: new FormControl('', [Validators.required]),
+      // medicalCenter: new FormControl('', [Validators.required]),
       device: new FormControl(''),
     });
 
@@ -77,7 +77,7 @@ export class AssignRoomDeviceFormComponent implements OnInit {
 
       this.registerForm.patchValue({
         name: this.room.name || '',
-       // length: this.room.length || '',
+        // length: this.room.length || '',
         //width: this.room.width || '',
         //height: this.room.height || '',
         medicalCenter: this.room.medicalCenterId || '',
@@ -87,31 +87,34 @@ export class AssignRoomDeviceFormComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log('im submitting');
-    if (this.registerForm.invalid) {
-      return;
-    }
+    if (this.registerForm.invalid) return;
 
-    const room: Room = {
-      name: this.registerForm.value.name,
-      length: this.registerForm.value.length,
-      width: this.registerForm.value.width,
-      height: this.registerForm.value.height,
-    };
+    // const room: Room = {
+    //   name: this.registerForm.value.name,
+    //   length: this.registerForm.value.length,
+    //   width: this.registerForm.value.width,
+    //   height: this.registerForm.value.height,
+    //   device: this.registerForm.value.device,
+    // };
 
-    if (this.editing) {
-      this.matDialogRef.close({
-        id: this.room?.id,
-        room: room,
-        newMedicalCenter: this.registerForm.value.medicalCenter,
+       this.matDialogRef.close({
+        roomId: this.room?.id,
+        deviceId: this.registerForm.value.device,
       });
-    } else {
-      DebugerService.log('NO EDITING');
-      this.matDialogRef.close({
-        id: this.registerForm.value.medicalCenter,
-        room: room,
-      });
-    }
+    // if (this.editing) {
+    //   this.matDialogRef.close({
+    //     roomId: this.room?.id,
+    //     deviceId: this.registerForm.value.device,
+    //     //room: room,
+    //     //newMedicalCenter: this.registerForm.value.medicalCenter,
+    //   });
+    // } else {
+    //   DebugerService.log('NO EDITING');
+    //   this.matDialogRef.close({
+    //     id: this.registerForm.value.medicalCenter,
+    //     room: room,
+    //   });
+    // }
   }
 
   closeDialog() {
@@ -121,6 +124,4 @@ export class AssignRoomDeviceFormComponent implements OnInit {
   error(controlName: string, errorName: string) {
     return this.registerForm.get(controlName)?.hasError(errorName);
   }
-
-  
 }

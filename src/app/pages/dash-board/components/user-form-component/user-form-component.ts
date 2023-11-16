@@ -21,8 +21,8 @@ export class UserFormComponent implements OnInit {
 
   roles: SelectOption[] = [
     // { value: 'ADMIN', viewValue: 'Admin' },
-    { value: 'NURSE', viewValue: 'Enfermero' },
-    {value: 'MEDICAL_DOCTOR', viewValue: 'Médico'}
+    { value: 'ROLE_NURSE', viewValue: 'Enfermero' },
+    {value: 'ROLE_MEDICAL_DOCTOR', viewValue: 'Médico'}
   ];
 
   status: SelectOption[] = statusOptions;

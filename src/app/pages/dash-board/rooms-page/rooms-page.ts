@@ -8,6 +8,7 @@ import {
   addRoom,
   loadRooms,
   removeRoom,
+  updateAddRoomDevice,
   updateRoom,
 } from 'src/app/store/actions/room.actions';
 import { AppState } from 'src/app/store/app.state';
@@ -118,13 +119,18 @@ export class RoomsPage implements OnInit {
   //   this.store.dispatch(loadRooms({ id: id }));
   // }
 
-  assignDevice(){
+  assignDevice(roomId:number, deviceId:number){
+    this.store.dispatch(updateAddRoomDevice({roomId:roomId, deviceId:deviceId}));
+    this.checkStatusRequest(
+      'Dispositivo asignado con éxito',
+      'Ha sucedido un error, por favor intente de nuevo'
+    );
 
   }
 
-  editDevice(){
+  // editDevice(){
 
-  }
+  // }
 
 
 
@@ -176,15 +182,20 @@ export class RoomsPage implements OnInit {
     const dialogRef = this.dialog.open(AssignRoomDeviceFormComponent, {
       width: '50%',
       data: room,
-  
+    });
+
+    dialogRef.afterClosed().subscribe(async (result) => {
+      if (result && result.roomId) {
+        this.assignDevice(result.roomId, result.deviceId);
+      }
     });
   }
 
-  openAssignDeviceRegisterDialog(): void {
-    const dialogRef = this.dialog.open(AssignRoomDeviceFormComponent, {
-      width: '50%',
-    });
-  }
+  // openAssignDeviceRegisterDialog(): void {
+  //   const dialogRef = this.dialog.open(AssignRoomDeviceFormComponent, {
+  //     width: '50%',
+  //   });
+  // }
 
   openRoomEditDialog(room: Room): void {
     const dialogRef = this.dialog.open(RoomFormComponent, {

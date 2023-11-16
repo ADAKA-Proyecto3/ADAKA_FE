@@ -38,7 +38,7 @@ export class MedicalCentersPage implements  OnInit {
     private store: Store<AppState>,
     private dialog: MatDialog,
     private readonly dialogService: DialogService,
-    private readonly aut: AuthService,
+    private readonly auth: AuthService,
     private readonly pageRouter: PageRouterService
   
   ) {}
@@ -63,7 +63,7 @@ export class MedicalCentersPage implements  OnInit {
 
   ngOnInit(): void {
     if (this.idAdmin === 0) {
-      this.aut.checkSignedInUser();
+      this.auth.checkSignedInUser();
     }
     this.loadUser();
     this.loadMedicalCenterTable()
