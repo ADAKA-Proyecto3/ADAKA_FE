@@ -13,9 +13,7 @@ import {
 } from '../../../store/actions/medicalCenter.actions';
 import { MedicalCenterFormComponent } from '../components/medicalCenter-form-component/medicalCenter-form-component';
 import { DebugerService } from '../../../services/debug-service/debug.service';
-import {
-  medicalCenterStatusAndError,
-} from 'src/app/store/selectors/medicalCenter.selector';
+import { medicalCenterStatusAndError } from 'src/app/store/selectors/medicalCenter.selector';
 import { ActionStatus } from 'src/app/common/enums/action-status.enum';
 import { DialogService } from 'src/app/services/dialog-service/dialog.service';
 import { Utils } from 'src/app/common/utils/app-util';
@@ -30,9 +28,8 @@ import { UrlPages } from 'src/app/common/enums/url-pages.enum';
   templateUrl: './medicalCenters-page.html',
   styleUrls: ['./medicalCenters-page.scss'],
 })
-export class MedicalCentersPage implements  OnInit {
+export class MedicalCentersPage implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-
 
   constructor(
     private store: Store<AppState>,
@@ -40,7 +37,6 @@ export class MedicalCentersPage implements  OnInit {
     private readonly dialogService: DialogService,
     private readonly auth: AuthService,
     private readonly pageRouter: PageRouterService
-  
   ) {}
 
   displayedColumns: string[] = [
@@ -55,6 +51,7 @@ export class MedicalCentersPage implements  OnInit {
   dataSource = new MatTableDataSource<MedicalCenter>();
   idAdmin: any = 0;
   private statusSubscription: Subscription = new Subscription();
+  activeUser: any;
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -62,16 +59,17 @@ export class MedicalCentersPage implements  OnInit {
   }
 
   ngOnInit(): void {
-    if (this.idAdmin === 0) {
-      this.auth.checkSignedInUser();
-    }
-    this.loadUser();
-    this.loadMedicalCenterTable()
+    this.store
+      .select((state) => state.user.activeUser)
+      .subscribe((user) => {
+        this.idAdmin = user.id;
+        this.store.dispatch(loadMedicalCenter({ id: this.idAdmin }));
+        this.loadMedicalCenterTable();
+      });
   }
 
   loadMedicalCenterTable(): void {
     this.store.select('medicalCenters').subscribe(({ medicalCenters }) => {
-   
       this.dataSource.data = medicalCenters;
     });
     this.dataSource.paginator = this.paginator;
@@ -79,9 +77,8 @@ export class MedicalCentersPage implements  OnInit {
 
   //CRUD
   registerMedicalCenter(id: number, medicalCenter: MedicalCenter) {
-
     this.store.dispatch(addMedicalCenter({ id: id, content: medicalCenter }));
-    this.checkStatusRequest("Centro médico registrado con éxito");
+    this.checkStatusRequest('Centro médico registrado con éxito');
   }
 
   editMedicalCenter(id: number, medicalCenter: MedicalCenter) {
@@ -91,7 +88,6 @@ export class MedicalCentersPage implements  OnInit {
   }
 
   deleteMedicalCenter(medicalCenter: MedicalCenter) {
-  
     const medicalId = medicalCenter.id!;
     this.store.dispatch(removeMedicalCenter({ id: medicalId }));
 
@@ -131,7 +127,7 @@ export class MedicalCentersPage implements  OnInit {
 
     dialogRef.afterClosed().subscribe(async (result) => {
       DebugerService.log('MEDICAL CENTER REGISTRATION DIALOG CLOSED');
-      
+
       if (result && result.medicalCenter) {
         this.registerMedicalCenter(this.idAdmin, result.medicalCenter);
       }
@@ -139,7 +135,6 @@ export class MedicalCentersPage implements  OnInit {
   }
 
   getDeleteMedicalCenterConfirmation(medicalCenter: MedicalCenter) {
-   
     Swal.fire({
       title: `¿Está seguro de eliminar el centro medico:  ${medicalCenter.name}?`,
       text: 'Esta acción no se puede revertir',
@@ -156,45 +151,41 @@ export class MedicalCentersPage implements  OnInit {
     });
   }
 
-
   private checkStatusRequest(successMessage: string) {
-    this.statusSubscription = this.store.pipe(select(medicalCenterStatusAndError)).subscribe((data) => {
-      DebugerService.log('RequestStatus: ' + data.status);
-    
-      if (data.status === ActionStatus.SUCCESS) {
-        this.dialogService.showToast(successMessage);
-        this.statusSubscription.unsubscribe(); 
-      } else if (data.status === ActionStatus.ERROR) {
-        Utils.showNotification({
-          icon: 'error',
-          text: data.error.error.title,
-          showConfirmButton: true,
-        });
-        this.statusSubscription.unsubscribe(); 
-      }
-    });
+    this.statusSubscription = this.store
+      .pipe(select(medicalCenterStatusAndError))
+      .subscribe((data) => {
+        DebugerService.log('RequestStatus: ' + data.status);
+
+        if (data.status === ActionStatus.SUCCESS) {
+          this.dialogService.showToast(successMessage);
+          this.statusSubscription.unsubscribe();
+        } else if (data.status === ActionStatus.ERROR) {
+          Utils.showNotification({
+            icon: 'error',
+            text: data.error.error.title,
+            showConfirmButton: true,
+          });
+          this.statusSubscription.unsubscribe();
+        }
+      });
   }
 
-  private loadUser() {
+  /* private loadUser() {
     this.store
       .select('user')
       .pipe(
-        filter(
-          (activeUser) =>
-          activeUser.status === "success"
-        ),
+        filter((activeUser) => activeUser.status === 'success'),
         take(1)
       )
       .subscribe((activeUser) => {
         this.idAdmin = activeUser.activeUser.id;
         this.store.dispatch(loadMedicalCenter({ id: this.idAdmin }));
-
+        this.loadMedicalCenterTable();
       });
+  }*/
+
+  goToMain() {
+    this.pageRouter.route(`${UrlPages.DASHBOARD}/${UrlPages.MAIN}`);
   }
-
-  goToMain(){
-    this.pageRouter.route(`${UrlPages.DASHBOARD}/${UrlPages.MAIN}`)
-      }
-
-  
 }
