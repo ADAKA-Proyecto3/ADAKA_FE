@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -7,7 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { filter, take } from 'rxjs';
+import { Subscription, filter, take } from 'rxjs';
 import { User } from 'src/app/models/user.interface';
 import { loadActiveUser, loadActiveUserSuccess, updateActiveUser } from 'src/app/store/actions/activeUser.actions';
 import { AppState } from 'src/app/store/app.state';
@@ -23,7 +23,7 @@ import { UrlPages } from 'src/app/common/enums/url-pages.enum';
   templateUrl: './user-page.html',
   styleUrls: ['./user-page.scss'],
 })
-export class UserPage implements OnInit {
+export class UserPage implements OnInit, OnDestroy {
   @Input() user: any;
   userForm: FormGroup = {} as FormGroup;
   passwordForm: FormGroup = {} as FormGroup;
@@ -32,6 +32,7 @@ export class UserPage implements OnInit {
 
   expiredPassword = false;
   selectedTabIndex = 0;
+  private activeUserSuscription: Subscription = new Subscription();
 
   constructor(
     private fb: FormBuilder,
@@ -40,10 +41,15 @@ export class UserPage implements OnInit {
     private readonly dialogService: DialogService,
     private readonly pageRouter: PageRouterService
   ) {}
+ 
+  ngOnDestroy(): void {
+    this.activeUserSuscription.unsubscribe();
+  }
 
   ngOnInit() {
     this.initForms();
-    this.store
+
+    this.activeUserSuscription = this.store
       .select('user')
       .pipe(
         filter((activeUser) => activeUser.status === 'success'),

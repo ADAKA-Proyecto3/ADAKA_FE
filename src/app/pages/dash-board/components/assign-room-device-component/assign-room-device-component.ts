@@ -1,7 +1,8 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
 import { SelectOption } from 'src/app/common/interfaces/option.interface';
 import { Room } from 'src/app/models/rooms.interface';
 import { DebugerService } from 'src/app/services/debug-service/debug.service';
@@ -13,7 +14,7 @@ import { AppState } from 'src/app/store/app.state';
   templateUrl: './assign-room-device-component.html',
   styleUrls: ['./assign-room-device-component.scss'],
 })
-export class AssignRoomDeviceFormComponent implements OnInit {
+export class AssignRoomDeviceFormComponent implements OnInit, OnDestroy {
   public registerForm: FormGroup = {} as FormGroup;
 
   activeUser: any;
@@ -21,6 +22,10 @@ export class AssignRoomDeviceFormComponent implements OnInit {
   deviceOptions: SelectOption[] = [];
   editing = false;
   dataSource: any;
+
+  private activeUserSuscription: Subscription = new Subscription();
+  private devicesSuscription: Subscription = new Subscription();
+  private medicalCenterSuscription: Subscription = new Subscription();
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public room: Room | undefined,
@@ -31,27 +36,32 @@ export class AssignRoomDeviceFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.room?.device?.deviceId);
-    this.store
+    this.activeUserSuscription = this.store
       .select((state) => state.user.activeUser.id)
       .subscribe((id) => {
         this.activeUser = id;
         this.loadMedicalCenters(this.activeUser);
       });
 
-    this.store
+    this.devicesSuscription = this.store
       .select((state) => state.devices.devices)
       .subscribe((devices) => {
-        console.log(devices);
         this.deviceOptions = devices.map((d) => {
           return { value: d.id!, viewValue: d.deviceId.toString() };
         });
       });
   }
 
+  ngOnDestroy(): void {
+    this.activeUserSuscription.unsubscribe();
+    this.devicesSuscription.unsubscribe();
+    this.medicalCenterSuscription.unsubscribe();
+  }
+
   loadMedicalCenters(userId: number) {
     this.store.dispatch(loadMedicalCenter({ id: userId }));
-    this.store
+
+    this.medicalCenterSuscription = this.store
       .select((state) => state.medicalCenters.medicalCenters)
       .subscribe((medicalCenters) => {
         this.medicalCenterOptions = medicalCenters.map((mc) => {
@@ -97,10 +107,10 @@ export class AssignRoomDeviceFormComponent implements OnInit {
     //   device: this.registerForm.value.device,
     // };
 
-       this.matDialogRef.close({
-        roomId: this.room?.id,
-        deviceId: this.registerForm.value.device,
-      });
+    this.matDialogRef.close({
+      roomId: this.room?.id,
+      deviceId: this.registerForm.value.device,
+    });
     // if (this.editing) {
     //   this.matDialogRef.close({
     //     roomId: this.room?.id,

@@ -48,32 +48,6 @@ export const deviceReducer = createReducer(
     };
   }),
 
-  // on(updateDevice, (state) => ({
-  //   ...state,
-  //   status: ActionStatus.LOADING,
-  // })),
-
-  // on(updateDeviceSuccess, (state, { id, content }) => ({
-  //   ...state,
-  //   devices: state.devices.map((device) => {
-  //     if (device.deviceId === id) {
-  //       return {
-  //         ...device,
-  //         ...content,
-  //       };
-  //     }
-  //     return device;
-  //   }),
-  // })),
-
-  // on(updateDeviceFailure, (state, action) => {
-  //   return {
-  //     ...state,
-  //     error: action.error,
-  //     status: ActionStatus.ERROR,
-  //   };
-  // }),
-
   on(removeDevice, (state)=>({
     ...state,
     status: ActionStatus.LOADING,
@@ -81,8 +55,9 @@ export const deviceReducer = createReducer(
 
 
   on(removeDeviceSuccess, (state, { deviceId }) => ({
+    
     ...state,
-    Devices: state.devices.filter((devices) => devices.id !== deviceId),
+    devices: state.devices.filter((devices) => devices.id !== deviceId),
     status: ActionStatus.SUCCESS,
   })),
 

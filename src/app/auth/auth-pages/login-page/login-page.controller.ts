@@ -8,6 +8,7 @@ import { AppState } from 'src/app/store/app.state';
 import { loadActiveUser } from 'src/app/store/actions/activeUser.actions';
 import { PageRouterService } from 'src/app/services/page-router-service/page-router.service';
 import { UrlPages } from 'src/app/common/enums/url-pages.enum';
+import { Subscription } from 'rxjs';
 
 type LoginRequest = {
   email: string;
@@ -16,6 +17,9 @@ type LoginRequest = {
 
 @Injectable()
 export class loginPageController {
+
+  private activeUserSuscription: Subscription = new Subscription();
+  
   constructor(
     private readonly loadingService: LoadingService,
     private readonly authService: AuthService,
@@ -76,14 +80,20 @@ export class loginPageController {
   }
 
   private routerUser(): void {
-    this.store.select((state)=> state.user.activeUser).subscribe((activeUser)=> {
+    this.activeUserSuscription = this.store.select((state)=> state.user.activeUser).subscribe((activeUser)=> {
       if(activeUser.status === 'FREEZE'){
         this.pageRouter.route(`${UrlPages.DASHBOARD}/${UrlPages.PROFILE}`);
+        this.unsubscribe();
 
       }else{
         this.pageRouter.route(UrlPages.DASHBOARD);
+        this.unsubscribe();
       }
         
     });
+  }
+
+  private unsubscribe(): void {
+    this.activeUserSuscription.unsubscribe();
   }
 }

@@ -16,8 +16,6 @@ import { switchMap, map, catchError, mergeMap } from 'rxjs/operators';
 import { DeviceHttpService } from 'src/app/services/http-service/device-http.service';
 import { Device } from 'src/app/models/devices.interface';
 
-
-
 @Injectable()
 export class DeviceEffects {
   constructor(
@@ -54,20 +52,6 @@ export class DeviceEffects {
       )
     )
   );
-
-  // updateDevice$ = createEffect(() =>
-  //   this.actions$.pipe(
-  //     ofType(updateDevice),
-  //     mergeMap((action) =>
-  //       this.deviceService.editDevice(action.id, action.content).pipe(
-  //         map(() =>
-  //           updateDeviceSuccess({ id: action.id, content: action.content })
-  //         ),
-  //         catchError((error) => of(updateDeviceFailure({ error })))
-  //       )
-  //     )
-  //   )
-  // );
 
   resgiterDevice$ = createEffect(() =>
   this.actions$.pipe(

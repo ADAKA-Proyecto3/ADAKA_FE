@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -35,7 +35,7 @@ import { AssignRoomDeviceFormComponent } from '../components/assign-room-device-
   templateUrl: './rooms-page.html',
   styleUrls: ['./rooms-page.scss'],
 })
-export class RoomsPage implements OnInit {
+export class RoomsPage implements OnInit, OnDestroy {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   displayedColumns: string[] = [];
@@ -50,6 +50,8 @@ export class RoomsPage implements OnInit {
   requestDeviceId: number = 0;
 
   private statusSubscription: Subscription = new Subscription();
+  private activeUserSuscription: Subscription = new Subscription();
+  private roomsSuscription: Subscription = new Subscription();
   activeUser: any;
   constructor(
     private store: Store<AppState>,
@@ -58,13 +60,18 @@ export class RoomsPage implements OnInit {
     private readonly pageRouter: PageRouterService
   ) {}
 
+  ngOnDestroy(): void {
+    this.activeUserSuscription.unsubscribe();
+    this.roomsSuscription.unsubscribe();
+  }
+
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   ngOnInit(): void {
-    this.store
+   this.activeUserSuscription = this.store
       .select((state) => state.user.activeUser)
       .subscribe((user) => {
 
@@ -99,7 +106,7 @@ export class RoomsPage implements OnInit {
   }
 
   loadRoomsTable(): void {
-    this.store.select('rooms').subscribe(({ rooms }) => {
+    this.roomsSuscription = this.store.select('rooms').subscribe(({ rooms }) => {
       this.dataSource.data = rooms;
       this.dataSource.paginator = this.paginator;
     });
