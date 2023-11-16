@@ -11,4 +11,5 @@ phases:
       - ng build --base-href / --output-path ./
 artifacts:
   files:
-    - 'dist/**/*'
+    - '**/*'
+  base-directory: 'dist'
