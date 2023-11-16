@@ -9,9 +9,6 @@ phases:
   build:
     commands:
       - ng build --base-href / --output-path ./
-  # post_build:
-  #   commands:
-  #     - aws s3 mv s3://zhenair.com/dist/ s3://zhenair.com/ --recursive
 artifacts:
   files:
     - 'dist/**/*'
