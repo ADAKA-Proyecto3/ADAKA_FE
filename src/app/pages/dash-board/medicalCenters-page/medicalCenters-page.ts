@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/app.state';
@@ -28,7 +28,7 @@ import { UrlPages } from 'src/app/common/enums/url-pages.enum';
   templateUrl: './medicalCenters-page.html',
   styleUrls: ['./medicalCenters-page.scss'],
 })
-export class MedicalCentersPage implements OnInit {
+export class MedicalCentersPage implements OnInit, OnDestroy {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(
@@ -38,7 +38,7 @@ export class MedicalCentersPage implements OnInit {
     private readonly auth: AuthService,
     private readonly pageRouter: PageRouterService
   ) {}
-
+  
   displayedColumns: string[] = [
     'name',
     'email',
@@ -51,6 +51,8 @@ export class MedicalCentersPage implements OnInit {
   dataSource = new MatTableDataSource<MedicalCenter>();
   idAdmin: any = 0;
   private statusSubscription: Subscription = new Subscription();
+  private activeUserSuscription: Subscription = new Subscription();
+  private medicalCenterSuscription: Subscription = new Subscription();
   activeUser: any;
 
   applyFilter(event: Event) {
@@ -59,7 +61,7 @@ export class MedicalCentersPage implements OnInit {
   }
 
   ngOnInit(): void {
-    this.store
+   this.activeUserSuscription = this.store
       .select((state) => state.user.activeUser)
       .subscribe((user) => {
         this.idAdmin = user.id;
@@ -68,8 +70,14 @@ export class MedicalCentersPage implements OnInit {
       });
   }
 
+  ngOnDestroy(): void {
+    this.activeUserSuscription.unsubscribe();
+    this.medicalCenterSuscription.unsubscribe();
+  }
+
+
   loadMedicalCenterTable(): void {
-    this.store.select('medicalCenters').subscribe(({ medicalCenters }) => {
+    this.medicalCenterSuscription = this.store.select('medicalCenters').subscribe(({ medicalCenters }) => {
       this.dataSource.data = medicalCenters;
     });
     this.dataSource.paginator = this.paginator;
