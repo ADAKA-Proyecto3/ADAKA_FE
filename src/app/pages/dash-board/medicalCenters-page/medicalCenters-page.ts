@@ -62,7 +62,6 @@ export class MedicalCentersPage implements OnInit {
     this.store
       .select((state) => state.user.activeUser)
       .subscribe((user) => {
-        console.log("Entro al init");
         this.idAdmin = user.id;
         this.store.dispatch(loadMedicalCenter({ id: this.idAdmin }));
         this.loadMedicalCenterTable();
