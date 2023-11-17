@@ -74,23 +74,12 @@ export class AssignRoomDeviceFormComponent implements OnInit, OnDestroy {
 
   initializeProperties() {
     this.registerForm = new FormGroup({
-      // name: new FormControl('', [Validators.required,Validators.maxLength(30),]),
-      // length: new FormControl('', [Validators.required]),
-      //width: new FormControl('', [Validators.required]),
-      //height: new FormControl('', [Validators.required]),
-      // medicalCenter: new FormControl('', [Validators.required]),
       device: new FormControl(''),
     });
 
     if (this.room) {
       this.editing = true;
-
       this.registerForm.patchValue({
-        name: this.room.name || '',
-        // length: this.room.length || '',
-        //width: this.room.width || '',
-        //height: this.room.height || '',
-        medicalCenter: this.room.medicalCenterId || '',
         device: this.room.device?.id || '',
       });
     }
@@ -98,33 +87,24 @@ export class AssignRoomDeviceFormComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     if (this.registerForm.invalid) return;
-
-    // const room: Room = {
-    //   name: this.registerForm.value.name,
-    //   length: this.registerForm.value.length,
-    //   width: this.registerForm.value.width,
-    //   height: this.registerForm.value.height,
-    //   device: this.registerForm.value.device,
-    // };
-
     this.matDialogRef.close({
       roomId: this.room?.id,
       deviceId: this.registerForm.value.device,
+      unlinking: false,
     });
-    // if (this.editing) {
-    //   this.matDialogRef.close({
-    //     roomId: this.room?.id,
-    //     deviceId: this.registerForm.value.device,
-    //     //room: room,
-    //     //newMedicalCenter: this.registerForm.value.medicalCenter,
-    //   });
-    // } else {
-    //   DebugerService.log('NO EDITING');
-    //   this.matDialogRef.close({
-    //     id: this.registerForm.value.medicalCenter,
-    //     room: room,
-    //   });
-    // }
+
+  }
+
+  unlinkDevice() {
+    const existingRoom = this.room as Room;
+    const { device, ...roomWithOutDevice } = existingRoom;
+    // existingRoom.device = null;
+    // this.matDialogRef.close({
+    //   room: existingRoom,
+    //   unlinking: true,
+    //});
+
+    // Rest of the code...
   }
 
   closeDialog() {

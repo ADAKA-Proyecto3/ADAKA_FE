@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { User } from 'src/app/models/user.interface';
 import { Config } from 'src/app/config/config';
 import { DebugerService } from '../debug-service/debug.service';
-import { map } from 'rxjs';
+import { catchError, map } from 'rxjs';
 import { LoadingService } from '../loading-service/loading.service';
 import { Utils } from 'src/app/common/utils/app-util';
 import { DialogService } from '../dialog-service/dialog.service';
@@ -41,38 +41,66 @@ export class UserHttpService {
 
   saveUser(user: User): Promise<void> {
     DebugerService.log('Submitting POST to HTTP Server user/');
+    this.loader.showLoadingModal();
 
     return new Promise((resolve, reject) => {
       this.httpClient.post(`${this.url}/`, user).subscribe({
         next: (response) => {
           if (response) {
+            this.loader.dismiss();
             resolve();
           } else {
+            this.loader.dismiss();
             reject();
           }
         },
         error: (error) => {
           reject(error);
           console.error(error);
+          this.loader.dismiss();
         },
       });
     });
   }
 
   getUsers(id: number) {
-    return this.httpClient.get(`${this.url}/all/${id}`, Utils.getHttpHeaders()).pipe(
-      map((resp) => {
-        return resp as User[];
-      })
-    );
+    return this.httpClient
+      .get(`${this.url}/all/${id}`, Utils.getHttpHeaders())
+      .pipe(
+        map((resp) => {
+          return resp as User[];
+        })
+      );
   }
 
   deleteUser(id: number) {
     return this.httpClient.delete(`${this.url}/${id}`, Utils.getHttpHeaders());
   }
 
-  resgiterSubUser(user: User, parentId:number, medicalCenterId:number) {
-    return this.httpClient.post(`${this.url}/${parentId}/${medicalCenterId}`, user, Utils.getHttpHeaders());
+  resgiterSubUser(user: User, parentId: number, medicalCenterId: number) {
+    // return this.httpClient.post(`${this.url}/${parentId}/${medicalCenterId}`, user, Utils.getHttpHeaders());
+    DebugerService.log('REGISTER SUB USER');
+
+    this.loader.showLoadingModal();
+
+    return this.httpClient
+      .post(
+        `${this.url}/${parentId}/${medicalCenterId}`,
+        user,
+        Utils.getHttpHeaders()
+      )
+      .pipe(
+        map((resp: any) => {
+          this.loader.dismiss();
+          console.log('resp', resp);
+          return resp;
+        }),
+        catchError((error) => {
+          this.loader.dismiss();
+          console.error('Error en la petición:', error);
+          throw error;
+        })
+      );
   }
 
   editUser(id: number, user: User) {
@@ -83,6 +111,11 @@ export class UserHttpService {
           this.loader.dismiss();
           DebugerService.log('resp' + JSON.stringify(resp));
           return resp as User;
+        }),
+        catchError((error) => {
+          this.loader.dismiss();
+          console.error('Error en la petición:', error);
+          throw error;
         })
       );
   }
@@ -95,6 +128,11 @@ export class UserHttpService {
           this.loader.dismiss();
           DebugerService.log('resp' + JSON.stringify(resp));
           return resp as User;
+        }),
+        catchError((error) => {
+          this.loader.dismiss();
+          console.error('Error en la petición:', error);
+          throw error;
         })
       );
   }
@@ -106,6 +144,11 @@ export class UserHttpService {
         map((resp) => {
           DebugerService.log('resp' + JSON.stringify(resp));
           return resp as User;
+        }),
+        catchError((error) => {
+          this.loader.dismiss();
+          console.error('Error en la petición:', error);
+          throw error;
         })
       );
   }
@@ -116,6 +159,11 @@ export class UserHttpService {
       .pipe(
         map((resp) => {
           return resp as User;
+        }),
+        catchError((error) => {
+          this.loader.dismiss();
+          console.error('Error en la petición:', error);
+          throw error;
         })
       );
   }

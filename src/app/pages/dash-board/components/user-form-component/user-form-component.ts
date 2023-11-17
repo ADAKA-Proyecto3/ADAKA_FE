@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
@@ -8,13 +8,14 @@ import { DebugerService } from 'src/app/services/debug-service/debug.service';
 import { AppState } from 'src/app/store/app.state';
 import { loadMedicalCenter } from '../../../../store/actions/medicalCenter.actions';
 import { roleOptions, statusOptions } from 'src/app/common/selectOptions/selectOptions';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-user-form-component',
   templateUrl: './user-form-component.html',
   styleUrls: ['./user-form-component.scss'],
 })
-export class UserFormComponent implements OnInit {
+export class UserFormComponent implements OnInit, OnDestroy {
   public registerForm: FormGroup = {} as FormGroup;
 
   selectedValue: string = '';
@@ -26,11 +27,11 @@ export class UserFormComponent implements OnInit {
   ];
 
   status: SelectOption[] = statusOptions;
-
   medicalCenterOptions: SelectOption[] = [];
   activeUser: any;
-
   editing = false;
+  private activeUserSuscription: Subscription = new Subscription();
+  private medicalCenterSuscription: Subscription = new Subscription();
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public user: User | undefined,
@@ -39,19 +40,15 @@ export class UserFormComponent implements OnInit {
   ) {
     matDialogRef.disableClose = true;
   }
+ 
 
   ngOnInit(): void {
-    this.store
+    this.activeUserSuscription = this.store
       .select((state) => state.user.activeUser.id)
       .subscribe((id) => {
         this.activeUser = id;
-     
         this.loadMedicalCenters(this.activeUser);
-
-       
       });
-
-
 
     this.registerForm = new FormGroup({
       name: new FormControl('', [
@@ -63,10 +60,9 @@ export class UserFormComponent implements OnInit {
         this.digitsOnly,
         Validators.required,
         Validators.minLength(8),
-       
       ]),
       email: new FormControl('', [Validators.required]),
-      status: new FormControl('', [Validators.required]),
+      status: new FormControl(''),
       medicalCenter: new FormControl('', [Validators.required]),
     });
 
@@ -84,27 +80,25 @@ export class UserFormComponent implements OnInit {
     }
   }
 
-
-
+  ngOnDestroy(): void {
+    this.activeUserSuscription.unsubscribe();
+    this.medicalCenterSuscription.unsubscribe();
+  }
   onSubmit() {
-    if (this.registerForm.invalid) {
-      return;
-    }
-
+    if (this.registerForm.invalid) return;
+    
     const user: User = {
       name: this.registerForm.value.name,
       role: this.registerForm.value.role,
       phone: this.registerForm.value.phone,
       email: this.registerForm.value.email,
-      status: this.registerForm.value.status,
-      //manager: this.activeUser,
-      //assignedMedicalCenter: this.registerForm.value.medicalCenter,
-
+      status: "FREEZE",
     };
 
     if (this.editing) {
       user.manager = this.activeUser;
       user.assignedMedicalCenter = this.registerForm.value.medicalCenter;
+      user.status = this.registerForm.value.status;
       this.matDialogRef.close({ id: this.user?.id, user: user });
     } else {
       DebugerService.log('NO EDITING');
@@ -135,9 +129,8 @@ export class UserFormComponent implements OnInit {
 
   loadMedicalCenters(userId: number) {
     this.store.dispatch(loadMedicalCenter({ id: userId }));
-
-
-    this.store
+   
+    this.medicalCenterSuscription = this.store
     .select((state) => state.medicalCenters.medicalCenters)
     .subscribe((medicalCenters) => {
       this.medicalCenterOptions = medicalCenters.map((mc) => {

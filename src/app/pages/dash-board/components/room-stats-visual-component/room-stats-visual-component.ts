@@ -51,6 +51,7 @@ export class RoomStatsVisualComponent implements OnInit, OnDestroy {
   }
 
   processSensorData() {
+    this.x = []; 
     this.sensorData.forEach((element, index) => {
       if (element.sensorName == SensorName.TEMPERATURE) {
         this.loadTemperatureConfig(element.value, element.sensorName);

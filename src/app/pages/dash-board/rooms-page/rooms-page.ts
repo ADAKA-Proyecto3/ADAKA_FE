@@ -174,7 +174,10 @@ export class RoomsPage implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe(async (result) => {
-      if (result && result.roomId) {
+
+      if(result && result.unlinking){
+        this.editRoom(result.room.id, result.room, result.room.medicalCenterId);
+      }else if (result && !result.unlinking) {
         this.assignDevice(result.roomId, result.deviceId);
       }
     });
@@ -213,6 +216,13 @@ export class RoomsPage implements OnInit, OnDestroy {
       width: '80%',
       data: room,
     });
+  }
+
+  hasDevices(room: Room): boolean {
+    if (room && room.device?.deviceId) {
+      return true;
+    }
+    return false;
   }
 
   private checkStatusRequest(successMessage: string, errorMessage: string) {
