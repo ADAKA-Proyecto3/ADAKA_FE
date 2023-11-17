@@ -8,5 +8,5 @@ export interface Room {
     height: number;
     medicalCenter?: MedicalCenter;
     medicalCenterId?: number;
-    device?:Device;
+    device?:Device | null;
 }

@@ -12,6 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ZhenAirPageController } from './zhenair-stats-page.controller';
 
 
 
@@ -38,6 +39,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     
 
   ],
+  providers: [ZhenAirPageController]
  
 })
 export class ZhenairStatsModule { }

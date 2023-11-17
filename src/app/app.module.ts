@@ -17,6 +17,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { NgxEchartsModule } from 'ngx-echarts';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 @NgModule({
@@ -36,6 +37,7 @@ import { NgxEchartsModule } from 'ngx-echarts';
     MatNativeDateModule,
     MatDatepickerModule,
     MatSnackBarModule,
+    MatTooltipModule,
     NgxEchartsModule.forRoot({
       echarts: () => import('echarts')
     })

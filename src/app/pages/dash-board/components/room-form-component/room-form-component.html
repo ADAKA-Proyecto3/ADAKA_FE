@@ -1,5 +1,5 @@
 <h1 class="titulo-2 container text-center pt-3">
-    {{ editing ? 'Editar sala'  : 'Registrar sala' }}
+    {{ editing ? 'Editar sala' : 'Registrar sala' }}
 </h1>
 <div class="container white-bg pb-5 d-flex justify-content-center">
     <form class="d-flex flex-column w-75" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
@@ -49,21 +49,8 @@
             <mat-error *ngIf="error('status','required')">
                 Centro médico es <strong>requerido</strong>
             </mat-error>
-        </mat-form-field>
+        </mat-form-field>     
 
-        <div>
-            Dispositivo ZhenAir: xxx
-        </div>
-
-        <!-- <mat-form-field appearance="outline" class="pt-3">
-            <mat-label>Asignar Dispositivo</mat-label>
-            <mat-select formControlName="device">
-                <mat-option value="" disabled>Seleccione un dispositivo</mat-option>
-                <mat-option *ngFor="let d of deviceOptions" [value]="d.value">
-                    {{d.viewValue}}
-                </mat-option>
-            </mat-select>
-        </mat-form-field> -->
 
         <div class="d-flex justify-content-between">
             <button type="button" mat-raised-button color="warn" class="btn_login mt-3" (click)="closeDialog()">

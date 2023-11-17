@@ -27,6 +27,7 @@
     "@sweetalert2/ngx-sweetalert2": "^12.2.0",
     "@swimlane/ngx-charts": "^20.4.1",
     "chart.js": "^4.4.0",
+    "date-fns": "^2.30.0",
     "echarts": "^5.4.3",
     "leaflet": "^1.9.4",
     "ngx-echarts": "^16.1.1",
