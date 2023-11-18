@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { AssignRoomDeviceFormComponent } from './assign-room-device-component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 @NgModule({
@@ -20,6 +21,7 @@ import { AssignRoomDeviceFormComponent } from './assign-room-device-component';
     MatInputModule,
     MatFormFieldModule,
     MatSelectModule,
+    MatTooltipModule,
 
   ],
   exports: [AssignRoomDeviceFormComponent]

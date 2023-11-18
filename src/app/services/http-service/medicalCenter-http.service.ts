@@ -55,6 +55,7 @@ export class MedicalCenterHttpService {
           return resp.data[0];
         }),
         catchError((error) => {
+          this.loader.dismiss();
           console.error('Error en la petición:', error);
           throw(error.error.title);
         })

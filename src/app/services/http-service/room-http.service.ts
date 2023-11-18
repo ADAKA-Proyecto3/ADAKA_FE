@@ -19,40 +19,6 @@ export class RoomHttpService {
     private loader: LoadingService
   ) {}
 
-  // getRoomsByMedicalCenter(id: number) {
-
-  //   this.loader.showLoadingModal();
-  //   return this.httpClient
-  //     .get<Response<Room>>(`${this.url}/all/${id}`, Utils.getHttpHeaders())
-  //     .pipe(
-  //       map((resp) => {
-  //       DebugerService.log("getRoomsByMedicalCenter");
-  //         this.loader.dismiss();
-  //         return resp.data as Room[];
-  //       })
-        
-  //     );
-  // }
-  // getRoomsByMedicalCenter(id: number): Observable<Room[]> {
-  //   this.loader.showLoadingModal();
-  //   return this.httpClient
-  //     .get<Response<Room>>(`${this.url}/allUser/${id}`, Utils.getHttpHeaders())
-  //     .pipe(
-  //       map((resp) => {
-  //         DebugerService.log("getRoomsByMedicalCenter");
-  //         this.loader.dismiss();
-  //         console.log('resp', resp.data);
-  //         return resp.data as Room[];
-  //       }),
-  //       catchError((error) => {
-  //         // Handle the error here
-  //         this.loader.dismiss(); // Ensure loader is dismissed even in case of an error
-  //         console.error('Error in getRoomsByMedicalCenter:', error);
-  //         // You can log the error, show a user-friendly message, or perform other error handling actions
-  //         return throwError(() => error); // Use a factory function to create the error
-  //       })
-  //     );
-  // }
 
   getRoomsByUser(id: number) {
     this.loader.showLoadingModal();
@@ -63,6 +29,11 @@ export class RoomHttpService {
           DebugerService.log("GetRoomsByUser: " + JSON.stringify(resp.data));
           this.loader.dismiss();
           return resp.data as Room[];
+        }),
+        catchError((error) => {
+          this.loader.dismiss();
+          console.error('Error en la petición:', error);
+          throw error.error.title;
         })
       );
   }

@@ -111,4 +111,9 @@ export class LayoutPage implements OnInit, OnDestroy {
   checkAdmin(): boolean {
     return this.authService.isAdmin();
   }
+
+  routeToLink(link: string) {
+    this.pageRouter.route(link);
+
+  }
 }

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import { EChartsOption } from 'echarts';
@@ -11,71 +11,54 @@ import {
 } from 'src/app/common/chart-config/chart-config';
 import { SensorName } from 'src/app/common/enums/sensor-name.enum';
 import { SensorReading } from 'src/app/common/interfaces/sensor-reading';
+import { MetricsService } from 'src/app/services/http-service/metrics-http.service';
 import { LoadingService } from 'src/app/services/loading-service/loading.service';
 import { AppState } from 'src/app/store/app.state';
+import { SensorData } from '../../../../models/sensor-data.interface';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-room-stats-visual-component',
   templateUrl: './room-stats-visual-component.html',
   styleUrls: ['./room-stats-visual-component.scss'],
 })
-export class RoomStatsVisualComponent implements OnInit {
+export class RoomStatsVisualComponent implements OnInit, OnDestroy {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any | undefined,
     private matDialogRef: MatDialogRef<RoomStatsVisualComponent>,
     private readonly store: Store<AppState>,
-    private readonly loadingService: LoadingService
+    private readonly loadingService: LoadingService,
+    private metricsService: MetricsService
   ) {
     matDialogRef.disableClose = false;
   }
 
-  //Data que viene del API
-  mockdata = [
-    {
-      value: 2819,
-      unit: '',
-      sensor_name: 'VOC',
-    },
-    {
-      value: 29,
-      unit: 'µg/m³',
-      sensor_name: 'PM2.5',
-    },
-    {
-      value: 31,
-      unit: 'µg/m³',
-      sensor_name: 'PM10',
-    },
-    {
-      value: 448,
-      unit: 'ppm',
-      sensor_name: 'CO2',
-    },
-    {
-      value: 31.6212,
-      unit: '°C',
-      sensor_name: 'Temperatura',
-    },
-    {
-      value: 56.0272,
-      unit: '%',
-      sensor_name: 'Humedad',
-    },
-  ];
-
+  sensorData: SensorData[] = [];
   x: EChartsOption[] = [];
   y: EChartsOption = {};
+  private SensorDataSuscription: Subscription = new Subscription();
 
   ngOnInit(): void {
-    this.loadingService.showLoadingModal();
-    this.mockdata.forEach((element, index) => {
-      if (element.sensor_name == SensorName.TEMPERATURE) {
-        this.loadTemperatureConfig(element.value, element.sensor_name);
+    this.SensorDataSuscription = this.metricsService
+      .getLatesMetricForRoom(this.data.id)
+      .subscribe((data) => {
+        this.sensorData = data[0].sensorData;
+        this.processSensorData();
+      });
+  }
+  ngOnDestroy(): void {
+    this.SensorDataSuscription.unsubscribe();
+  }
+
+  processSensorData() {
+    this.x = []; 
+    this.sensorData.forEach((element, index) => {
+      if (element.sensorName == SensorName.TEMPERATURE) {
+        this.loadTemperatureConfig(element.value, element.sensorName);
       }
 
-      this.loadAirSensorConfig(element.value, element.sensor_name);
+      this.loadAirSensorConfig(element.value, element.sensorName);
     });
-    this.loadingService.dismiss();
   }
 
   loadTemperatureConfig(val: number, sensorName: string) {
@@ -325,7 +308,6 @@ export class RoomStatsVisualComponent implements OnInit {
 
     this.x.push(newReading);
   }
-
 
   closeDialog() {
     this.matDialogRef.close();

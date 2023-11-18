@@ -156,6 +156,7 @@ export class MedicalCentersPage implements OnInit, OnDestroy {
     this.store.dispatch(
       updateMedicalCenter({ id: id, content: medicalCenter })
     );
+    this.checkStatusRequest('Centro médico actualizado con éxito');
   }
 
   deleteMedicalCenter(medicalCenter: MedicalCenter) {
@@ -166,12 +167,19 @@ export class MedicalCentersPage implements OnInit, OnDestroy {
   }
 
   deactivateMedicalCenter(medicalCenter: MedicalCenter) {
+   
+    if(medicalCenter.status === 'INACTIVE') {
+    this.dialogService.showToast('El centro médico ya se encuentra desactivado');
+    return 
+    }
+
     this.store.dispatch(
       updateMedicalCenterState({
         id: medicalCenter.id!,
         state: 'INACTIVE',
       })
     );
+    this.checkStatusRequest('Centro médico desactivado correctamente');
   }
 
   // Dialog | Modal Control
@@ -239,19 +247,6 @@ export class MedicalCentersPage implements OnInit, OnDestroy {
       });
   }
 
-  /* private loadUser() {
-    this.store
-      .select('user')
-      .pipe(
-        filter((activeUser) => activeUser.status === 'success'),
-        take(1)
-      )
-      .subscribe((activeUser) => {
-        this.idAdmin = activeUser.activeUser.id;
-        this.store.dispatch(loadMedicalCenter({ id: this.idAdmin }));
-        this.loadMedicalCenterTable();
-      });
-  }*/
 
   returnStatusViewValue(status: string) {
     const viewValue = statusOptions.find(

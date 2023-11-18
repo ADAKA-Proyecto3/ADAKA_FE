@@ -95,11 +95,7 @@ export class RoomsPage implements OnInit, OnDestroy {
       this.store.dispatch(loadDevices({ adminId: this.activeUser.manager }));
     }
     this.medicalCenters = this.activeUser.medicalCenters;
-    // this.medicalCenterOptions = this.medicalCenters.map((mc) => {
-    // return { value: mc.id!, viewValue: mc.name };
-    //  });
-
-     
+      
 
     this.store.dispatch(loadRooms({ id: this.activeUser.id }));
     this.loadRoomsTable();
@@ -117,14 +113,6 @@ export class RoomsPage implements OnInit, OnDestroy {
     this.openRoomEditDialog(room);
   }
 
-  // onSelectChange(event: any) {
-  //   const selectedValue = event.value;
-  //   this.store.dispatch(loadRooms({ id: selectedValue }));
-  // }
-
-  // updateMedicalCenterSelectionOnSave(id: number) {
-  //   this.store.dispatch(loadRooms({ id: id }));
-  // }
 
   assignDevice(roomId:number, deviceId:number){
     this.store.dispatch(updateAddRoomDevice({roomId:roomId, deviceId:deviceId}));
@@ -134,12 +122,6 @@ export class RoomsPage implements OnInit, OnDestroy {
     );
 
   }
-
-  // editDevice(){
-
-  // }
-
-
 
   registerRoom(id: number, room: Room) {
     this.store.dispatch(addRoom({ id: id, content: room }));
@@ -192,17 +174,15 @@ export class RoomsPage implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe(async (result) => {
-      if (result && result.roomId) {
+
+      if(result && result.unlinking){
+        this.editRoom(result.room.id, result.room, result.room.medicalCenterId);
+      }else if (result && !result.unlinking) {
         this.assignDevice(result.roomId, result.deviceId);
       }
     });
   }
 
-  // openAssignDeviceRegisterDialog(): void {
-  //   const dialogRef = this.dialog.open(AssignRoomDeviceFormComponent, {
-  //     width: '50%',
-  //   });
-  // }
 
   openRoomEditDialog(room: Room): void {
     const dialogRef = this.dialog.open(RoomFormComponent, {
@@ -231,11 +211,18 @@ export class RoomsPage implements OnInit, OnDestroy {
     });
   }
 
-  showRoomStats(id: number): void {
+  showRoomStats(room: Room): void {
     const dialogRef = this.dialog.open(RoomStatsVisualComponent, {
       width: '80%',
-      data: id,
+      data: room,
     });
+  }
+
+  hasDevices(room: Room): boolean {
+    if (room && room.device?.deviceId) {
+      return true;
+    }
+    return false;
   }
 
   private checkStatusRequest(successMessage: string, errorMessage: string) {
