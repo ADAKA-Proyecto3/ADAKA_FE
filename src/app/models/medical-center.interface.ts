@@ -9,4 +9,5 @@ email: string;
 latitude: number;
 longitude: number;
 rooms?: Room[];
+showPublic?: number;
 }

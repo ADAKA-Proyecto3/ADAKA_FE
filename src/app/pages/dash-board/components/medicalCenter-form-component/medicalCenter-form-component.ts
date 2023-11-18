@@ -9,6 +9,11 @@ interface SelectOption {
   viewValue: string;
 }
 
+interface SelectOptionPublic {
+  value: number;
+  viewValue: string;
+}
+
 @Component({
   selector: 'app-medicalCenter-form-component',
   templateUrl: './medicalCenter-form-component.html',
@@ -22,6 +27,11 @@ export class MedicalCenterFormComponent implements OnInit {
   status: SelectOption[] = [
     { value: 'ACTIVE', viewValue: 'Activo' },
     { value: 'INACTIVE', viewValue: 'Inactivo' },
+  ];
+
+  publico: SelectOptionPublic[] = [
+    { value: 1, viewValue: 'Público' },
+    { value: 2, viewValue: 'Privado' },
   ];
 
   editing = false;
@@ -44,6 +54,7 @@ export class MedicalCenterFormComponent implements OnInit {
         Validators.email, // Validación de correo electrónico
       ]),
       status: new FormControl('', [Validators.required]),
+      showPublic: new FormControl('', [Validators.required]),
       direction: new FormControl('', [Validators.required]),
       latitude: new FormControl('', [
         Validators.required,
@@ -54,9 +65,10 @@ export class MedicalCenterFormComponent implements OnInit {
         this.coordinateValidator(), // Validación personalizada para coordenadas
       ]),
     });
+
     if (this.medicalCenter) {
       this.editing = true;
-
+        console.log(this.medicalCenter)
       this.registerForm.patchValue({
         name: this.medicalCenter.name || '',
         direction: this.medicalCenter.direction || '',
@@ -64,8 +76,10 @@ export class MedicalCenterFormComponent implements OnInit {
         status: this.medicalCenter.status || '',
         latitude: this.medicalCenter.latitude || '',
         longitude: this.medicalCenter.longitude || '',
+        showPublic: this.medicalCenter.showPublic || '',
       });
     }
+
   }
 
   onSubmit() {
@@ -80,6 +94,7 @@ export class MedicalCenterFormComponent implements OnInit {
       status: this.registerForm.value.status,
       latitude: this.registerForm.value.latitude,
       longitude: this.registerForm.value.longitude,
+      showPublic: this.registerForm.value.showPublic,
     };
 
     if (this.editing) {

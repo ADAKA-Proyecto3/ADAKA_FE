@@ -16,10 +16,14 @@ import {
   loadMedicalCenterForSubUser,
   loadMedicalCenterForSubUserFailure,
   loadMedicalCenterForSubUserSuccess,
+  updateMedicalCenterState,
+  updateMedicalCenterStateSucess,
+  updateMedicalCenterStateFailure,
 } from '../actions/medicalCenter.actions';
 import { of, from } from 'rxjs';
 import { switchMap, map, catchError, mergeMap } from 'rxjs/operators';
 import { MedicalCenterHttpService } from 'src/app/services/http-service/medicalCenter-http.service';
+import { MedicalCenter } from 'src/app/models/medical-center.interface';
 
 
 @Injectable()
@@ -95,6 +99,18 @@ export class MedicalCenterEffects {
       )
     )
   );
+
+  updateMedicalCenterState$ = createEffect(() =>
+  this.actions$.pipe(
+    ofType(updateMedicalCenterState),
+    mergeMap((action) =>
+      this.medicalService.editStatusMedicalCenter(action.id, action.state).pipe(
+        map((response) => updateMedicalCenterStateSucess({ content: response as MedicalCenter })),
+        catchError((error) => of(updateMedicalCenterStateFailure({ error })))
+      )
+    )
+  )
+);
 
   registerMedicalCenter$ = createEffect(() =>
   this.actions$.pipe(

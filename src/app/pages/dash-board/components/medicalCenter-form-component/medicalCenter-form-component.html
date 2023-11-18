@@ -67,6 +67,19 @@
             </mat-error>
         </mat-form-field>
 
+
+        <mat-form-field appearance="outline" class="pt-3">
+            <mat-label>Datos público</mat-label>
+            <mat-select formControlName="showPublic">
+                <mat-option *ngFor="let public of publico" [value]="public.value">
+                    {{public.viewValue}}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="error('status','required')">
+                Aceptar los datos públicos de centro médico es <strong>requerido</strong>
+            </mat-error>
+        </mat-form-field>
+
         <div class="d-flex justify-content-between">
 
             <button type="button" mat-raised-button color="warn" class="btn_login mt-3" (click)="closeDialog()">
