@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { MapPage } from './map.page';
 import { MapPageRoutingModule } from './map-page-routing.module';
 import { NavbarModule } from 'src/app/components/navbar/navbar.module';
@@ -14,7 +14,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 @NgModule({
   declarations: [ MapPage ],
   imports: [
-    CommonModule,
+    NgClass,
     MapPageRoutingModule,
     NavbarModule,
     FooterComponent,
