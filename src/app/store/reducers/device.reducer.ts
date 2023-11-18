@@ -3,7 +3,6 @@ import {
   loadDevicesFailure,
   loadDevices,
   loadDevicesSuccess,
-
   addDeviceFailure,
   addDeviceSuccess,
   addDevice,

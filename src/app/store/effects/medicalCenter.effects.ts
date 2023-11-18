@@ -30,19 +30,14 @@ export class MedicalCenterEffects {
     private medicalService: MedicalCenterHttpService
   ) {}
 
-  // Run this code when a loadTodos action is dispatched
   loadMedicalCenter$ = createEffect(() =>
     this.actions$.pipe(
       ofType(loadMedicalCenter),
       switchMap((action) =>
-
-        // Call the get method, convert it to an observable
         from(this.medicalService.getMedicalCenters(action.id)).pipe(
-          // Take the returned value and return a new success action containing the todos
           map((medicalCenter) =>
             loadMedicalCenterSuccess({ medicalCenter: medicalCenter })
           ),
-          // Or... if it errors return a new failure action containing the error
           catchError((error) => of(loadMedicalCenterFailure({ error })))
         )
       )
@@ -53,14 +48,10 @@ export class MedicalCenterEffects {
   this.actions$.pipe(
     ofType(loadMedicalCenterForSubUser),
     switchMap((action) =>
-
-      // Call the get method, convert it to an observable
       from(this.medicalService.getAssignedMedicalCenterForSubUser(action.id)).pipe(
-        // Take the returned value and return a new success action containing the todos
         map((medicalCenter) =>
           loadMedicalCenterForSubUserSuccess({ medicalCenter: medicalCenter })
         ),
-        // Or... if it errors return a new failure action containing the error
         catchError((error) => of(loadMedicalCenterForSubUserFailure({ error })))
       )
     )

@@ -80,20 +80,6 @@ export const loadRoomsFailure = createAction(
   props<{ error: any }>()
 );
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 export const loadRoomsByMedicalCenter = createAction(
   '[Room Page] Load Rooms ByMedicalCenter',
   props<{ id: number }>()

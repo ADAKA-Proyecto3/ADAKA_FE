@@ -1,10 +1,8 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Store } from '@ngrx/store';
 import * as L from 'leaflet';
-import { Map, circle, marker, tileLayer } from 'leaflet';
-import { filter, take } from 'rxjs';
 import { MapInfo } from 'src/app/models/map-info.interface';
 import { MapInfoHttpService } from 'src/app/services/http-service/mapInfo-http.service';
 import { AppState } from 'src/app/store/app.state';
@@ -33,7 +31,6 @@ export class MapPage {
   };
 
   constructor(
-    private store: Store<AppState>,
     private mapInfoService: MapInfoHttpService
   ) {}
 

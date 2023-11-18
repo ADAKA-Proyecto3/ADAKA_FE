@@ -17,22 +17,6 @@ export const addDeviceFailure = createAction(
   props<{ error: any }>()
 );
 
-//Updating device
-// export const updateDevice = createAction(
-//   '[Device Page] Update Device',
-//   props<{ id: number; content: Device }>()
-// );
-
-// export const updateDeviceSuccess = createAction(
-//   '[Device Page] Update Device Success',
-//   props<{ id: number; content: Device  }>()
-// );
-
-// export const updateDeviceFailure = createAction(
-//   '[Device Page] Update device Failure',
-//   props<{ error: any }>()
-// );
-
 //Deleting device
 export const removeDevice = createAction(
   '[Device Page] Remove device',
@@ -48,7 +32,6 @@ export const removeDeviceFailure = createAction(
   '[Device Page] Remove device Failure',
   props<{ error: any }>()
 );
-
 
 //Loading devices
 export const loadDevices = createAction(

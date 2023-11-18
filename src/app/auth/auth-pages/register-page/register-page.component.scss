@@ -1,6 +1,5 @@
 
 .top-decoration{
-  //clip-path: circle(63.3% at 28% 21%);
   clip-path: polygon(0% 0%, 61% 0, 77% 47%, 47% 78%, 0 72%);
 
   width: 10.75rem;
@@ -10,7 +9,6 @@
 .form-container{
   border-radius: 5px;
   width: 80%;
-  //padding: 3.125rem ;
 }
 
 .field-full-width {
@@ -19,8 +17,6 @@
 }
 
 .btn_login {
-  //min-width: 400px;
-  //max-width: 450px;
   width: 60%;
   padding: 25px;
 }
@@ -61,19 +57,16 @@
 //PLANS
 .top-decoration-basic{
   background-color: #05c7f2;
-  //clip-path: polygon(0 0, 100% 0%, 100% 8%, 0 8%);
   height: 0.5rem;
 }
 
 .top-decoration-pro{
   background-color: #049DD9;
-  //clip-path: polygon(0 0, 100% 0%, 100% 8%, 0 8%);
   height: 0.5rem;
 }
 
 .top-decoration-enterprice{
   background-color: #042959;
-  //clip-path: polygon(0 0, 100% 0%, 100% 8%, 0 8%);
   height: 0.5rem;
 }
 

@@ -8,9 +8,6 @@ import {
   addRoomFailure,
   addRoomSuccess,
   loadRooms,
-  loadRoomsByMedicalCenter,
-  loadRoomsByMedicalCenterFailure,
-  loadRoomsByMedicalCenterSuccess,
   loadRoomsFailure,
   loadRoomsSuccess,
   removeRoom,
@@ -44,21 +41,6 @@ export class RoomEffects {
       )
     )
   );
-
-  // loadRoomsByMedicalCenter$ = createEffect(() =>
-  //   this.actions$.pipe(
-  //     ofType(loadRoomsByMedicalCenter),
-  //     switchMap((action) =>
-
-  //       from(this.roomService.getRoomsByMedicalCenter(action.id)).pipe(
-
-  //         map((room) => loadRoomsByMedicalCenterSuccess({ rooms: room })),
-
-  //         catchError((error) => of(loadRoomsByMedicalCenterFailure({ error })))
-  //       )
-  //     )
-  //   )
-  // );
 
   deleteRoom$ = createEffect(() =>
     this.actions$.pipe(

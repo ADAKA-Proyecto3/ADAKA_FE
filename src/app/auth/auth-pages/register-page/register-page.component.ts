@@ -68,7 +68,6 @@ export class RegisterPage implements OnInit {
     private readonly router: Router,
     private readonly crHttpService: CRHttpService,
     private _formBuilder: FormBuilder,
-
     private dialogService: DialogService
   ) {}
 
@@ -119,7 +118,7 @@ export class RegisterPage implements OnInit {
   }
 
   digitsOnly(control: AbstractControl): { [key: string]: any } | null {
-    const isValid = /^\d+$/.test(control.value); // This regular expression checks if the input contains only digits
+    const isValid = /^\d+$/.test(control.value); 
   
     return isValid ? null : { digitsOnly: true };
   }
