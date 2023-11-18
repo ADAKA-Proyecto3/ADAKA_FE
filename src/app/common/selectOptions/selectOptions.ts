@@ -11,3 +11,8 @@ export const roleOptions: SelectOption[] = [
     { value: 'INACTIVE', viewValue: 'Inactivo' },
     { value: 'FREEZE', viewValue: 'Expirado' }
   ];
+
+  export const publicOptions: SelectOption[] = [
+    { value: 1, viewValue: 'Público' },
+    { value: 2, viewValue: 'Privado' }
+  ];

@@ -32,6 +32,22 @@ export const updateMedicalCenterFailure = createAction(
   props<{ error: any }>()
 );
 
+//Updating Medical Center State
+export const updateMedicalCenterState = createAction(
+  '[Medical Center Page] Update Medical Center State',
+  props<{ id: number; state: string }>()
+);
+
+export const updateMedicalCenterStateSucess = createAction(
+  '[Medical Center Page] Update Medical Center State Success',
+  props<{ content: MedicalCenter }>()
+);
+
+export const updateMedicalCenterStateFailure = createAction(
+  '[Medical Center Page] Update Medical Center State Failure',
+  props<{ error: any }>()
+);
+
 //Deleting Medical Center
 export const removeMedicalCenter = createAction(
   '[Medical Center Page] Remove Medical Center',

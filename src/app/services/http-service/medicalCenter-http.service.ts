@@ -114,13 +114,11 @@ export class MedicalCenterHttpService {
   editMedicalCenter(id: number, medicalCenter: MedicalCenter) {
     this.loader.showLoadingModal();
     DebugerService.log("Entro al editar");
-    console.log(medicalCenter);
     return this.httpClient
       .put(`${this.url}/changeMedical/${id}`, medicalCenter, Utils.getHttpHeaders())
       .pipe(
         map((resp: any) => {
           this.loader.dismiss();
-          console.log('resp', resp);
   
           const response: Response<MedicalCenter> = {
             title: resp.title,
@@ -141,7 +139,7 @@ export class MedicalCenterHttpService {
     DebugerService.log("Entro al editar");
     console.log(status);
     return this.httpClient
-      .put(`${this.url}/changeMedical/${id}/${status}`, Utils.getHttpHeaders())
+      .put(`${this.url}/changeMedicalStatus/${id}/${status}`, Utils.getHttpHeaders())
       .pipe(
         map((resp: any) => {
           this.loader.dismiss();
@@ -152,7 +150,7 @@ export class MedicalCenterHttpService {
             data: resp.data, 
           };
 
-          return response;
+          return response.data[0];
         }),
         catchError((error) => {
           console.log(error);

@@ -10,7 +10,12 @@ import {
   loadMedicalCenter,
   removeMedicalCenter,
   updateMedicalCenter,
+  updateMedicalCenterState,
 } from '../../../store/actions/medicalCenter.actions';
+import {
+  publicOptions,
+  statusOptions,
+} from 'src/app/common/selectOptions/selectOptions';
 import { MedicalCenterFormComponent } from '../components/medicalCenter-form-component/medicalCenter-form-component';
 import { DebugerService } from '../../../services/debug-service/debug.service';
 import { medicalCenterStatusAndError } from 'src/app/store/selectors/medicalCenter.selector';
@@ -35,17 +40,17 @@ export class MedicalCentersPage implements OnInit, OnDestroy {
     private store: Store<AppState>,
     private dialog: MatDialog,
     private readonly dialogService: DialogService,
-    private readonly auth: AuthService,
     private readonly pageRouter: PageRouterService
   ) {}
-  
+
   displayedColumns: string[] = [
     'name',
     'email',
-    'status',
     'direction',
     'latitude',
     'longitude',
+    'status',
+    'showPublic',
     'actions',
   ];
   dataSource = new MatTableDataSource<MedicalCenter>();
@@ -61,9 +66,10 @@ export class MedicalCentersPage implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-   this.activeUserSuscription = this.store
+    this.activeUserSuscription = this.store
       .select((state) => state.user.activeUser)
       .subscribe((user) => {
+        this.activeUser = user;
         this.idAdmin = user.id;
         this.store.dispatch(loadMedicalCenter({ id: this.idAdmin }));
         this.loadMedicalCenterTable();
@@ -75,18 +81,67 @@ export class MedicalCentersPage implements OnInit, OnDestroy {
     this.medicalCenterSuscription.unsubscribe();
   }
 
-
   loadMedicalCenterTable(): void {
-    this.medicalCenterSuscription = this.store.select('medicalCenters').subscribe(({ medicalCenters }) => {
-      this.dataSource.data = medicalCenters;
-    });
+    this.medicalCenterSuscription = this.store
+      .select('medicalCenters')
+      .subscribe(({ medicalCenters }) => {
+        this.dataSource.data = medicalCenters;
+      });
     this.dataSource.paginator = this.paginator;
   }
 
-  //CRUD
   registerMedicalCenter(id: number, medicalCenter: MedicalCenter) {
-    this.store.dispatch(addMedicalCenter({ id: id, content: medicalCenter }));
-    this.checkStatusRequest('Centro médico registrado con éxito');
+    const fechaActual = new Date();
+
+    const formatoFecha = `${fechaActual.getDate()}/${
+      fechaActual.getMonth() + 1
+    }/${fechaActual.getFullYear()}`;
+
+    if (medicalCenter.showPublic == 1) {
+      Swal.fire({
+        title: 'Términos y Condiciones',
+        html: `
+            <p>Estimado/a ${this.activeUser.name} ,</p>
+            <p>Para mejorar la transparencia y contribuir al avance de la atención médica, solicitamos su consentimiento para la publicación pública de sus datos de mediciones en la aplicación de [Nombre de la Aplicación].</p>
+            <p><strong>¿Consiente la publicación pública de sus datos de mediciones en la aplicación?</strong></p>
+              <br>
+            <p>Entendemos la sensibilidad de esta información y garantizamos su privacidad al máximo. La publicación se realizará de manera anónima y agregada, sin revelar su identidad.</p>
+            <p>Fecha: ${formatoFecha}</p>
+            <p>Gracias por contribuir a la mejora continua de nuestros servicios y a la comunidad médica en general.</p>
+            <p>Atentamente,</p>
+            <p>ADAKA<br/>ZhenAir</p>
+        `,
+        showCloseButton: true,
+        showCancelButton: true,
+        focusConfirm: false,
+        confirmButtonText: 'Aceptar',
+        confirmButtonAriaLabel: 'Aceptar',
+        cancelButtonText: 'No aceptar',
+        cancelButtonAriaLabel: 'No aceptar',
+        customClass: {
+          closeButton: 'modal-close-button',
+          confirmButton: 'modal-confirm-button',
+          cancelButton: 'modal-cancel-button',
+        },
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.store.dispatch(
+            addMedicalCenter({ id: id, content: medicalCenter })
+          );
+        } else if (!result.isConfirmed) {
+          medicalCenter.showPublic = 2;
+          this.store.dispatch(
+            addMedicalCenter({ id: id, content: medicalCenter })
+          );
+        }
+        this.checkStatusRequest('Centro médico registrado con éxito');
+      });
+    }else{
+      this.store.dispatch(
+        addMedicalCenter({ id: id, content: medicalCenter })
+      );
+      this.checkStatusRequest('Centro médico registrado con éxito');
+    }
   }
 
   editMedicalCenter(id: number, medicalCenter: MedicalCenter) {
@@ -111,12 +166,9 @@ export class MedicalCentersPage implements OnInit, OnDestroy {
     }
 
     this.store.dispatch(
-      updateMedicalCenter({
+      updateMedicalCenterState({
         id: medicalCenter.id!,
-        content: {
-          ...medicalCenter,
-          status: 'INACTIVE',
-        },
+        state: 'INACTIVE',
       })
     );
     this.checkStatusRequest('Centro médico desactivado correctamente');
@@ -187,6 +239,20 @@ export class MedicalCentersPage implements OnInit, OnDestroy {
       });
   }
 
+
+  returnStatusViewValue(status: string) {
+    const viewValue = statusOptions.find(
+      (option) => option.value === status
+    )?.viewValue;
+    return viewValue;
+  }
+
+  returnShowPublicViewValue(show: number) {
+    const viewValue = publicOptions.find(
+      (option) => option.value === show
+    )?.viewValue;
+    return viewValue;
+  }
 
   goToMain() {
     this.pageRouter.route(`${UrlPages.DASHBOARD}/${UrlPages.MAIN}`);
