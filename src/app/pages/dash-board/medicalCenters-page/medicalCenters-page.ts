@@ -1,10 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import {  Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/app.state';
@@ -96,11 +90,9 @@ export class MedicalCentersPage implements OnInit, OnDestroy {
     this.dataSource.paginator = this.paginator;
   }
 
-  //CRUD
   registerMedicalCenter(id: number, medicalCenter: MedicalCenter) {
     const fechaActual = new Date();
 
-    // Formatear la fecha como DD/MM/AAAA (puedes ajustar el formato según tus necesidades)
     const formatoFecha = `${fechaActual.getDate()}/${
       fechaActual.getMonth() + 1
     }/${fechaActual.getFullYear()}`;

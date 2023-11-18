@@ -4,9 +4,6 @@ import { RoomState, roomReducer } from "./reducers/room.reducer";
 import { DeviceState, deviceReducer } from "./reducers/device.reducer";
 import { MedicalCenterState, medicalCenterReducer } from "./reducers/medicalCenter.reducer";
 import { ActiveUserState, activeUserReducer } from "./reducers/activeUser.reducer";
-//import { EmailState, sendEmailReducer } from "./reducers/sendEmail.reducer";
-
-
 export interface AppState {
 [x: string]: any;
 //Import all your reducers here

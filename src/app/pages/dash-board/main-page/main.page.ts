@@ -3,7 +3,6 @@ import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/services/auth.service';
 import { UrlPages } from 'src/app/common/enums/url-pages.enum';
-import { UserRoles } from 'src/app/common/enums/user-roles.enum';
 import { PageRouterService } from 'src/app/services/page-router-service/page-router.service';
 import { AppState } from 'src/app/store/app.state';
 

@@ -2,7 +2,7 @@ import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { Store, select, on } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { Device } from 'src/app/models/devices.interface';
 import { AppState } from 'src/app/store/app.state';
 import { DeviceFormComponent } from '../components/device-form-component/device-form-component';
@@ -14,11 +14,8 @@ import { ActionStatus } from 'src/app/common/enums/action-status.enum';
 import { DialogService } from 'src/app/services/dialog-service/dialog.service';
 import { Utils } from 'src/app/common/utils/app-util';
 import Swal from 'sweetalert2';
-import { Observable } from 'rxjs';
-
 import { UrlPages } from 'src/app/common/enums/url-pages.enum';
 import { PageRouterService } from 'src/app/services/page-router-service/page-router.service';
-import { Suscription } from 'src/app/models/suscription.interface';
 
 @Component({
   selector: 'app-devices-page',

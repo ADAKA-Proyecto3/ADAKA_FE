@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/app.state';
 import { PageRouterService } from 'src/app/services/page-router-service/page-router.service';
 import { Subscription } from 'rxjs';
+import { DebugerService } from 'src/app/services/debug-service/debug.service';
 
 @Component({
   selector: 'app-layout-page',
@@ -67,7 +68,8 @@ export class LayoutPage implements OnInit, OnDestroy {
  
 
   ngOnInit(): void {
-    if (this.activeUser === '' || this.activeUser === undefined) {
+    DebugerService.log('Layout Page Init');
+    if (this.activeUser === '' || this.activeUser === undefined) { //! Este tiene un problema
       this.authService.checkSignedInUser();
     }
 

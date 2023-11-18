@@ -96,15 +96,10 @@ export class AssignRoomDeviceFormComponent implements OnInit, OnDestroy {
   }
 
   unlinkDevice() {
-    const existingRoom = this.room as Room;
-    const { device, ...roomWithOutDevice } = existingRoom;
-    // existingRoom.device = null;
-    // this.matDialogRef.close({
-    //   room: existingRoom,
-    //   unlinking: true,
-    //});
-
-    // Rest of the code...
+    this.matDialogRef.close({
+      roomId: this.room?.id,
+      unlinking: true,
+    });
   }
 
   closeDialog() {

@@ -9,7 +9,7 @@ import {
 import { Store } from '@ngrx/store';
 import { Subscription, filter, take } from 'rxjs';
 import { User } from 'src/app/models/user.interface';
-import { loadActiveUser, loadActiveUserSuccess, updateActiveUser } from 'src/app/store/actions/activeUser.actions';
+import { loadActiveUserSuccess, updateActiveUser } from 'src/app/store/actions/activeUser.actions';
 import { AppState } from 'src/app/store/app.state';
 import { UserHttpService } from 'src/app/services/http-service/user-http.service';
 import { DebugerService } from 'src/app/services/debug-service/debug.service';

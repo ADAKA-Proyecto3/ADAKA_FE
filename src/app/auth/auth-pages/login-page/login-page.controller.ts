@@ -5,7 +5,6 @@ import { DebugerService } from 'src/app/services/debug-service/debug.service';
 import { Utils } from 'src/app/common/utils/app-util';
 import { Store, select } from '@ngrx/store';
 import { AppState } from 'src/app/store/app.state';
-import { loadActiveUser } from 'src/app/store/actions/activeUser.actions';
 import { PageRouterService } from 'src/app/services/page-router-service/page-router.service';
 import { UrlPages } from 'src/app/common/enums/url-pages.enum';
 import { Subscription } from 'rxjs';

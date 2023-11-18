@@ -27,16 +27,12 @@ export class UserEffects {
     private userService: UserHttpService
   ) {}
 
-  // Run this code when a loadTodos action is dispatched
   loadUsers$ = createEffect(() =>
     this.actions$.pipe(
       ofType(loadUsers),
       switchMap((action) =>
-        // Call the get method, convert it to an observable
         from(this.userService.getUsers(action.id)).pipe(
-          // Take the returned value and return a new success action containing the todos
           map((users) => loadUsersSuccess({ users: users })),
-          // Or... if it errors return a new failure action containing the error
           catchError((error) => of(loadUsersFailure({ error })))
         )
       )

@@ -28,7 +28,6 @@ export class PasswordRecoveryPage implements OnInit{
   }
   
   ngOnInit(): void {
-    // Puedes eliminar esta línea ya que ya estás inicializando el formulario en el constructor
   }
 
   public returnToLogin(): void {

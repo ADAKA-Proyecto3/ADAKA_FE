@@ -4,7 +4,6 @@ import {
   FormGroupDirective,
   NgForm,
   ValidatorFn,
-  Validators,
 } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { InputProps } from 'src/app/common/interfaces/input.interface';
@@ -33,12 +32,6 @@ export class InputComponent  {
     ...this.customValidators ,
   ]);
 
-    // emailFormControl = new FormControl('', [
-    //  Validators.required,
-    //  Validators.email,
-   
-    // ]);
-  
     matcher = new MyErrorStateMatcher();
 
 }

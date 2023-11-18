@@ -29,11 +29,8 @@ export class DeviceEffects {
     this.actions$.pipe(
       ofType(loadDevices),
       switchMap((action) =>
-        // Call the get method, convert it to an observable
         from(this.deviceService.getDevices(action.adminId)).pipe( 
-          // Take the returned value and return a new success action containing all devices
           map((Devices) => loadDevicesSuccess({ devices: Devices })),
-          // Or... if it errors return a new failure action containing the error
           catchError((error) => of(loadDevicesFailure({ error })))
           
         )
