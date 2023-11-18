@@ -60,6 +60,7 @@ export class RoomsPage implements OnInit, OnDestroy {
   ) {}
 
   ngOnDestroy(): void {
+    console.log('ngOnDestroy');
     this.activeUserSuscription.unsubscribe();
     this.roomsSuscription.unsubscribe();
   }
@@ -131,9 +132,9 @@ export class RoomsPage implements OnInit, OnDestroy {
   }
 
   editRoom(id: number, room: Room, newMedicalCenterId: number) {
-    this.store.dispatch( updateRoom({ id: id, medicalCenterId: newMedicalCenterId, content: room })    );
+    this.store.dispatch(updateRoom({ id: id, medicalCenterId: newMedicalCenterId, content: room })    );
     this.checkStatusRequest(
-      'Sala actualizado con éxito',
+      'Sala actualizada con éxito',
       'Ha sucedido un error, por favor intente de nuevo'
     );
   }
@@ -218,7 +219,7 @@ export class RoomsPage implements OnInit, OnDestroy {
 
   showRoomStats(room: Room): void {
     const dialogRef = this.dialog.open(RoomStatsVisualComponent, {
-      width: '80%',
+      width: '90%',
       data: room,
     });
   }

@@ -118,6 +118,7 @@ export const roomReducer = createReducer(
 
   on(updateRoomSucess, (state, { id, content }) => ({
     ...state,
+    status: ActionStatus.SUCCESS,
     rooms: state.rooms.map((room) => {
       if (room.id === id) {
         return {
