@@ -14,9 +14,11 @@ import { RoomsPage } from './rooms-page';
 import { RoomsPageRoutingModule } from './rooms-page-routing.module';
 import { RoomFormModule } from '../components/room-form-component/room-form.module';
 import { MatSelectModule } from '@angular/material/select';
-import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+
 
 import { ReactiveFormsModule } from '@angular/forms';
+import { RoomStatsVisualComponentModule } from '../components/room-stats-visual-component/room-stats-visual-component.module';
+import { AssignRoomDeviceModule } from '../components/assign-room-device-component/assign-room-device.module';
 
 
 
@@ -36,8 +38,10 @@ import { ReactiveFormsModule } from '@angular/forms';
     RoomFormModule,
     MatTooltipModule,
     MatSelectModule,
-    NgxSkeletonLoaderModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RoomStatsVisualComponentModule,
+    AssignRoomDeviceModule
+    
 
   ],
   providers: [{ provide: MatPaginatorIntl, useValue: getSpanishPaginatorIntl() }],

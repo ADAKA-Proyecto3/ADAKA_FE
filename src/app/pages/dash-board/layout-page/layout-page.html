@@ -5,12 +5,21 @@
         <mat-toolbar class="">
             <span>Menu</span>
             <span class="spacer"></span>
-            <button mat-icon-button (click)="sidenav.toggle()"><mat-icon>close</mat-icon></button>
+            <button mat-icon-button (click)="sidenav.toggle()" >
+                <mat-icon>close</mat-icon>
+            </button>
 
         </mat-toolbar>
 
-        <mat-nav-list>
-            <mat-list-item *ngFor=" let item of sideBarItems" [routerLink]="item?.url" (click)="sidenav.toggle()">
+        <mat-nav-list *ngIf="checkAdmin()">
+            <mat-list-item *ngFor=" let item of adminSideBarItems" (click)="routeToLink(item!.url)" (click)="sidenav.toggle()">
+                <mat-icon matListItemIcon>{{item?.icon}}</mat-icon>
+                {{item?.label}}
+            </mat-list-item>
+        </mat-nav-list>
+
+        <mat-nav-list *ngIf="!checkAdmin()">
+            <mat-list-item *ngFor=" let item of userSideBarItems" (click)="routeToLink(item!.url)" (click)="sidenav.toggle()">
                 <mat-icon matListItemIcon>{{item?.icon}}</mat-icon>
                 {{item?.label}}
             </mat-list-item>
@@ -20,14 +29,20 @@
 
     <mat-toolbar class="ms-2 ">
 
-        <button mat-icon-button (click)="sidenav.toggle()"><mat-icon>menu</mat-icon></button>
+        <button mat-icon-button (click)="sidenav.toggle()" [disabled]="expiredPassword">
+            <mat-icon>menu</mat-icon>
+        </button>
 
-        <img src="/assets/logos/ZhenAir.png" width="200px">
+        <img src="/assets/logos/ZhenAir.png" width="200px" style="margin-top: 20px;" class="cursor-pointer" (click)="goToMain()" >
+
+        <button class="ms-5" mat-button matTooltip="Administrar mi perfil" (click)="manageProfile()" disabled>
+            <mat-icon>work</mat-icon> <strong>Workspace:</strong>   San Juan de Dios 
+        </button>
 
         <span class="spacer"></span>
 
         <button class="me-4" mat-button matTooltip="Administrar mi perfil" (click)="manageProfile()">
-            <mat-icon>account_circle</mat-icon>  {{activeUser}}
+            <mat-icon>account_circle</mat-icon>  {{activeUser.name}}
         </button>
 
         <button class="me-2" mat-button matTooltip="Cerrar Sesión" (click)="onLogout()">

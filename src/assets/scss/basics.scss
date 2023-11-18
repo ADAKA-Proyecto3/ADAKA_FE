@@ -3,8 +3,6 @@
   margin-bottom: 10px;
 }
 
-
-
 .spacer {
   flex: 1 1 auto;
 }
@@ -68,3 +66,21 @@
   width: 79.02px;
   height: 81.118px;
 }
+
+.vertical-align-middle {
+  vertical-align: middle;
+}
+.bread_link{
+  color: #938b8b;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.active_bread_link{
+  color: #938b8b;
+  border-bottom: 3px dotted #049DD9; 
+    display: inline; 
+  
+}
+
+

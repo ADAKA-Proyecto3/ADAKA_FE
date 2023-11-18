@@ -68,25 +68,19 @@
             </mat-error>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="pt-3">
+        <mat-form-field appearance="outline" class="pt-3" *ngIf="editing">
             <mat-label>Estado</mat-label>
             <mat-select formControlName="status">
                 <mat-option *ngFor="let state of status" [value]="state.value">
                     {{state.viewValue}}
                 </mat-option>
             </mat-select>
-            <mat-error *ngIf="error('status','required')">
+            <!-- <mat-error *ngIf="error('status','required')">
                 Estado de usuario es <strong>requerido</strong>
-            </mat-error>
+            </mat-error> -->
         </mat-form-field>
 
-        <!-- <mat-form-field appearance="outline" class="field-full-width pt-3">
-            <mat-label>Contraseña</mat-label>
-            <input type="password" matInput formControlName="password" placeholder="*********"> 
-            <mat-error *ngIf="error('password','required')">
-                La contraseña es <strong>requerida</strong>
-            </mat-error>
-        </mat-form-field> -->
+
         <div class="d-flex justify-content-between">
 
             <button type="button" mat-raised-button color="warn" class="btn_login mt-3" (click)="closeDialog()">

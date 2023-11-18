@@ -1,99 +1,33 @@
-import { Component, ViewChild, OnInit, AfterViewInit } from '@angular/core';
-import { Chart } from 'chart.js/auto';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Store } from '@ngrx/store';
 import { EChartsOption } from 'echarts/types/dist/echarts';
-import * as Highcharts from 'highcharts';
-import HC_exporting from 'highcharts/modules/exporting';
-import { SensorName } from 'src/app/common/enums/sensor-name.enum';
-HC_exporting(Highcharts);
-//import * as echarts from 'echarts';
+import { SelectOption } from 'src/app/common/interfaces/option.interface';
+import { Room } from 'src/app/models/rooms.interface';
+import { LoadingService } from 'src/app/services/loading-service/loading.service';
+import { loadRooms } from 'src/app/store/actions/room.actions';
+import { AppState } from 'src/app/store/app.state';
+import { Subscription } from 'rxjs';
+import { PageRouterService } from 'src/app/services/page-router-service/page-router.service';
+import { UrlPages } from 'src/app/common/enums/url-pages.enum';
 
-interface SensorReading {
-  sensor_name: string;
-  unit?: string;
-  value?: number;
-  lower_limit: number;
-  upper_limit: number;
-  tolerance?: number;
-}
+import format from 'date-fns/format';
+import { ZhenAirPageController } from './zhenair-stats-page.controller';
 
 @Component({
   selector: 'app-zhenair-stats',
   templateUrl: './zhenair-stats.page.html',
   styleUrls: ['./zhenair-stats.page.scss'],
 })
-export class ZhenairStatsPage implements OnInit {
-  constructor() {}
+export class ZhenairStatsPage implements OnInit, OnDestroy {
+  constructor(
+    private readonly loadingService: LoadingService,
+    private readonly store: Store<AppState>,
+    private readonly pageRouter: PageRouterService,
+    private readonly zhenairController: ZhenAirPageController
+  ) {}
 
-  //Archivo de configuracion local
-
-  PM25_SensorConfig: SensorReading = {
-    sensor_name: 'PM2.5',
-    unit: 'µg/m³',
-    lower_limit: 0,
-    upper_limit: 200,
-    tolerance:35
-  };
-  PM10_SensorConfig: SensorReading = {
-    sensor_name: 'PM10',
-    unit: 'µg/m³',
-    lower_limit: 0,
-    upper_limit: 400,
-    tolerance:150
-  };
-  CO2_SensorConfig: SensorReading = {
-    sensor_name: 'CO2',
-    unit: 'ppm',
-    lower_limit: 0,
-    upper_limit: 5500,
-    tolerance:2000
-  };
-  Temperature_SensorConfig: SensorReading = {
-    sensor_name: 'Temperatura',
-    unit: '°C',
-    lower_limit: 0,
-    upper_limit: 150,
-  };
-  Humidity_SensorConfig: SensorReading = {
-    sensor_name: 'Humedad',
-    unit: '%',
-    lower_limit: 0,
-    upper_limit: 100,
-  };
-
-  sensorConfigs: SensorReading[] = [
-    {
-      sensor_name: 'PM2.5',
-      unit: 'µg/m³',
-      lower_limit: 0,
-      upper_limit: 200,
-    },
-    {
-      sensor_name: 'PM10',
-      unit: 'µg/m³',
-      lower_limit: 0,
-      upper_limit: 400,
-    },
-    {
-      sensor_name: 'CO2',
-      unit: 'ppm',
-      lower_limit: 0,
-      upper_limit: 5500,
-    },
-    {
-      sensor_name: 'Temperatura',
-      unit: '°C',
-      lower_limit: 0,
-      upper_limit: 150,
-    },
-    {
-      sensor_name: 'Humedad',
-      unit: '%',
-      lower_limit: 0,
-      upper_limit: 100,
-    },
-  ];
-
-  //Data que viene del API
+  public submitForm: FormGroup = {} as FormGroup;
   mockdata = [
     {
       value: 2819,
@@ -126,599 +60,444 @@ export class ZhenairStatsPage implements OnInit {
       sensor_name: 'Humedad',
     },
   ];
+  rooms: Room[] = [];
+  roomOptions: SelectOption[] = [];
+  activeUser: any;
+  x: EChartsOption[] = [];
+  y: EChartsOption = {};
 
-  standardSensorConfig: EChartsOption = {
-    series: [
-      {
-        type: 'gauge',
-        startAngle: 200,
-        endAngle: -20,
-        center: ['50%', '75%'],
-        radius: '90%',
-        min: 0,
-        max: 200,
-        splitNumber: 4,
-        itemStyle: {
-          color: '#FFAB91',
-        },
-        axisLine: {
-          lineStyle: {
-            width: 20,
-            color: [
-              [35 / 200, '#049DD9'],
-
-              [1, '#FF6E76'],
-            ],
-          },
-        },
-
-        pointer: {
-          icon: 'path://M12.8,0.7l12,40.1H0.7L12.8,0.7z',
-          length: '12%',
-          width: 20,
-          offsetCenter: [0, '-60%'],
-          itemStyle: {
-            color: 'auto',
-          },
-        },
-        axisTick: {
-          length: 1,
-          lineStyle: {
-            color: 'auto',
-            width: 2,
-          },
-          show: false,
-        },
-        splitLine: {
-          length: 5,
-          lineStyle: {
-            color: 'auto',
-            width: 5,
-          },
-        },
-        axisLabel: {
-          distance: -45,
-          color: '#999',
-          //fontSize: 20,
-        },
-        title: {
-          offsetCenter: [0, '-10%'],
-          fontSize: 20,
-        },
-        detail: {
-          fontSize: 30,
-          offsetCenter: [0, '-15%'],
-          valueAnimation: true,
-          formatter: function (value) {
-            return '{value|' + value.toFixed(0) + '}{unit|µg/m³}';
-          },
-          color: 'inherit',
-          rich: {
-            value: {
-              fontSize: 25,
-              fontWeight: 'bolder',
-              color: '#777',
-            },
-            unit: {
-              // fontSize: 18,
-              color: '#999',
-              padding: [0, 0, -20, 10],
-            },
-          },
-        },
-
-        data: [
-          {
-            value: 35,
-            name: 'PM2.5',
-            title: {
-              offsetCenter: [0, '20%'],
-              fontSize: 20,
-            },
-          },
-        ],
-      },
-    ],
-  };
-  temperatureSensorConfig: EChartsOption = {
-    series: [
-      {
-        type: 'gauge',
-        center: ['50%', '75%'],
-        startAngle: 200,
-        endAngle: -20,
-        min: 0,
-        max: 60,
-        splitNumber: 12,
-        itemStyle: {
-          color: '#042959',
-        },
-        progress: {
-          show: true,
-          width: 30,
-        },
-        pointer: {
-          show: false,
-        },
-        axisLine: {
-          lineStyle: {
-            width: 30,
-          },
-        },
-        axisTick: {
-          distance: -45,
-          splitNumber: 5,
-          lineStyle: {
-            width: 2,
-            color: '#999',
-          },
-        },
-        splitLine: {
-          distance: -52,
-          length: 14,
-          lineStyle: {
-            width: 3,
-            color: '#999',
-          },
-        },
-        axisLabel: {
-          distance: -20,
-          color: '#999',
-          fontSize: 20,
-        },
-        anchor: {
-          show: false,
-        },
-        title: {
-          show: false,
-        },
-        detail: {
-          valueAnimation: true,
-          width: '60%',
-          lineHeight: 40,
-          borderRadius: 8,
-          offsetCenter: [0, '-15%'],
-          //fontSize: 60,
-          fontWeight: 'bolder',
-          formatter: '{value} °C',
-          color: 'inherit',
-        },
-        data: [
-          {
-            value: 20,
-          },
-        ],
-      },
-    ],
-  };
-
-  x: EChartsOption [] = []
-
-  option: EChartsOption = {
-    series: [
-      {
-        type: 'gauge',
-        startAngle: 200,
-        endAngle: -20,
-        center: ['50%', '75%'],
-        radius: '90%',
-        min: 0,
-        max: 200,
-        splitNumber: 4,
-        itemStyle: {
-          color: '#FFAB91',
-        },
-        axisLine: {
-          lineStyle: {
-            width: 20,
-            color: [
-              [35 / 200, '#049DD9'],
-
-              [1, '#FF6E76'],
-            ],
-          },
-        },
-
-        pointer: {
-          icon: 'path://M12.8,0.7l12,40.1H0.7L12.8,0.7z',
-          length: '12%',
-          width: 20,
-          offsetCenter: [0, '-60%'],
-          itemStyle: {
-            color: 'auto',
-          },
-        },
-        axisTick: {
-          length: 1,
-          lineStyle: {
-            color: 'auto',
-            width: 2,
-          },
-          show: false,
-        },
-        splitLine: {
-          length: 5,
-          lineStyle: {
-            color: 'auto',
-            width: 5,
-          },
-        },
-        axisLabel: {
-          distance: -45,
-          color: '#999',
-          //fontSize: 20,
-        },
-        title: {
-          offsetCenter: [0, '-10%'],
-          fontSize: 20,
-        },
-        detail: {
-          fontSize: 30,
-          offsetCenter: [0, '-15%'],
-          valueAnimation: true,
-          formatter: function (value) {
-            return '{value|' + value.toFixed(0) + '}{unit|µg/m³}';
-          },
-          color: 'inherit',
-          rich: {
-            value: {
-              fontSize: 25,
-              fontWeight: 'bolder',
-              color: '#777',
-            },
-            unit: {
-              // fontSize: 18,
-              color: '#999',
-              padding: [0, 0, -20, 10],
-            },
-          },
-        },
-
-        data: [
-          {
-            value: 35,
-            name: 'PM2.5',
-            title: {
-              offsetCenter: [0, '20%'],
-              fontSize: 20,
-            },
-          },
-        ],
-      },
-    ],
-  };
-
-  temperature: EChartsOption = {
-    series: [
-      {
-        type: 'gauge',
-        center: ['50%', '75%'],
-        startAngle: 200,
-        endAngle: -20,
-        min: 0,
-        max: 60,
-        splitNumber: 12,
-        itemStyle: {
-          color: '#042959',
-        },
-        progress: {
-          show: true,
-          width: 30,
-        },
-        pointer: {
-          show: false,
-        },
-        axisLine: {
-          lineStyle: {
-            width: 30,
-          },
-        },
-        axisTick: {
-          distance: -45,
-          splitNumber: 5,
-          lineStyle: {
-            width: 2,
-            color: '#999',
-          },
-        },
-        splitLine: {
-          distance: -52,
-          length: 14,
-          lineStyle: {
-            width: 3,
-            color: '#999',
-          },
-        },
-        axisLabel: {
-          distance: -20,
-          color: '#999',
-          fontSize: 20,
-        },
-        anchor: {
-          show: false,
-        },
-        title: {
-          show: false,
-        },
-        detail: {
-          valueAnimation: true,
-          width: '60%',
-          lineHeight: 40,
-          borderRadius: 8,
-          offsetCenter: [0, '-15%'],
-          //fontSize: 60,
-          fontWeight: 'bolder',
-          formatter: '{value} °C',
-          color: 'inherit',
-        },
-        data: [
-          {
-            value: 20,
-          },
-        ],
-      },
-      // {
-      //   type: 'gauge',
-      //   center: ['50%', '60%'],
-      //   startAngle: 200,
-      //   endAngle: -20,
-      //   min: 0,
-      //   max: 60,
-      //   itemStyle: {
-      //     color: '#FD7347'
-      //   },
-      //   progress: {
-      //     show: true,
-      //     width: 8
-      //   },
-      //   pointer: {
-      //     show: false
-      //   },
-      //   axisLine: {
-      //     show: false
-      //   },
-      //   axisTick: {
-      //     show: false
-      //   },
-      //   splitLine: {
-      //     show: false
-      //   },
-      //   axisLabel: {
-      //     show: false
-      //   },
-      //   detail: {
-      //     show: false
-      //   },
-      //   data: [
-      //     {
-      //       value: 20
-      //     }
-      //   ]
-      // }
-    ],
-  };
+  testBool: boolean = false;
+  private activeUserSuscription: Subscription = new Subscription();
+  private roomsSuscription: Subscription = new Subscription();
 
   ngOnInit(): void {
-    this.mockdata.forEach((element, index) => {
-      if (element.sensor_name == SensorName.TEMPERATURE) {
-        //this.loadTemperatureConfig(element.value, element.sensor_name);
-      }
-      console.log(element.sensor_name);
-      this.loadAirSensorConfig(element.value, element.sensor_name);
+    this.submitForm = new FormGroup({
+      fromDate: new FormControl('', [Validators.required]),
+      toDate: new FormControl('', [Validators.required]),
+      room: new FormControl('', [Validators.required]),
     });
+
+    this.activeUserSuscription = this.store
+      .select((state) => state.user.activeUser.id)
+      .subscribe((id) => {
+        this.activeUser = id;
+        this.store.dispatch(loadRooms({ id: this.activeUser }));
+        this.loadRoomOptions();
+      });
+
+    // this.y = {
+    //   title: {
+    //     text: '',
+    //   },
+
+    //   tooltip: {
+    //     trigger: 'axis',
+    //   },
+    //   legend: {
+    //     data: ['CO2', 'PM2.5', 'PM10', 'Temperatura', 'Humedad', 'VOC'],
+    //   },
+    //   grid: {
+    //     left: '3%',
+    //     right: '4%',
+    //     bottom: '3%',
+    //     top: '10%',
+    //     containLabel: true,
+    //     z: 0,
+    //   },
+    //   toolbox: {
+    //     feature: {
+    //       saveAsImage: {},
+    //       dataZoom: {
+    //         yAxisIndex: 'none',
+    //       },
+    //     },
+    //   },
+    //   dataZoom: [
+    //     {
+    //       startValue: '2014-06-01',
+    //     },
+    //     {
+    //       type: 'inside',
+    //     },
+    //   ],
+    //   xAxis: {
+    //     type: 'category',
+    //     data: [
+    //       '10-22 00',
+    //       '10-22 01',
+    //       '10-22 02',
+    //       '10-22 03',
+    //       '10-22 04',
+    //       '10-22 05',
+    //       '10-22 06',
+    //       '10-22 07',
+    //       '10-22 08',
+    //       '10-22 09',
+    //       '10-22 10',
+    //       '10-22 11',
+    //       '10-22 12',
+    //       '10-22 13',
+    //       '10-22 14',
+    //       '10-22 15',
+    //       '10-22 16',
+    //       '10-22 17',
+    //       '10-22 18',
+    //       '10-22 19',
+    //       '10-22 20',
+    //       '10-22 21',
+    //       '10-22 22',
+    //       '10-22 23',
+    //       '10-23 00',
+    //       '10-23 01',
+    //       '10-23 02',
+    //       '10-23 03',
+    //       '10-23 04',
+    //       '10-23 05',
+    //       '10-23 06',
+    //       '10-23 07',
+    //       '10-23 08',
+    //       '10-23 09',
+    //       '10-23 10',
+    //       '10-23 11',
+    //       '10-23 12',
+    //       '10-23 13',
+    //       '10-23 14',
+    //       '10-23 15',
+    //       '10-23 16',
+    //       '10-23 17',
+    //       '10-23 18',
+    //       '10-23 19',
+    //       '10-23 20',
+    //       '10-23 21',
+    //       '10-23 22',
+    //       '10-23 23',
+    //       '10-24 00',
+    //       '10-24 01',
+    //       '10-24 02',
+    //       '10-24 03',
+    //       '10-24 04',
+    //       '10-24 05',
+    //       '10-24 06',
+    //       '10-24 07',
+    //       '10-24 08',
+    //       '10-24 09',
+    //       '10-24 10',
+    //       '10-24 11',
+    //       '10-24 12',
+    //       '10-24 13',
+    //       '10-24 14',
+    //       '10-24 15',
+    //       '10-24 16',
+    //       '10-24 17',
+    //       '10-24 18',
+    //       '10-24 19',
+    //       '10-24 20',
+    //       '10-24 21',
+    //       '10-24 22',
+    //       '10-24 23',
+    //       '10-25 00',
+    //       '10-25 01',
+    //       '10-25 02',
+    //       '10-25 03',
+    //       '10-25 04',
+    //       '10-25 05',
+    //       '10-25 06',
+    //       '10-25 07',
+    //       '10-25 08',
+    //       '10-25 09',
+    //       '10-25 10',
+    //       '10-25 11',
+    //       '10-25 12',
+    //       '10-25 13',
+    //       '10-25 14',
+    //       '10-25 15',
+    //       '10-25 16',
+    //       '10-25 17',
+    //       '10-25 18',
+    //       '10-25 19',
+    //       '10-25 20',
+    //       '10-25 21',
+    //       '10-25 22',
+    //       '10-25 23',
+    //       '10-26 00',
+    //       '10-26 01',
+    //       '10-26 02',
+    //       '10-26 03',
+    //       '10-26 04',
+    //       '10-26 05',
+    //       '10-26 06',
+    //       '10-26 07',
+    //       '10-26 08',
+    //       '10-26 09',
+    //       '10-26 10',
+    //       '10-26 11',
+    //       '10-26 12',
+    //       '10-26 13',
+    //       '10-26 14',
+    //       '10-26 15',
+    //       '10-26 16',
+    //       '10-26 17',
+    //       '10-26 18',
+    //       '10-26 19',
+    //       '10-26 20',
+    //       '10-26 21',
+    //       '10-26 22',
+    //       '10-26 23',
+    //       '10-27 00',
+    //       '10-27 01',
+    //       '10-27 02',
+    //       '10-27 03',
+    //       '10-27 04',
+    //       '10-27 05',
+    //       '10-27 06',
+    //       '10-27 07',
+    //       '10-27 08',
+    //       '10-27 09',
+    //       '10-27 10',
+    //       '10-27 11',
+    //       '10-27 12',
+    //       '10-27 13',
+    //       '10-27 14',
+    //       '10-27 15',
+    //       '10-27 16',
+    //       '10-27 17',
+    //       '10-27 18',
+    //       '10-27 19',
+    //       '10-27 20',
+    //       '10-27 21',
+    //       '10-27 22',
+    //       '10-27 23',
+    //     ],
+    //   },
+
+    //   yAxis: {
+    //     type: 'value',
+    //     axisTick: {
+    //       length: 2,
+    //     },
+    //     minorTick: {
+    //       show: true,
+    //       splitNumber: 5,
+    //     },
+    //     maxInterval: 20,
+    //   },
+
+    //   series: [
+    //     {
+    //       name: 'CO2',
+    //       type: 'line',
+    //       step: 'start',
+    //       data: [28, 25, 30, 44, 50, 12, 18, 22, 45, 31,40,45,28, 25, 30, 44, 50, 12, 18, 22, 45, 31,40,45,28, 25, 30, 44, 50, 12, 18, 22, 45, 31,40,45,28, 25, 30, 44, 50, 12, 18, 22, 45, 31,40,45,28, 25, 30, 44, 50, 12, 18, 22, 45, 31,40,45,28, 25, 30, 44, 50, 12, 18, 22, 45, 31,40,45,28, 25, 30, 44, 50, 12, 18, 22, 45, 31,40,45,28, 25, 30, 44, 50, 12, 18, 22, 45, 31,40,45,28, 25, 30, 44, 50, 12, 18, 22, 45, 31,40,45,28, 25, 30, 44, 50, 12, 18, 22, 45, 31,40,45],
+    //       triggerLineEvent: true,
+    //     },
+    //     {
+    //       name: 'PM2.5',
+    //       type: 'line',
+    //       step: 'start',
+    //       data: [28, 25, 30, 44, 50, 12, 18, 22, 45, 31,40,45,28, 25, 30, 44, 50, 12, 18, 22, 45, 31,40,45,28, 25, 30, 44, 50, 12, 18, 22, 45, 31,40,45,28, 25, 30, 44, 50, 12, 18, 22, 45, 31,40,45,28, 25, 30, 44, 50, 12, 18, 22, 45, 31,40,45,28, 25, 30, 44, 50, 12, 18, 22, 45, 31,40,45,28, 25, 30, 44, 50, 12, 18, 22, 45, 31,40,45,28, 25, 30, 44, 50, 12, 18, 22, 45, 31,40,45,28, 25, 30, 44, 50, 12, 18, 22, 45, 31,40,45,28, 25, 30, 44, 50, 12, 18, 22, 45, 31,40,45],
+    //     },
+    //     {
+    //       name: 'PM10',
+    //       type: 'line',
+    //       step: 'start',
+    //       data: [70, 45, 60, 200, 66, 54, 75, 120, 50, 98,100,50,70, 45, 60, 200, 66, 54, 75, 120, 50, 98,100,50,70, 45, 60, 200, 66, 54, 75, 120, 50, 98,100,50,70, 45, 60, 200, 66, 54, 75, 120, 50, 98,100,50,70, 45, 60, 200, 66, 54, 75, 120, 50, 98,100,50,70, 45, 60, 200, 66, 54, 75, 120, 50, 98,100,50,70, 45, 60, 200, 66, 54, 75, 120, 50, 98,100,50,70, 45, 60, 200, 66, 54, 75, 120, 50, 98,100,50,70, 45, 60, 200, 66, 54, 75, 120, 50, 98,100,50,70, 45, 60, 200, 66, 54, 75, 120, 50, 98,100,50],
+    //     },
+    //     {
+    //       name: 'Temperatura',
+    //       type: 'line',
+    //       step: 'start',
+    //       data: [28, 25, 30, 44, 50, 12, 18, 22, 45, 31,40,45,28, 25, 30, 44, 50, 12, 18, 22, 45, 31,40,45,28, 25, 30, 44, 50, 12, 18, 22, 45, 31,40,45,28, 25, 30, 44, 50, 12, 18, 22, 45, 31,40,45,28, 25, 30, 44, 50, 12, 18, 22, 45, 31,40,45,28, 25, 30, 44, 50, 12, 18, 22, 45, 31,40,45,28, 25, 30, 44, 50, 12, 18, 22, 45, 31,40,45,28, 25, 30, 44, 50, 12, 18, 22, 45, 31,40,45,28, 25, 30, 44, 50, 12, 18, 22, 45, 31,40,45,28, 25, 30, 44, 50, 12, 18, 22, 45, 31,40,45],
+    //     },
+    //     {
+    //       name: 'Humedad',
+    //       type: 'line',
+    //       step: 'start',
+    //       data: [65, 3, 40, 14, 30, 2, 8, 2, 5, 31, 40, 25,65, 3, 40, 14, 30, 2, 8, 2, 5, 31, 40, 25,65, 3, 40, 14, 30, 2, 8, 2, 5, 31, 40, 25,65, 3, 40, 14, 30, 2, 8, 2, 5, 31, 40, 25,65, 3, 40, 14, 30, 2, 8, 2, 5, 31, 40, 25,65, 3, 40, 14, 30, 2, 8, 2, 5, 31, 40, 25,65, 3, 40, 14, 30, 2, 8, 2, 5, 31, 40, 25,65, 3, 40, 14, 30, 2, 8, 2, 5, 31, 40, 25,65, 3, 40, 14, 30, 2, 8, 2, 5, 31, 40, 25,65, 3, 40, 14, 30, 2, 8, 2, 5, 31, 40, 25],
+    //     },
+    //     {
+    //       name: 'VOC',
+    //       type: 'line',
+    //       step: 'start',
+    //       data: [1, 0, 1, 0, 0, 0, 1, 0, 0, 1,0,0,1, 0, 1, 0, 0, 0, 1, 0, 0, 1,0,0,1, 0, 1, 0, 0, 0, 1, 0, 0, 1,0,0,1, 0, 1, 0, 0, 0, 1, 0, 0, 1,0,0,1, 0, 1, 0, 0, 0, 1, 0, 0, 1,0,0,1, 0, 1, 0, 0, 0, 1, 0, 0, 1,0,0,1, 0, 1, 0, 0, 0, 1, 0, 0, 1,0,0,1, 0, 1, 0, 0, 0, 1, 0, 0, 1,0,0,1, 0, 1, 0, 0, 0, 1, 0, 0, 1,0,0,1, 0, 1, 0, 0, 0, 1, 0, 0, 1,0,0],
+    //     },
+    //   ],
+    // };
   }
 
-  loadTemperatureConfig(val: number, sensorName: string) {
-    const {
-      sensor_name,
-      unit,
-      lower_limit,
-      upper_limit,
-      value = val,
-    } = this.Temperature_SensorConfig;
+  ngOnDestroy(): void {
+    console.log('destroyed');
+    this.activeUserSuscription.unsubscribe();
+    this.roomsSuscription.unsubscribe();
+  }
 
-    let newTempReading: EChartsOption = {
+  loadRoomOptions(): void {
+    this.roomsSuscription = this.store
+      .select('rooms')
+      .subscribe(({ rooms }) => {
+        this.rooms = rooms;
+        this.roomOptions = this.rooms.map((room) => {
+          return { value: room.id!, viewValue: room.name };
+        });
+      });
+  }
+
+  async onSubmit() {
+    if (this.submitForm.invalid) return;
+    const fromDate: string = format(
+      new Date(this.submitForm.value.fromDate),
+      'yyyy-MM-dd'
+    );
+    const toDate: string = format(
+      new Date(this.submitForm.value.toDate),
+      'yyyy-MM-dd'
+    );
+    const resultData = await this.zhenairController.requestHistoricalData(
+      this.submitForm.value.room,
+      fromDate,
+      toDate
+    );
+    console.log(resultData);
+    this.processData(resultData);
+  }
+
+  processData(data: any): void {
+    const indexesToKeep: number[] = [];
+    const addedHours: Set<string> = new Set();
+
+    console.log(data.dates);
+
+    data.dates.forEach((timestamp: string, index: number) => {
+      const [datePart, timePart] = timestamp.split(' '); 
+      const [month, day] = datePart.split('-'); 
+      const hour = timePart.split(':')[0]; 
+      const formattedHour = `${month}-${day} ${hour.padStart(2, '0')}`; //
+
+      if (!addedHours.has(formattedHour)) {
+        indexesToKeep.push(index);
+        addedHours.add(formattedHour);
+      }
+    });
+
+    const addedHoursArray: string[] = Array.from(addedHours);
+
+    const humedad: number[] = indexesToKeep.map((index) => data.Humedad[index]);
+    const voc: number[] = indexesToKeep.map((index) => data.VOC[index]/100);
+    const co2: number[] = indexesToKeep.map((index) => data.CO2[index]/10);
+    const pm25: number[] = indexesToKeep.map((index) => data['PM2.5'][index]);
+    const pm10: number[] = indexesToKeep.map((index) => data.PM10[index]);
+    const temperatura: number[] = indexesToKeep.map((index) => data.Temperatura[index]
+    );
+
+    console.log(Array.from(addedHoursArray));
+
+    this.loadGraph(addedHoursArray, humedad, voc, co2, pm25, pm10, temperatura);
+  }
+
+  loadGraph(
+    addedHours: string[],
+    humedad: number[],
+    voc: number[],
+    co2: number[],
+    pm25: number[],
+    pm10: number[],
+    temperatura: number[]
+  ): void {
+    this.y = {
+      title: {
+        text: '',
+      },
+      tooltip: {
+        trigger: 'axis',
+      },
+      legend: {
+        data: ['CO2', 'PM2.5', 'PM10', 'Temperatura', 'Humedad', 'VOC'],
+      },
+      grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        top: '10%',
+        containLabel: true,
+        z: 0,
+      },
+      toolbox: {
+        feature: {
+          saveAsImage: {},
+          dataZoom: {
+            yAxisIndex: 'none',
+          },
+        },
+      },
+      dataZoom: [
+        {
+          startValue: '2014-06-01',
+        },
+        {
+          type: 'inside',
+        },
+      ],
+      xAxis: {
+        type: 'category',
+        data: addedHours,
+      },
+
+      yAxis: {
+        type: 'value',
+        axisTick: {
+          length: 2,
+        },
+        minorTick: {
+          show: true,
+          splitNumber: 5,
+        },
+        maxInterval: 20,
+      },
+
       series: [
         {
-          type: 'gauge',
-          center: ['50%', '75%'],
-          startAngle: 200,
-          endAngle: -20,
-          min: lower_limit,
-          max: upper_limit,
-          splitNumber: 12,
-          itemStyle: {
-            color: '#042959',
-          },
-          progress: {
-            show: true,
-            width: 30,
-          },
-          pointer: {
-            show: false,
-          },
-          axisLine: {
-            lineStyle: {
-              width: 30,
-            },
-          },
-          axisTick: {
-            distance: -45,
-            splitNumber: 5,
-            lineStyle: {
-              width: 2,
-              color: '#999',
-            },
-          },
-          splitLine: {
-            distance: -52,
-            length: 14,
-            lineStyle: {
-              width: 3,
-              color: '#999',
-            },
-          },
-          axisLabel: {
-            distance: -20,
-            color: '#999',
-            fontSize: 20,
-          },
-          anchor: {
-            show: false,
-          },
-          title: {
-            show: false,
-          },
-          detail: {
-            valueAnimation: true,
-            width: '60%',
-            lineHeight: 40,
-            borderRadius: 8,
-            offsetCenter: [0, '-15%'],
-            fontWeight: 'bolder',
-            formatter: `${value} ${unit}`,
-            color: 'inherit',
-          },
-          data: [
-            {
-              value: value,
-            },
-          ],
+          name: 'CO2',
+          type: 'line',
+          step: 'start',
+          data: co2,
+          triggerLineEvent: true,
+        },
+        {
+          name: 'PM2.5',
+          type: 'line',
+          step: 'start',
+          data: pm25,
+        },
+        {
+          name: 'PM10',
+          type: 'line',
+          step: 'start',
+          data: pm10,
+        },
+        {
+          name: 'Temperatura',
+          type: 'line',
+          step: 'start',
+          data: temperatura,
+        },
+        {
+          name: 'Humedad',
+          type: 'line',
+          step: 'start',
+          data: humedad,
+        },
+        {
+          name: 'VOC',
+          type: 'line',
+          step: 'start',
+          data: voc,
         },
       ],
     };
+
+    this.testBool = true;
   }
 
-  loadAirSensorConfig(val: number, sensorName: string) {
-    let config: SensorReading;
-    let value : number = 0;
-
-    switch (sensorName) {
-      case SensorName.PM25:
-        config = this.PM25_SensorConfig;
-        value = val;
-        break;
-      case SensorName.PM10:
-        config = this.PM10_SensorConfig;
-        value = val;
-        break;
-      case SensorName.CO2:
-        config = this.CO2_SensorConfig;
-        value = val;
-        break;
-      case SensorName.HUMIDITY:
-        config = this.Humidity_SensorConfig;
-        value = val;
-        break;
-      default:
-        return;
-        
-        
-    }
-    console.log(config);
-    this.buildChart(config, value);
-  }
-
-
-  buildChart(config: SensorReading, val: number) {
-
-    const { sensor_name, unit, lower_limit, upper_limit, value=val, tolerance } = config;
-
-    let newReading: EChartsOption = {
-      series: [
-        {
-          type: 'gauge',
-          startAngle: 200,
-          endAngle: -20,
-          center: ['50%', '75%'],
-          radius: '90%',
-          min: lower_limit,
-          max: upper_limit,
-          splitNumber: 4,
-          itemStyle: {
-            color: '#FFAB91',
-          },
-          axisLine: {
-            lineStyle: {
-              width: 20,
-              color: [
-                [tolerance ? tolerance : 0  / upper_limit, '#049DD9'],
-  
-                [1, '#FF6E76'],
-              ],
-            },
-          },
-  
-          pointer: {
-            icon: 'path://M12.8,0.7l12,40.1H0.7L12.8,0.7z',
-            length: '12%',
-            width: 20,
-            offsetCenter: [0, '-60%'],
-            itemStyle: {
-              color: 'auto',
-            },
-          },
-          axisTick: {
-            length: 1,
-            lineStyle: {
-              color: 'auto',
-              width: 2,
-            },
-            show: false,
-          },
-          splitLine: {
-            length: 5,
-            lineStyle: {
-              color: 'auto',
-              width: 5,
-            },
-          },
-          axisLabel: {
-            distance: -45,
-            color: '#999',
-            //fontSize: 20,
-          },
-          title: {
-            offsetCenter: [0, '-10%'],
-            fontSize: 20,
-          },
-          detail: {
-            fontSize: 30,
-            offsetCenter: [0, '-15%'],
-            valueAnimation: true,
-            formatter: function (value) {
-              return `{value|${value.toFixed(0)}}{unit|${unit}}`;
-            },
-            color: 'inherit',
-            rich: {
-              value: {
-                fontSize: 25,
-                fontWeight: 'bolder',
-                color: '#777',
-              },
-              unit: {
-                // fontSize: 18,
-                color: '#999',
-                padding: [0, 0, -20, 10],
-              },
-            },
-          },
-  
-          data: [
-            {
-              value: value,
-              name: sensor_name,
-              title: {
-                offsetCenter: [0, '20%'],
-                fontSize: 20,
-              },
-            },
-          ],
-        },
-      ],
-    };
-
-    this.x.push(newReading);
-
+  goToMain() {
+    this.pageRouter.route(`${UrlPages.DASHBOARD}/${UrlPages.MAIN}`);
   }
 }

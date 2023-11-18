@@ -1,17 +1,15 @@
 import { createReducer, on } from '@ngrx/store';
 import {
-  removeDeviceSuccess,
-  removeDeviceFailure,
   loadDevicesFailure,
   loadDevices,
   loadDevicesSuccess,
-  updateDeviceSuccess,
-  updateDeviceFailure,
+
   addDeviceFailure,
   addDeviceSuccess,
   addDevice,
-  updateDevice,
   removeDevice,
+  removeDeviceSuccess,
+  removeDeviceFailure,
 } from '../actions/device.actions';
 import { Device } from 'src/app/models/devices.interface';
 import { ActionStatus } from 'src/app/common/enums/action-status.enum';
@@ -50,41 +48,16 @@ export const deviceReducer = createReducer(
     };
   }),
 
-  on(updateDevice, (state) => ({
-    ...state,
-    status: ActionStatus.LOADING,
-  })),
-
-  on(updateDeviceSuccess, (state, { id, content }) => ({
-    ...state,
-    devices: state.devices.map((device) => {
-      if (device.id === id) {
-        return {
-          ...device,
-          ...content,
-        };
-      }
-      return device;
-    }),
-  })),
-
-  on(updateDeviceFailure, (state, action) => {
-    return {
-      ...state,
-      error: action.error,
-      status: ActionStatus.ERROR,
-    };
-  }),
-
   on(removeDevice, (state)=>({
     ...state,
     status: ActionStatus.LOADING,
   })),
 
 
-  on(removeDeviceSuccess, (state, { id }) => ({
+  on(removeDeviceSuccess, (state, { deviceId }) => ({
+    
     ...state,
-    Devices: state.devices.filter((devices) => devices.id !== id),
+    devices: state.devices.filter((devices) => devices.id !== deviceId),
     status: ActionStatus.SUCCESS,
   })),
 

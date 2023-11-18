@@ -1,3 +1,4 @@
+import { Device } from './devices.interface';
 import { MedicalCenter } from './medical-center.interface';
 export interface Room {
     id?: number;
@@ -7,4 +8,5 @@ export interface Room {
     height: number;
     medicalCenter?: MedicalCenter;
     medicalCenterId?: number;
+    device?:Device | null;
 }

@@ -5,75 +5,84 @@ import { Config } from 'src/app/config/config';
 import { catchError, map } from 'rxjs';
 import { LoadingService } from '../loading-service/loading.service';
 import { Utils } from 'src/app/common/utils/app-util';
+import { DebugerService } from '../debug-service/debug.service';
+
+
 
 @Injectable({
   providedIn: 'root',
 })
 export class DeviceHttpService {
-  private url = `${Config.BASE_URL}/device`;
+  private url = `${Config.BASE_URL}/devices`;
 
   constructor(
     private readonly httpClient: HttpClient,
     private loader: LoadingService
     ) {}
 
- registerDevice(idUser: number, device:Device): Promise<void> {
+  registerDevice(adminId: number, device: Device){
     this.loader.showLoadingModal();
-
-    return new Promise((resolve, reject) => {
-      this.httpClient.post(`${this.url}/${idUser}`, device, Utils.getHttpHeaders() ).subscribe({
-        next: (response) => {
-            if (response) {
-                resolve();
-            } else {
-                reject();
-            }
-        },
-        error: (error) => {
-          reject(error);
-          console.error('Error al registrar: ',error);
-        },
-      });
-    });
+    return this.httpClient
+      .post(`${this.url}/${adminId}/save`, device, Utils.getHttpHeaders())
+      .pipe(
+        map((resp: any) => {
+          this.loader.dismiss();
+          DebugerService.log('Register Device: ' + JSON.stringify(resp));
+          return resp;
+        }),
+        catchError((error) => {
+          this.loader.dismiss();
+          console.error('Error en la petición:', error);
+          throw(error.error);
+        })
+      );
   }
 
-  getDevices(idUser: number) {
+
+
+  getDevices(adminId: number) {
     this.loader.showLoadingModal();
-    return this.httpClient.get(`${this.url}/all/${idUser}`)
+    return this.httpClient.get(`${this.url}/all/${adminId}`, Utils.getHttpHeaders())
     .pipe(
-      map(resp => {
-        console.log("resp", resp);
+      map((resp:any) => {
         this.loader.dismiss();
-        return resp as Device[];
+        DebugerService.log('Get Devices: ' + JSON.stringify(resp.data));
+        return resp.data as Device[];
+      }),
+      catchError((error) => {
+        this.loader.dismiss();
+        console.error('Error en la petición:', error);
+        throw(error.error);
       })
     );
   }
 
   deleteDevice( deviceId: number){
-    return this.httpClient.delete(`${this.url}/delete/${deviceId}`, Utils.getHttpHeaders())
-    .pipe(catchError((error) => {
-      throw error;
-     }),
-     map((resp: any) => {
-       this.loader.dismiss();
-       /*const response: Response = {
-         title: 'Deleted Device',
-         data: resp.data,
-       };
-       return response;*/
-     })
+    return this.httpClient.delete(`${this.url}/delete/${deviceId}`, Utils.getHttpHeaders());
+    // this.loader.showLoadingModal();
+    // return this.httpClient.delete(`${this.url}/${deviceId}`, Utils.getHttpHeaders())
+    // .pipe(catchError((error) => {
+    //   this.loader.dismiss();
+    //   throw error;
+    //  }),
+    //  map((resp: any) => {
+    //    this.loader.dismiss();
+    //    const response: any = "Deleted device" + resp;
+    //    return response;
+    //  })
 
-    )
+    // )
   }
 
-  editDevice(id: number, device: Device) {
-    this.loader.showLoadingModal();
-    return this.httpClient.put(`${this.url}/edit/${id}`, device)
-    .pipe(
-      map(resp => {
-        this.loader.dismiss();
-        return resp as Device;
-      })
-    );
-  }
+  // editDevice(deviceId: number, device: Device) {
+  //   this.loader.showLoadingModal();
+  //   return this.httpClient.put(`${this.url}/${deviceId}`, device)
+  //   .pipe(
+  //     map(resp => {
+  //       this.loader.dismiss();
+  //       return resp as Device;
+  //     })
+  //   );
+  // }
+  
 }

@@ -25,6 +25,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { loginPageController } from './auth-pages/login-page/login-page.controller';
+import { PasswordRecoveryPageController } from './auth-pages/password-recovery-page/password-recovery-page.controller';
 
 
 
@@ -59,7 +60,7 @@ import { loginPageController } from './auth-pages/login-page/login-page.controll
    
   ],
 
-  providers: [ RegisterPageController, loginPageController ],
+  providers: [ RegisterPageController, loginPageController, PasswordRecoveryPageController ],
 
 })
 export class AuthModule { }

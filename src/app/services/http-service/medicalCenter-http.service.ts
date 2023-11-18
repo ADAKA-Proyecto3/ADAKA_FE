@@ -55,6 +55,7 @@ export class MedicalCenterHttpService {
           return resp.data[0];
         }),
         catchError((error) => {
+          this.loader.dismiss();
           console.error('Error en la petición:', error);
           throw(error.error.title);
         })
@@ -72,6 +73,19 @@ export class MedicalCenterHttpService {
         return resp.data as MedicalCenter[];
       })
     );
+  }
+
+  getAssignedMedicalCenterForSubUser(id: number) {
+    this.loader.showLoadingModal();
+    const urlWithId = `${this.url}/${id}`;
+    return this.httpClient.get<Response<MedicalCenter>>(urlWithId,Utils.getHttpHeaders()).pipe(
+      map((resp) => {
+        console.log('resp', resp);
+        this.loader.dismiss();
+        return resp.data as MedicalCenter[];
+      })
+    );
+
   }
  
   deleteMedicalCenter(id: number) {

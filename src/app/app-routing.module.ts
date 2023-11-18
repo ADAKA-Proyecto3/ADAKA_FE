@@ -36,11 +36,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/dash-board/layout-page/layout-page.module').then(m => m.LayoutPageModule)
   },
   {
-    path: UrlPages.MEDICAL_CENTERS,
-    canActivate: [authGuard],
-    loadChildren: () => import('./pages/dash-board/medicalCenters-page/medicalCenter-page.module').then(m => m.MedicalCenterModule)
-  },
-  {
     path: '**',
     redirectTo: UrlPages.HOME,
     pathMatch: 'full'

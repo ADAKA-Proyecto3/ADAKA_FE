@@ -22,26 +22,6 @@ export class DialogService {
       duration: 2700,
       verticalPosition: 'top',
     });
-
-
-    // if (this.toastDialog?.getState() === MatDialogState.OPEN) {
-    //   this.dismiss();
-    // }
-
-    // this.toastDialog = this.dialog.open(DialogComponent, {
-    //   width: '100%',
-    //   data: message,
-    //   panelClass: 'base-modal',
-    //   position: { top: '1%' },
-    // });
-
-    //if (useTimeOut) {
-      // setTimeout(() => {
-      //   this.dismiss();
-      // }
-      //   , 3000);
-   // }
-    
   }
 
 

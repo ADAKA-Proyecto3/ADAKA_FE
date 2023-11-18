@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { User } from 'src/app/models/user.interface';
@@ -25,20 +25,24 @@ import {
 } from 'src/app/common/selectOptions/selectOptions';
 import { loadMedicalCenter } from 'src/app/store/actions/medicalCenter.actions';
 import { MedicalCenter } from 'src/app/models/medical-center.interface';
+import { PageRouterService } from 'src/app/services/page-router-service/page-router.service';
+import { UrlPages } from 'src/app/common/enums/url-pages.enum';
 
 @Component({
   selector: 'app-users-page',
   templateUrl: './users-page.html',
   styleUrls: ['./users-page.scss'],
 })
-export class UsersPage implements OnInit {
+export class UsersPage implements OnInit, OnDestroy {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(
     private store: Store<AppState>,
     private dialog: MatDialog,
-    private readonly dialogService: DialogService
+    private readonly dialogService: DialogService,
+    private readonly pageRouter: PageRouterService
   ) {}
+ 
 
   result: string = '';
   activeUser: any;
@@ -55,14 +59,18 @@ export class UsersPage implements OnInit {
   ];
   dataSource = new MatTableDataSource<User>();
   private statusSubscription: Subscription = new Subscription();
+  private activeUserSuscription: Subscription = new Subscription();
+  private medicalCenterSuscription: Subscription = new Subscription();
+  private usersSuscription: Subscription = new Subscription();
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
+
   }
 
   ngOnInit(): void {
-    this.store
+   this.activeUserSuscription = this.store
       .select((state) => state.user.activeUser.id)
       .subscribe((id) => {
         this.activeUser = id;
@@ -72,12 +80,18 @@ export class UsersPage implements OnInit {
     this.loadUsersTable();
   }
 
+  ngOnDestroy(): void {
+    this.activeUserSuscription.unsubscribe();
+    this.medicalCenterSuscription.unsubscribe();
+    this.usersSuscription.unsubscribe();
+  }
+
   loadUsersTable(): void {
-    this.store.select('medicalCenters').subscribe(({ medicalCenters }) => {
+    this.medicalCenterSuscription = this.store.select('medicalCenters').subscribe(({ medicalCenters }) => {
       this.medicalCenters = medicalCenters;
     });
 
-    this.store.select('users').subscribe(({ users, status }) => {
+    this.usersSuscription = this.store.select('users').subscribe(({ users, status }) => {
       this.dataSource.data = users;
     });
 
@@ -221,5 +235,9 @@ export class UsersPage implements OnInit {
       (mc) => mc.id === medicalCenterId
     )?.name;
     return viewValue;
+  }
+
+  goToMain(){
+this.pageRouter.route(`${UrlPages.DASHBOARD}/${UrlPages.MAIN}`)
   }
 }

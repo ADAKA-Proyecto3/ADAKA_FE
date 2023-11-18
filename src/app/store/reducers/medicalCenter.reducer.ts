@@ -10,6 +10,9 @@ import {
   addMedicalCenterSuccess,
   addMedicalCenterFailure,
   removeMedicalCenter,
+  loadMedicalCenterForSubUserFailure,
+  loadMedicalCenterForSubUserSuccess,
+  loadMedicalCenterForSubUser,
 } from '../actions/medicalCenter.actions';
 import { MedicalCenter } from 'src/app/models/medical-center.interface';
 import { ActionStatus } from 'src/app/common/enums/action-status.enum';
@@ -97,6 +100,23 @@ export const medicalCenterReducer = createReducer(
   })),
 
   on(loadMedicalCenterFailure, (state, { error }) => ({
+    ...state,
+    error: error,
+    status: ActionStatus.ERROR,
+  })),
+
+  on(loadMedicalCenterForSubUser, (state) => ({
+    ...state,
+    status: ActionStatus.LOADING,
+  })),
+
+  on(loadMedicalCenterForSubUserSuccess, (state, { medicalCenter }) => ({
+    ...state,
+    medicalCenters: medicalCenter,
+    status: ActionStatus.SUCCESS,
+  })),
+
+  on(loadMedicalCenterForSubUserFailure, (state, { error }) => ({
     ...state,
     error: error,
     status: ActionStatus.ERROR,

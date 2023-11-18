@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -8,6 +8,7 @@ import {
   addRoom,
   loadRooms,
   removeRoom,
+  updateAddRoomDevice,
   updateRoom,
 } from 'src/app/store/actions/room.actions';
 import { AppState } from 'src/app/store/app.state';
@@ -16,45 +17,53 @@ import { DebugerService } from 'src/app/services/debug-service/debug.service';
 import { MedicalCenter } from 'src/app/models/medical-center.interface';
 import { SelectOption } from 'src/app/common/interfaces/option.interface';
 import { FormControl } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Subscription, of, switchMap, take } from 'rxjs';
 import { selectRoomStatus } from 'src/app/store/selectors/room.selector';
 import { ActionStatus } from 'src/app/common/enums/action-status.enum';
 import { Utils } from 'src/app/common/utils/app-util';
 import { DialogService } from 'src/app/services/dialog-service/dialog.service';
 import Swal from 'sweetalert2';
+import { RoomStatsVisualComponent } from '../components/room-stats-visual-component/room-stats-visual-component';
+import { PageRouterService } from 'src/app/services/page-router-service/page-router.service';
+import { UrlPages } from 'src/app/common/enums/url-pages.enum';
+import { loadMedicalCenterForSubUser } from 'src/app/store/actions/medicalCenter.actions';
+import { Device } from 'src/app/models/devices.interface';
+import { loadDevices } from 'src/app/store/actions/device.actions';
+import { AssignRoomDeviceFormComponent } from '../components/assign-room-device-component/assign-room-device-component';
 
 @Component({
   templateUrl: './rooms-page.html',
   styleUrls: ['./rooms-page.scss'],
 })
-export class RoomsPage implements OnInit {
+export class RoomsPage implements OnInit, OnDestroy {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  displayedColumns: string[] = [
-    'id',
-    'name',
-    'length',
-    'width',
-    'height',
-    'medicalCenter',
-    'actions',
-  ];
-  dataSource = new MatTableDataSource<Room>();
+  displayedColumns: string[] = [];
 
   medicalCenters: MedicalCenter[] = [];
   medicalCenterOptions: SelectOption[] = [];
-
-  assignedMedicalCenterOnEdit: number = 0;
-
-  selectedMedicalCenter = new FormControl();
+  dataSource = new MatTableDataSource<Room>();
+  isAdmin: boolean = true;
+  assignedMedical: number = 0;
+  devices: Device[] = [];
+  devicesOptions: SelectOption[] = [];
+  requestDeviceId: number = 0;
 
   private statusSubscription: Subscription = new Subscription();
+  private activeUserSuscription: Subscription = new Subscription();
+  private roomsSuscription: Subscription = new Subscription();
   activeUser: any;
   constructor(
     private store: Store<AppState>,
     private dialog: MatDialog,
-    private readonly dialogService: DialogService
+    private readonly dialogService: DialogService,
+    private readonly pageRouter: PageRouterService
   ) {}
+
+  ngOnDestroy(): void {
+    this.activeUserSuscription.unsubscribe();
+    this.roomsSuscription.unsubscribe();
+  }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -62,60 +71,60 @@ export class RoomsPage implements OnInit {
   }
 
   ngOnInit(): void {
-    this.store
-      .select((state) => state.user.activeUser.medicalCenters)
-      .subscribe((mc) => {
-        if (mc) {
-          this.medicalCenters = mc;
-          this.medicalCenterOptions = this.medicalCenters.map((mc) => {
-            return { value: mc.id!, viewValue: mc.name };
-          });
+   this.activeUserSuscription = this.store
+      .select((state) => state.user.activeUser)
+      .subscribe((user) => {
+
+        if(user.id !== 0){
+          const login = JSON.parse(sessionStorage.getItem('login') || '{}');
+          this.isAdmin = login ? login.isAdmin : false;
+          this.activeUser = user;
+          this.preLoadRooms();
         }
+       
       });
+      
+  }
 
-      this.store
-      .select((state) => state.user.activeUser.id)
-      .subscribe((id) => {
-        this.activeUser = id;
-        
-        this.store.dispatch(loadRooms({ id: this.activeUser }));
-        
-      });
+  preLoadRooms() {
+    if(this.isAdmin){
+      this.displayedColumns = [ 'id', 'name','medicalCenter', 'zhenair', 'device', 'actions' ];
+      this.store.dispatch(loadDevices({ adminId: this.activeUser.id }));
+    }else{
+      this.displayedColumns = [ 'id', 'name', 'medicalCenter', 'zhenair', 'device' ];
+      this.store.dispatch(loadDevices({ adminId: this.activeUser.manager }));
+    }
+    this.medicalCenters = this.activeUser.medicalCenters;
+      
 
-      this.loadRoomsTable();
-    
-    //  this.store.dispatch(loadRooms({ id: id }))
+    this.store.dispatch(loadRooms({ id: this.activeUser.id }));
+    this.loadRoomsTable();
+  }
+
+  loadRoomsTable(): void {
+    this.roomsSuscription = this.store.select('rooms').subscribe(({ rooms }) => {
+      this.dataSource.data = rooms;
+      this.dataSource.paginator = this.paginator;
+    });
+   
   }
 
   editRoomDialog(room: Room) {
     this.openRoomEditDialog(room);
   }
 
-  onSelectChange(event: any) {
-    const selectedValue = event.value;
-    this.assignedMedicalCenterOnEdit = selectedValue;
-    this.store.dispatch(loadRooms({ id: selectedValue }));
-    //this.loadRoomsTable();
-  }
 
-  updateMedicalCenterSelectionOnSave(id: number) {
-    this.selectedMedicalCenter.setValue(id);
-    this.store.dispatch(loadRooms({ id: id }));
-    //this.loadRoomsTable();
-  }
+  assignDevice(roomId:number, deviceId:number){
+    this.store.dispatch(updateAddRoomDevice({roomId:roomId, deviceId:deviceId}));
+    this.checkStatusRequest(
+      'Dispositivo asignado con éxito',
+      'Ha sucedido un error, por favor intente de nuevo'
+    );
 
-  loadRoomsTable(): void {
-
-    this.store.select('rooms').subscribe(({ rooms }) => {
-      this.dataSource.data = rooms;
-    });
-
-    this.dataSource.paginator = this.paginator;
   }
 
   registerRoom(id: number, room: Room) {
     this.store.dispatch(addRoom({ id: id, content: room }));
-    //this.updateMedicalCenterSelectionOnSave(id);
     this.checkStatusRequest(
       'Sala registrada con éxito',
       'Ha sucedido un error, por favor intente de nuevo'
@@ -126,7 +135,6 @@ export class RoomsPage implements OnInit {
     this.store.dispatch(
       updateRoom({ id: id, medicalCenterId: newMedicalCenterId, content: room })
     );
-   // this.updateMedicalCenterSelectionOnSave(newMedicalCenterId);
     this.checkStatusRequest(
       'Sala actualizado con éxito',
       'Ha sucedido un error, por favor intente de nuevo'
@@ -159,11 +167,24 @@ export class RoomsPage implements OnInit {
     );
   }
 
+  openAssignDeviceEditDialog(room: Room): void {
+    const dialogRef = this.dialog.open(AssignRoomDeviceFormComponent, {
+      width: '50%',
+      data: room,
+    });
+
+    dialogRef.afterClosed().subscribe(async (result) => {
+
+      if(result && result.unlinking){
+        this.editRoom(result.room.id, result.room, result.room.medicalCenterId);
+      }else if (result && !result.unlinking) {
+        this.assignDevice(result.roomId, result.deviceId);
+      }
+    });
+  }
+
+
   openRoomEditDialog(room: Room): void {
-    // const roomToEdit = {
-    //   ...room,
-    //   assignedMedicalCenter: this.assignedMedicalCenterOnEdit,
-    // };
     const dialogRef = this.dialog.open(RoomFormComponent, {
       width: '60%',
       data: room,
@@ -190,6 +211,20 @@ export class RoomsPage implements OnInit {
     });
   }
 
+  showRoomStats(room: Room): void {
+    const dialogRef = this.dialog.open(RoomStatsVisualComponent, {
+      width: '80%',
+      data: room,
+    });
+  }
+
+  hasDevices(room: Room): boolean {
+    if (room && room.device?.deviceId) {
+      return true;
+    }
+    return false;
+  }
+
   private checkStatusRequest(successMessage: string, errorMessage: string) {
     this.statusSubscription = this.store
       .pipe(select(selectRoomStatus))
@@ -210,12 +245,18 @@ export class RoomsPage implements OnInit {
       });
   }
 
-
-
   returnMedicalCenterViewValue(medicalCenterId: number) {
     const viewValue = this.medicalCenters.find(
       (mc) => mc.id === medicalCenterId
     )?.name;
     return viewValue;
+  }
+
+  goToMain() {
+    this.pageRouter.route(`${UrlPages.DASHBOARD}/${UrlPages.MAIN}`);
+  }
+
+  showRegisterButton(): boolean {
+    return this.isAdmin;
   }
 }

@@ -7,9 +7,6 @@ import {
     loadDevices,
     loadDevicesSuccess,
     loadDevicesFailure,
-    updateDevice,
-    updateDeviceSuccess,
-    updateDeviceFailure,
     removeDevice,
     removeDeviceFailure,
     removeDeviceSuccess,
@@ -19,7 +16,6 @@ import { switchMap, map, catchError, mergeMap } from 'rxjs/operators';
 import { DeviceHttpService } from 'src/app/services/http-service/device-http.service';
 import { Device } from 'src/app/models/devices.interface';
 
-
 @Injectable()
 export class DeviceEffects {
   constructor(
@@ -28,17 +24,18 @@ export class DeviceEffects {
     private deviceService: DeviceHttpService
   ) {}
 
-  // Run this code when a loadTodos action is dispatched
+ 
   loadDevices$ = createEffect(() =>
     this.actions$.pipe(
       ofType(loadDevices),
-      switchMap(() =>
+      switchMap((action) =>
         // Call the get method, convert it to an observable
-        from(this.deviceService.getDevices()).pipe(
-          // Take the returned value and return a new success action containing the todos
+        from(this.deviceService.getDevices(action.adminId)).pipe( 
+          // Take the returned value and return a new success action containing all devices
           map((Devices) => loadDevicesSuccess({ devices: Devices })),
           // Or... if it errors return a new failure action containing the error
           catchError((error) => of(loadDevicesFailure({ error })))
+          
         )
       )
     )
@@ -48,23 +45,9 @@ export class DeviceEffects {
     this.actions$.pipe(
       ofType(removeDevice),
       mergeMap((action) =>
-        this.deviceService.deleteDevice(action.id).pipe(
-          map(() => removeDeviceSuccess({ id: action.id })),
+        this.deviceService.deleteDevice(action.deviceId).pipe(
+          map(() => removeDeviceSuccess({ deviceId: action.deviceId })),
           catchError((error) => of(removeDeviceFailure({ error })))
-        )
-      )
-    )
-  );
-
-  updateDevice$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(updateDevice),
-      mergeMap((action) =>
-        this.deviceService.editDevice(action.id, action.content).pipe(
-          map(() =>
-            updateDeviceSuccess({ id: action.id, content: action.content })
-          ),
-          catchError((error) => of(updateDeviceFailure({ error })))
         )
       )
     )
@@ -74,9 +57,9 @@ export class DeviceEffects {
   this.actions$.pipe(
     ofType(addDevice),
     mergeMap((action) =>
-      this.deviceService.resgiterDevice(action.content).pipe(
+      this.deviceService.registerDevice(action.adminId, action.content).pipe(
         map((response) => {
-          const userResponse = response as Device; 
+          const userResponse = response as Device;
           return addDeviceSuccess({ content: userResponse });
         }),
         catchError((error) => of(addDeviceFailure({ error })))
@@ -84,4 +67,5 @@ export class DeviceEffects {
     )
   )
 );
+
 }

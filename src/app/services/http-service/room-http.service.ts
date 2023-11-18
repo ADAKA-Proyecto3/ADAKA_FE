@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Config } from 'src/app/config/config';
-import { catchError, map } from 'rxjs';
+import { Observable, catchError, map, throwError } from 'rxjs';
 import { LoadingService } from '../loading-service/loading.service';
 import { Room } from 'src/app/models/rooms.interface';
 import { Response } from 'src/app/models/response.interface';
@@ -19,18 +19,6 @@ export class RoomHttpService {
     private loader: LoadingService
   ) {}
 
-  getRooms(id: number) {
-    this.loader.showLoadingModal();
-    return this.httpClient
-      .get<Response<Room>>(`${this.url}/all/${id}`, Utils.getHttpHeaders())
-      .pipe(
-        map((resp) => {
-          DebugerService.log('resp: ' + JSON.stringify(resp));
-          this.loader.dismiss();
-          return resp.data as Room[];
-        })
-      );
-  }
 
   getRoomsByUser(id: number) {
     this.loader.showLoadingModal();
@@ -38,12 +26,18 @@ export class RoomHttpService {
       .get<Response<Room>>(`${this.url}/allUser/${id}`, Utils.getHttpHeaders())
       .pipe(
         map((resp) => {
-          DebugerService.log('resp: ' + JSON.stringify(resp));
+          DebugerService.log("GetRoomsByUser: " + JSON.stringify(resp.data));
           this.loader.dismiss();
           return resp.data as Room[];
+        }),
+        catchError((error) => {
+          this.loader.dismiss();
+          console.error('Error en la petición:', error);
+          throw error.error.title;
         })
       );
   }
+
 
   deleteRoom(id: number) {
     return this.httpClient.delete(
@@ -54,6 +48,7 @@ export class RoomHttpService {
 
 
   resgiterRoom(id: number, room: Room) {
+    console.log(room);
     this.loader.showLoadingModal();
     return this.httpClient
       .post(`${this.url}/${id}`, room, Utils.getHttpHeaders())
@@ -61,11 +56,12 @@ export class RoomHttpService {
         map((resp: any) => {
           this.loader.dismiss();
         
-          DebugerService.log('resp: ' + JSON.stringify(resp));
+          DebugerService.log('Register Room: ' + JSON.stringify(resp));
          
           return resp.data[0];
         }),
         catchError((error) => {
+          this.loader.dismiss();
           console.error('Error en la petición:', error);
           throw error.error.title;
         })
@@ -81,7 +77,31 @@ export class RoomHttpService {
           this.loader.dismiss();
           console.log('resp', resp);
           return resp as Room;
+        }),
+        catchError((error) => {
+          this.loader.dismiss();
+          console.error('Error en la petición:', error);
+          throw error.error.title;
         })
       );
+  }
+
+  updateAddRoomDevice(roomId: number, deviceId: number) {
+    this.loader.showLoadingModal();
+    return this.httpClient
+      .put(`${this.url}/add/device/${roomId}/${deviceId}`, Utils.getHttpHeaders())
+      .pipe(
+        map((resp) => {
+          this.loader.dismiss();
+          console.log('resp', resp);
+          return resp as Room;
+        }),
+        catchError((error) => {
+          this.loader.dismiss();
+          console.error('Error en la petición:', error);
+          throw error.error.title;
+        })
+      );
+
   }
 }

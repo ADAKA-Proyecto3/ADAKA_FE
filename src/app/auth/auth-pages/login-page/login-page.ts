@@ -51,11 +51,11 @@ export class LoginPage implements OnInit {
       this.loginForm.value.password
     );
 
-    DebugerService.log('loginRequestResult: ' + loginRequestResult);
+   // DebugerService.log('loginRequestResult: ' + loginRequestResult);
 
-    if (loginRequestResult) {
-      this.pageRouter.route(UrlPages.DASHBOARD);
-    }
+    // if (loginRequestResult) {
+    //   this.pageRouter.route(UrlPages.DASHBOARD);
+    // }
   }
 
  
