@@ -109,21 +109,21 @@ export class MapPage {
   private loadInfoMedicalCenters() {
     this.mapInfoService.getMapInfo().subscribe(
       (resp) => {
-        const mapInfoListAqicn: MapInfo[] = resp.map((item) => {
-          const valor: number = parseFloat(item.valor);
+        const mapInfoList: MapInfo[] = resp.map((item) => {
+          const valor: number = parseFloat(item.value);
           const status = this.calculateStatus(valor);
-
+          
           return {
             name: item.name,
             direction: item.direction,
             latitude: item.latitude.toString(),
             longitude: item.longitude.toString(),
             status: status,
-            valor: item.valor,
+            value: item.value,
           };
         });
 
-        this.updateMapInfoList(mapInfoListAqicn);
+        this.updateMapInfoList(mapInfoList);
         this.addZone(this.MapInfoList);
       },
       (error) => {
@@ -184,7 +184,7 @@ export class MapPage {
           color: color,
         })
           .addTo(this.map)
-          .bindPopup('Rango: ' + element.valor);
+          .bindPopup('Rango: ' + element.value);
       }
     });
   }
@@ -201,7 +201,7 @@ export class MapPage {
             latitude: item.lat.toString(),
             longitude: item.lon.toString(),
             status: status,
-            valor: item.aqi,
+            value: item.aqi,
           };
         });
 
