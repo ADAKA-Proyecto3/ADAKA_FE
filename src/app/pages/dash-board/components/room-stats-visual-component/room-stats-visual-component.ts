@@ -8,6 +8,7 @@ import {
   PM10_SensorConfig,
   PM25_SensorConfig,
   Temperature_SensorConfig,
+  VOC_SensorConfig,
 } from 'src/app/common/chart-config/chart-config';
 import { SensorName } from 'src/app/common/enums/sensor-name.enum';
 import { SensorReading } from 'src/app/common/interfaces/sensor-reading';
@@ -16,6 +17,17 @@ import { LoadingService } from 'src/app/services/loading-service/loading.service
 import { AppState } from 'src/app/store/app.state';
 import { SensorData } from '../../../../models/sensor-data.interface';
 import { Subscription } from 'rxjs';
+import { MatTableDataSource } from '@angular/material/table';
+
+export interface InfoData {
+  metric: string;
+  definition: string;
+  units: string;
+  good: string;
+  morate: string;
+}
+
+
 
 @Component({
   selector: 'app-room-stats-visual-component',
@@ -184,6 +196,10 @@ export class RoomStatsVisualComponent implements OnInit, OnDestroy {
         config = Humidity_SensorConfig;
         value = val;
         break;
+      case SensorName.VOC:
+        config = VOC_SensorConfig;
+        value = val;
+        break;
       default:
         return;
     }
@@ -203,10 +219,10 @@ export class RoomStatsVisualComponent implements OnInit, OnDestroy {
 
     let newReading: EChartsOption = {
       grid: {
-        top: 0, // Adjust the top padding as needed
-        bottom: 0, // Adjust the bottom padding as needed
-        left: 0, // Adjust the left padding as needed
-        right: 0, // Adjust the right padding as needed
+        top: 0, 
+        bottom: 0,
+        left: 0,
+        right: 0,
       },
 
       series: [
@@ -308,6 +324,8 @@ export class RoomStatsVisualComponent implements OnInit, OnDestroy {
 
     this.x.push(newReading);
   }
+
+
 
   closeDialog() {
     this.matDialogRef.close();

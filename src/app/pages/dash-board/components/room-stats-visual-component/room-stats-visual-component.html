@@ -1,22 +1,93 @@
-<div class="container-fluid">
-    <div class="row pt-2">
-        <div class="titulo-1">Estadísticas</div>
+<mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center">
 
-    </div>
-    <div class="row d-flex justify-content-evenly">
-        <div class="col-sm-12 col-md-4" *ngFor="let reading of x">
-            <div echarts [options]="reading" style="height: 250px"></div>
+    <mat-tab label="Ultima lectura de sala">
+        <div class="container">
+            <div class="row d-flex justify-content-evenly">
+                <div class="col-sm-12 col-md-4 col-xl-6" *ngFor="let reading of x">
+                    <div echarts [options]="reading" style="height: 250px"></div>
+                </div>
+                <div class="col-sm-12 col-md-4 col-xl-6">
+                    <div echarts style="height: 250px" [options]="y"></div>
+                </div>
+            </div>
+            <div class="row d-flex justify-content-center   pt-2 pb-3">
+                <button type="button" mat-mini-fab color="warn" (click)="closeDialog()">
+                    <mat-icon iconPositionEnd>close</mat-icon>
+                </button>
+            </div>
         </div>
-        <div class="col-sm-12 col-md-4">
-            <div echarts style="height: 250px" [options]="y"></div>
+    </mat-tab>
+    <mat-tab label="Guia de interpretacion">
+        <div class="container pt-3 pb-3">
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+
+                        <th scope="col">Métrica</th>
+                        <th scope="col">Definición</th>
+                        <th scope="col">Unidades</th>
+                        <th scope="col">Bueno</th>
+                        <th scope="col">Moderado</th>
+                        <th scope="col">Insalubre</th>
+                        <th scope="col" class="text-center">Muy Insalubre</th>
+                        <th scope="col">Peligroso</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+
+                        <td>PM2.5</td>
+                        <td>Concentración de microgramos por metro cúbico de partículas suspendidas en el aire con un
+                            diámetro aerodinámico de 2.5 micrómetros </td>
+                        <td>(μg/m3)</td>
+                        <td>0-12</td>
+                        <td>12-35</td>
+                        <td>35-55</td>
+                        <td>55-150</td>
+                        <td>> 150</td>
+                    </tr>
+
+                    <tr>
+
+                        <td>PM10</td>
+                        <td>Concentración de microgramos por metro cúbico de partículas suspendidas en el aire con un
+                            diámetro aerodinámico de 10 micrómetros </td>
+                        <td>(μg/m3)</td>
+                        <td>0-50</td>
+                        <td>50-150</td>
+                        <td>150-250</td>
+                        <td>250-350</td>
+                        <td>> 350</td>
+                    </tr>
+
+                    <tr>
+
+                        <td>CO2</td>
+                        <td>Concentración de dióxido de carbono en el aire</td>
+                        <td>(ppm)</td>
+                        <td>350-1k</td>
+                        <td>1k-2k</td>
+                        <td>2k-5k</td>
+                        <td>-</td>
+                        <td>> 5k</td>
+                    </tr>
+
+                    <tr>
+                        <td>VOC</td>
+                        <td>Concentración de Compuestos Orgánicos Volátiles en el aire.
+                        </td>
+                        <td>(ppm)</td>
+                        <td>2819-Estable</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+
+                </tbody>
+            </table>
         </div>
-    </div>
-    <div class="row d-flex justify-content-evenly  text-end  pt-2 pb-3">
-        <button type="button" mat-raised-button  class="btn_close" (click)="closeDialog()">
-            <mat-icon iconPositionEnd>close</mat-icon>
-            Cerrar
 
-        </button>
-    </div>
-
-</div>
+    </mat-tab>
+    
