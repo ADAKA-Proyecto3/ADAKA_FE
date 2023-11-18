@@ -10,6 +10,9 @@ import {
   loadRooms,
   loadRoomsFailure,
   loadRoomsSuccess,
+  removeDeviceRoom,
+  removeDeviceRoomFailure,
+  removeDeviceRoomSucess,
   removeRoom,
   removeRoomFailure,
   removeRoomSuccess,
@@ -61,8 +64,8 @@ export class RoomEffects {
         this.roomService
           .editRoom(action.id, action.medicalCenterId, action.content)
           .pipe(
-            map(() =>
-              updateRoomSucess({ id: action.id, content: action.content })
+            map((response) =>
+              updateRoomSucess({ id: action.id, content: response })
             ),
             catchError((error) => of(updateRoomFailure({ error })))
           )
@@ -88,6 +91,25 @@ export class RoomEffects {
       )
     )
   );
+
+  removeDeviceRoom$ = createEffect(() =>
+  this.actions$.pipe(
+    ofType(removeDeviceRoom),
+    mergeMap((action) =>
+      this.roomService
+        .removeDeviceFromRoom(action.roomId)
+        .pipe(
+          map((response) =>
+          removeDeviceRoomSucess({
+              roomId: action.roomId,
+              content: response,
+            })
+          ),
+          catchError((error) => of(removeDeviceRoomFailure({ error })))
+        )
+    )
+  )
+);
 
   resgiterRoom$ = createEffect(() =>
     this.actions$.pipe(

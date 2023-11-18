@@ -7,6 +7,7 @@ import { Room } from 'src/app/models/rooms.interface';
 import {
   addRoom,
   loadRooms,
+  removeDeviceRoom,
   removeRoom,
   updateAddRoomDevice,
   updateRoom,
@@ -130,9 +131,7 @@ export class RoomsPage implements OnInit, OnDestroy {
   }
 
   editRoom(id: number, room: Room, newMedicalCenterId: number) {
-    this.store.dispatch(
-      updateRoom({ id: id, medicalCenterId: newMedicalCenterId, content: room })
-    );
+    this.store.dispatch( updateRoom({ id: id, medicalCenterId: newMedicalCenterId, content: room })    );
     this.checkStatusRequest(
       'Sala actualizado con éxito',
       'Ha sucedido un error, por favor intente de nuevo'
@@ -165,6 +164,14 @@ export class RoomsPage implements OnInit, OnDestroy {
     );
   }
 
+  removeDeviceFromRoom(roomId: number) {
+    this.store.dispatch(removeDeviceRoom({roomId:roomId}));
+    this.checkStatusRequest(
+      'Dispositivo desvinculado con éxito',
+      'Ha sucedido un error, por favor intente de nuevo'
+    );
+  }
+
   openAssignDeviceEditDialog(room: Room): void {
     const dialogRef = this.dialog.open(AssignRoomDeviceFormComponent, {
       width: '50%',
@@ -174,7 +181,7 @@ export class RoomsPage implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(async (result) => {
 
       if(result && result.unlinking){
-        this.editRoom(result.room.id, result.room, result.room.medicalCenterId);
+        this.removeDeviceFromRoom(result.roomId);
       }else if (result && !result.unlinking) {
         this.assignDevice(result.roomId, result.deviceId);
       }

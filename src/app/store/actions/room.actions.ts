@@ -1,5 +1,6 @@
 import { createAction, props } from '@ngrx/store';
 import { Room } from 'src/app/models/rooms.interface';
+import { removeDevice } from './device.actions';
 
 // Create room
 export const addRoom = createAction(
@@ -33,6 +34,7 @@ export const updateRoomFailure = createAction(
   props<{ error: any }>()
 );
 
+//Add device to room
 export const updateAddRoomDevice = createAction(
   '[Room Page] Update Add Room Device',
   props<{ roomId: number; deviceId:number }>()
@@ -45,6 +47,22 @@ export const updateAddRoomDeviceSucess = createAction(
 
 export const updateAddRoomDeviceFailure = createAction(
   '[Room Page] Update Add Room Device Failure',
+  props<{ error: any }>()
+);
+
+//Remove device from room
+export const removeDeviceRoom = createAction(
+  '[Room Page] Remove Device Room',
+  props<{ roomId: number }>()
+);
+
+export const removeDeviceRoomSucess = createAction(
+  '[Room Page] Remove Device Room Success',
+  props<{ roomId: number; content:Room }>()
+);
+
+export const removeDeviceRoomFailure = createAction(
+  '[Room Page] Remove Device Room Failure',
   props<{ error: any }>()
 );
 
