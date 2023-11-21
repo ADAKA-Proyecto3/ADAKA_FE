@@ -102,7 +102,7 @@ export class MedicalCentersPage implements OnInit, OnDestroy {
         title: 'Términos y Condiciones',
         html: `
             <p>Estimado/a ${this.activeUser.name} ,</p>
-            <p>Para mejorar la transparencia y contribuir al avance de la atención médica, solicitamos su consentimiento para la publicación pública de sus datos de mediciones en la aplicación de [Nombre de la Aplicación].</p>
+            <p>Para mejorar la transparencia y contribuir al avance de la atención médica, solicitamos su consentimiento para la publicación pública de sus datos de mediciones en la aplicación de ZhenAir.</p>
             <p><strong>¿Consiente la publicación pública de sus datos de mediciones en la aplicación?</strong></p>
               <br>
             <p>Entendemos la sensibilidad de esta información y garantizamos su privacidad al máximo. La publicación se realizará de manera anónima y agregada, sin revelar su identidad.</p>
