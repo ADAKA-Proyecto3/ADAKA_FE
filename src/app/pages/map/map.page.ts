@@ -107,7 +107,10 @@ export class MapPage {
     this.mapInfoService.getMapInfo().subscribe(
       (resp) => {
         const mapInfoList: MapInfo[] = resp.map((item) => {
-          const valor: number = parseFloat(item.value);
+          const valor: number = parseInt(item.value);
+          let resultadoSinDecimales: number = Math.floor(valor);
+          let resultadoComoString: string = resultadoSinDecimales.toString();
+          
           const status = this.calculateStatus(valor);
           
           return {
@@ -116,7 +119,7 @@ export class MapPage {
             latitude: item.latitude.toString(),
             longitude: item.longitude.toString(),
             status: status,
-            value: item.value,
+            value: resultadoComoString,
           };
         });
 
