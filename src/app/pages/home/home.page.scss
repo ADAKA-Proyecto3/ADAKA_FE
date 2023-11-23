@@ -12,19 +12,69 @@
   &_textContainer{
     padding-top: 5rem;
     padding-left: 5rem;
-    width: 70%;
+    width: 80%;
 
     &_header{
       padding-bottom: 1rem;
+      font-size: 2.3rem;
+      text-transform: uppercase;
+      font-weight: 800;
     }
 
     &_body{
       color: white;
       letter-spacing: 1.5px;
+      font-size: 1.5rem;
       font-weight: 300;
     }
   }
 }
+
+.blue-card{
+  background-color: transparent;
+  max-width: 300px;
+  min-width: 300px;
+ // min-height: 275px;
+}
+
+
+.example-card {
+  background-color: #6360600c;
+  max-width: 300px;
+  min-width: 300px;
+  min-height: 275px;
+
+}
+.card-number{
+  color:#042959;;
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center !important;
+}
+
+.card-text{
+  color:black;
+  font-size: 1.2rem;
+  font-weight: 500;
+  line-height: 1.2;
+  text-align: center;
+  
+
+}
+
+.accent{
+  color: #049DD9;
+ 
+}
+
+.client-logos{
+  width: 7.1875rem;
+ //width: 15%;
+ // aspect-ratio: 3/2;
+ // object-fit: contain;
+}
+
+
 
 
 
