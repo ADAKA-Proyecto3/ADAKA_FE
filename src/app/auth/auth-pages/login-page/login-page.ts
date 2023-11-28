@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UrlPages } from 'src/app/common/enums/url-pages.enum';
 import { loginPageController } from './login-page.controller';
-import { DebugerService } from 'src/app/services/debug-service/debug.service';
 import { PageRouterService } from 'src/app/services/page-router-service/page-router.service';
 
 @Component({

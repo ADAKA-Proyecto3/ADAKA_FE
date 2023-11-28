@@ -8,6 +8,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { NgIf } from '@angular/common';
 import { FooterComponent } from 'src/app/components/footer/footer.component';
 import { NavbarModule } from 'src/app/components/navbar/navbar.module';
+import {MatCardModule} from '@angular/material/card';
 
 
 @NgModule({
@@ -20,7 +21,9 @@ import { NavbarModule } from 'src/app/components/navbar/navbar.module';
     MatMenuModule,
     NgIf,
     FooterComponent,
-    NavbarModule
+    NavbarModule,
+    MatCardModule
+    
   ],
 })
 export class HomeModule {}

@@ -34,3 +34,11 @@ export const PM25_SensorConfig: SensorReading = {
     upper_limit: 100,
     tolerance:100
   };
+
+  export const VOC_SensorConfig: SensorReading = {
+    sensor_name: 'VOC',
+    unit: 'ppm',
+    lower_limit: 0,
+    upper_limit: 10000,
+    tolerance:2819
+  };

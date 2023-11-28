@@ -6,11 +6,10 @@ import {
   addRoomFailure,
   addRoomSuccess,
   loadRooms,
-  loadRoomsByMedicalCenter,
-  loadRoomsByMedicalCenterFailure,
-  loadRoomsByMedicalCenterSuccess,
   loadRoomsFailure,
   loadRoomsSuccess,
+  removeDeviceRoom,
+  removeDeviceRoomSucess,
   removeRoom,
   removeRoomFailure,
   removeRoomSuccess,
@@ -22,6 +21,7 @@ import {
   updateRoomSucess,
 } from '../actions/room.actions';
 import { Room } from 'src/app/models/rooms.interface';
+import { removeDeviceFailure } from '../actions/device.actions';
 
 export interface RoomState {
   rooms: Room[];
@@ -84,6 +84,33 @@ export const roomReducer = createReducer(
     };
   }),
 
+  on(removeDeviceRoom, (state) => ({
+    ...state,
+    status: ActionStatus.LOADING,
+  })),
+
+  on(removeDeviceRoomSucess, (state, { content }) => ({
+    ...state,
+    rooms: state.rooms.map((room) => {
+      if (room.id === content.id) {
+        return {
+          ...room,
+          ...content,
+        };
+      }
+      return room;
+    }),
+    status: ActionStatus.SUCCESS,
+  })),
+
+  on(removeDeviceFailure, (state, action) => {
+    return {
+      ...state,
+      error: action.error,
+      status: ActionStatus.ERROR,
+    };
+  }),
+
   on(updateRoom, (state) => ({
     ...state,
     status: ActionStatus.LOADING,
@@ -91,6 +118,7 @@ export const roomReducer = createReducer(
 
   on(updateRoomSucess, (state, { id, content }) => ({
     ...state,
+    status: ActionStatus.SUCCESS,
     rooms: state.rooms.map((room) => {
       if (room.id === id) {
         return {

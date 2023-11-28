@@ -77,7 +77,7 @@ export class RoomHttpService {
           this.loader.dismiss();
           console.log('resp', resp);
           return resp as Room;
-        }),
+        }), 
         catchError((error) => {
           this.loader.dismiss();
           console.error('Error en la petición:', error);
@@ -90,6 +90,25 @@ export class RoomHttpService {
     this.loader.showLoadingModal();
     return this.httpClient
       .put(`${this.url}/add/device/${roomId}/${deviceId}`, Utils.getHttpHeaders())
+      .pipe(
+        map((resp) => {
+          this.loader.dismiss();
+          console.log('resp', resp);
+          return resp as Room;
+        }),
+        catchError((error) => {
+          this.loader.dismiss();
+          console.error('Error en la petición:', error);
+          throw error.error.title;
+        })
+      );
+
+  }
+
+  removeDeviceFromRoom( roomId: number ) {
+    this.loader.showLoadingModal();
+    return this.httpClient
+      .put(`${this.url}/changeRoomDevice/${roomId}`, Utils.getHttpHeaders())
       .pipe(
         map((resp) => {
           this.loader.dismiss();

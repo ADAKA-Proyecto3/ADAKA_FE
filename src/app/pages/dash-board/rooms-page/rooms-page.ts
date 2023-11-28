@@ -7,6 +7,7 @@ import { Room } from 'src/app/models/rooms.interface';
 import {
   addRoom,
   loadRooms,
+  removeDeviceRoom,
   removeRoom,
   updateAddRoomDevice,
   updateRoom,
@@ -16,8 +17,7 @@ import { RoomFormComponent } from '../components/room-form-component/room-form-c
 import { DebugerService } from 'src/app/services/debug-service/debug.service';
 import { MedicalCenter } from 'src/app/models/medical-center.interface';
 import { SelectOption } from 'src/app/common/interfaces/option.interface';
-import { FormControl } from '@angular/forms';
-import { Subscription, of, switchMap, take } from 'rxjs';
+import { Subscription} from 'rxjs';
 import { selectRoomStatus } from 'src/app/store/selectors/room.selector';
 import { ActionStatus } from 'src/app/common/enums/action-status.enum';
 import { Utils } from 'src/app/common/utils/app-util';
@@ -26,7 +26,6 @@ import Swal from 'sweetalert2';
 import { RoomStatsVisualComponent } from '../components/room-stats-visual-component/room-stats-visual-component';
 import { PageRouterService } from 'src/app/services/page-router-service/page-router.service';
 import { UrlPages } from 'src/app/common/enums/url-pages.enum';
-import { loadMedicalCenterForSubUser } from 'src/app/store/actions/medicalCenter.actions';
 import { Device } from 'src/app/models/devices.interface';
 import { loadDevices } from 'src/app/store/actions/device.actions';
 import { AssignRoomDeviceFormComponent } from '../components/assign-room-device-component/assign-room-device-component';
@@ -61,6 +60,7 @@ export class RoomsPage implements OnInit, OnDestroy {
   ) {}
 
   ngOnDestroy(): void {
+    console.log('ngOnDestroy');
     this.activeUserSuscription.unsubscribe();
     this.roomsSuscription.unsubscribe();
   }
@@ -132,11 +132,9 @@ export class RoomsPage implements OnInit, OnDestroy {
   }
 
   editRoom(id: number, room: Room, newMedicalCenterId: number) {
-    this.store.dispatch(
-      updateRoom({ id: id, medicalCenterId: newMedicalCenterId, content: room })
-    );
+    this.store.dispatch(updateRoom({ id: id, medicalCenterId: newMedicalCenterId, content: room })    );
     this.checkStatusRequest(
-      'Sala actualizado con éxito',
+      'Sala actualizada con éxito',
       'Ha sucedido un error, por favor intente de nuevo'
     );
   }
@@ -167,6 +165,14 @@ export class RoomsPage implements OnInit, OnDestroy {
     );
   }
 
+  removeDeviceFromRoom(roomId: number) {
+    this.store.dispatch(removeDeviceRoom({roomId:roomId}));
+    this.checkStatusRequest(
+      'Dispositivo desvinculado con éxito',
+      'Ha sucedido un error, por favor intente de nuevo'
+    );
+  }
+
   openAssignDeviceEditDialog(room: Room): void {
     const dialogRef = this.dialog.open(AssignRoomDeviceFormComponent, {
       width: '50%',
@@ -176,7 +182,7 @@ export class RoomsPage implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(async (result) => {
 
       if(result && result.unlinking){
-        this.editRoom(result.room.id, result.room, result.room.medicalCenterId);
+        this.removeDeviceFromRoom(result.roomId);
       }else if (result && !result.unlinking) {
         this.assignDevice(result.roomId, result.deviceId);
       }
@@ -213,7 +219,7 @@ export class RoomsPage implements OnInit, OnDestroy {
 
   showRoomStats(room: Room): void {
     const dialogRef = this.dialog.open(RoomStatsVisualComponent, {
-      width: '80%',
+      width: '90%',
       data: room,
     });
   }

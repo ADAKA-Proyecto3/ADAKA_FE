@@ -1,14 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Config } from 'src/app/config/config';
-import { User } from '../../models/user.interface';
-import { Observable, of, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/app.state';
 import {
   activeUserReset,
   loadActiveUser,
 } from 'src/app/store/actions/activeUser.actions';
+import { DebugerService } from 'src/app/services/debug-service/debug.service';
 
 
 @Injectable({ providedIn: 'root' })
@@ -55,7 +55,6 @@ export class AuthService {
         },
         error: (error) => {
           reject(error);
-         //console.error(error.error.error);
         },
       });
     });
@@ -77,6 +76,7 @@ export class AuthService {
   }
 
   checkSignedInUser(): void {
+    DebugerService.log('Checking signed in user');
     const loginInfo = sessionStorage.getItem('login');
     const userEmail = loginInfo ? JSON.parse(loginInfo).user : '';
 

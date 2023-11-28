@@ -1,15 +1,15 @@
 <div class="back-ground">
 
-    <div class="d-flex justify-content-between">
+    <div class="d-flex justify-content-between ">
 
         <div class="top-decoration sky-blue-darker-bg"></div>
         <div class="titulo-1 mt-5">Crear una cuenta</div>
         <div class=" ">
-            <img class="img-fluid logo" src="/assets//logos/ZhenAir.png" />
+            <img class="img-fluid logo" src="/assets/logos/ZhenAir.png" />
         </div>
     </div>
 
-    <div class="container w-75 pb-5">
+    <div class="container w-75 pb-2">
         <a (click)="returnToLogin()" class="mb-5 sky-blue-darker-text titulo-3 btn_back">
             <i class="fa-solid fa-arrow-left"></i>
             Regresar a iniciar sesión
@@ -17,7 +17,7 @@
     </div>
 
     <div class="container text-center d-flex  justify-content-center">
-        <div class="form-container white-bg pb-5" [class.mat-elevation-z8]="true">
+        <div class="form-container white-bg" [class.mat-elevation-z8]="true">
 
             <mat-stepper [linear]="isLinear" #stepper>
                 <mat-step [stepControl]="adminDataForm">
