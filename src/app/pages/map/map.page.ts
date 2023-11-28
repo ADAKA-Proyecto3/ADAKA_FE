@@ -49,6 +49,7 @@ export class MapPage {
     this.createMap();
     this.getMapInfoaqicn();
     this.loadInfoMedicalCenters();
+    this.loadInfoQuemada();
   }
 
   private initializeInfoData(): void {
@@ -102,6 +103,73 @@ export class MapPage {
       },
     ]);
   }
+
+  private loadInfoQuemada() {
+    
+    const hospitalesCR = [
+      {
+        name: "Hospital San José",
+        direction: "Avenida Central, San José",
+        latitude: "9.9333",
+        longitude: "-84.0833",
+        status: "Abierto",
+        value: "55",
+      },
+      {
+        name: "Hospital Heredia",
+        direction: "Calle 2, Heredia",
+        latitude: "10.0028",
+        longitude: "-84.1167",
+        status: "Abierto",
+        value: "35",
+      },
+      {
+        name: "Hospital Puntarenas",
+        direction: "Paseo de los Turistas, Puntarenas",
+        latitude: "9.9768",
+        longitude: "-84.8382",
+        status: "Cerrado",
+        value: "25",
+      },
+      {
+        name: "Hospital Limón",
+        direction: "Calle 4, Limón",
+        latitude: "9.9939",
+        longitude: "-83.0374",
+        status: "Abierto",
+        value: "10",
+      },
+      {
+        name: "Hospital Alajuela",
+        direction: "Avenida 8, Alajuela",
+        latitude: "10.0167",
+        longitude: "-84.2167",
+        status: "Abierto",
+        value: "8",
+      },
+      // Puedes agregar más hospitales si lo necesitas
+    ];
+    const mapInfoList: MapInfo[] = hospitalesCR.map((item) => {
+      const valor: number = parseInt(item.value);
+      let resultadoSinDecimales: number = Math.floor(valor);
+      let resultadoComoString: string = resultadoSinDecimales.toString();
+  
+      const status = this.calculateStatus(valor);
+  
+      return {
+        name: item.name,
+        direction: item.direction,
+        latitude: item.latitude.toString(),
+        longitude: item.longitude.toString(),
+        status: status,
+        value: resultadoComoString,
+      };
+    });
+  
+    this.updateMapInfoList(mapInfoList);
+    this.addZone(this.MapInfoList);
+  }
+  
 
   private loadInfoMedicalCenters() {
     this.mapInfoService.getMapInfo().subscribe(
