@@ -27,6 +27,8 @@ import { Subscription, filter, take } from 'rxjs';
 import Swal from 'sweetalert2';
 import { PageRouterService } from 'src/app/services/page-router-service/page-router.service';
 import { UrlPages } from 'src/app/common/enums/url-pages.enum';
+import { PlanValidatorService } from 'src/app/auth/services/plan.service';
+
 
 @Component({
   selector: 'app-medicalCenter-page',
@@ -53,6 +55,8 @@ export class MedicalCentersPage implements OnInit, OnDestroy {
     'showPublic',
     'actions',
   ];
+  planValidator = new PlanValidatorService();
+  planName: string ="";
   dataSource = new MatTableDataSource<MedicalCenter>();
   idAdmin: any = 0;
   private statusSubscription: Subscription = new Subscription();
@@ -69,6 +73,9 @@ export class MedicalCentersPage implements OnInit, OnDestroy {
     this.activeUserSuscription = this.store
       .select((state) => state.user.activeUser)
       .subscribe((user) => {
+        if(user.subscription){
+          this.planName=user.subscription.planName;
+        }
         this.activeUser = user;
         this.idAdmin = user.id;
         this.store.dispatch(loadMedicalCenter({ id: this.idAdmin }));
@@ -91,57 +98,73 @@ export class MedicalCentersPage implements OnInit, OnDestroy {
   }
 
   registerMedicalCenter(id: number, medicalCenter: MedicalCenter) {
-    const fechaActual = new Date();
+    
+    if(this.planValidator.validarMedicalCenter(this.dataSource.data, this.planName)){
+     
+      const fechaActual = new Date();
 
-    const formatoFecha = `${fechaActual.getDate()}/${
-      fechaActual.getMonth() + 1
-    }/${fechaActual.getFullYear()}`;
-
-    if (medicalCenter.showPublic == 1) {
-      Swal.fire({
-        title: 'Términos y Condiciones',
-        html: `
-            <p>Estimado/a ${this.activeUser.name} ,</p>
-            <p>Para mejorar la transparencia y contribuir al avance de la atención médica, solicitamos su consentimiento para la publicación pública de sus datos de mediciones en la aplicación de ZhenAir.</p>
-            <p><strong>¿Consiente la publicación pública de sus datos de mediciones en la aplicación?</strong></p>
-              <br>
-            <p>Entendemos la sensibilidad de esta información y garantizamos su privacidad al máximo.</p>
-            <p>Fecha: ${formatoFecha}</p>
-            <p>Gracias por contribuir a la mejora continua de nuestros servicios y a la comunidad médica en general.</p>
-            <p>Atentamente,</p>
-            <p>ADAKA<br/>ZhenAir</p>
-        `,
-        showCloseButton: true,
-        showCancelButton: true,
-        focusConfirm: false,
-        confirmButtonText: 'Aceptar',
-        confirmButtonAriaLabel: 'Aceptar',
-        cancelButtonText: 'No aceptar',
-        cancelButtonAriaLabel: 'No aceptar',
-        customClass: {
-          closeButton: 'modal-close-button',
-          confirmButton: 'modal-confirm-button',
-          cancelButton: 'modal-cancel-button',
-        },
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.store.dispatch(
-            addMedicalCenter({ id: id, content: medicalCenter })
-          );
-        } else if (!result.isConfirmed) {
-          medicalCenter.showPublic = 2;
-          this.store.dispatch(
-            addMedicalCenter({ id: id, content: medicalCenter })
-          );
-        }
+      const formatoFecha = `${fechaActual.getDate()}/${
+        fechaActual.getMonth() + 1
+      }/${fechaActual.getFullYear()}`;
+  
+      if (medicalCenter.showPublic == 1) {
+        Swal.fire({
+          title: 'Términos y Condiciones',
+          html: `
+              <p>Estimado/a ${this.activeUser.name} ,</p>
+              <p>Para mejorar la transparencia y contribuir al avance de la atención médica, solicitamos su consentimiento para la publicación pública de sus datos de mediciones en la aplicación de ZhenAir.</p>
+              <p><strong>¿Consiente la publicación pública de sus datos de mediciones en la aplicación?</strong></p>
+                <br>
+              <p>Entendemos la sensibilidad de esta información y garantizamos su privacidad al máximo.</p>
+              <p>Fecha: ${formatoFecha}</p>
+              <p>Gracias por contribuir a la mejora continua de nuestros servicios y a la comunidad médica en general.</p>
+              <p>Atentamente,</p>
+              <p>ADAKA<br/>ZhenAir</p>
+          `,
+          showCloseButton: true,
+          showCancelButton: true,
+          focusConfirm: false,
+          confirmButtonText: 'Aceptar',
+          confirmButtonAriaLabel: 'Aceptar',
+          cancelButtonText: 'No aceptar',
+          cancelButtonAriaLabel: 'No aceptar',
+          customClass: {
+            closeButton: 'modal-close-button',
+            confirmButton: 'modal-confirm-button',
+            cancelButton: 'modal-cancel-button',
+          },
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.store.dispatch(
+              addMedicalCenter({ id: id, content: medicalCenter })
+            );
+          } else if (!result.isConfirmed) {
+            medicalCenter.showPublic = 2;
+            this.store.dispatch(
+              addMedicalCenter({ id: id, content: medicalCenter })
+            );
+          }
+          this.checkStatusRequest('Centro médico registrado con éxito');
+        });
+      }else{
+        this.store.dispatch(
+          addMedicalCenter({ id: id, content: medicalCenter })
+        );
         this.checkStatusRequest('Centro médico registrado con éxito');
-      });
+      }
+
+
     }else{
-      this.store.dispatch(
-        addMedicalCenter({ id: id, content: medicalCenter })
-      );
-      this.checkStatusRequest('Centro médico registrado con éxito');
+
+      Utils.showNotification({
+        icon: 'error',
+        text: "Número máximo de centros médico registrados para su plan",
+        showConfirmButton: true,
+      });
+
     }
+
+   
   }
 
   editMedicalCenter(id: number, medicalCenter: MedicalCenter) {
@@ -238,7 +261,6 @@ export class MedicalCentersPage implements OnInit, OnDestroy {
         }
       });
   }
-
 
   returnStatusViewValue(status: string) {
     const viewValue = statusOptions.find(
