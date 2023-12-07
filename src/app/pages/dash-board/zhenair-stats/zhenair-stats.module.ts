@@ -13,7 +13,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ZhenAirPageController } from './zhenair-stats-page.controller';
-
+import {MatTabsModule} from '@angular/material/tabs';
 
 
 
@@ -35,7 +35,7 @@ import { ZhenAirPageController } from './zhenair-stats-page.controller';
     NgxSkeletonLoaderModule,
     FormsModule,
     ReactiveFormsModule,
-    
+    MatTabsModule
     
 
   ],

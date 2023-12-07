@@ -60,39 +60,123 @@
 
         </div>
     </form>
-    <div class="pt-5" *ngIf="!testBool">
-        <div class="d-flex">
-            <ngx-skeleton-loader count="2" appearance="circle" [theme]="{
-            'width': '80px',
-            'height': '80px',
-            'margin': '10px',
-            'border-radius': '0%',
-            'background-color': '#79c4f216',
-            'border': '1px solid white'
-            }">
-            </ngx-skeleton-loader>
-            <div class="d-flex align-content-center mt-4">
-                <div>
-                    <h5>No hay parámetros seleccionados</h5>
+
+
+
+
+    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center">
+
+        <mat-tab label="Histórico">
+            
+    
+
+            <div class="pt-5" *ngIf="!testBool">
+                <div class="d-flex">
+                    <ngx-skeleton-loader count="2" appearance="circle" [theme]="{
+                    'width': '80px',
+                    'height': '80px',
+                    'margin': '10px',
+                    'border-radius': '0%',
+                    'background-color': '#79c4f216',
+                    'border': '1px solid white'
+                    }">
+                    </ngx-skeleton-loader>
+                    <div class="d-flex align-content-center mt-4">
+                        <div>
+                            <h5>No hay parámetros seleccionados</h5>
+                        </div>
+                    </div>
+        
+                </div>
+                <div style=" padding: 10px;">
+                    <ngx-skeleton-loader count="7" [theme]="{ 
+                    'border-radius': '0px',
+                    height: '50px',
+                    'background-color': '#79c4f216',
+                    border: '1px solid white'
+                  }"></ngx-skeleton-loader>
+                </div>
+            </div>
+        
+        
+            <div class="row pt-5 " *ngIf="testBool">
+                <div class="col vh-100">
+                    <div echarts style="height: 35rem;" [options]="y"></div>
                 </div>
             </div>
 
-        </div>
-        <div style=" padding: 10px;">
-            <ngx-skeleton-loader count="7" [theme]="{ 
-            'border-radius': '0px',
-            height: '50px',
-            'background-color': '#79c4f216',
-            border: '1px solid white'
-          }"></ngx-skeleton-loader>
-        </div>
-    </div>
-
-
-    <div class="row pt-5 " *ngIf="testBool">
-        <div class="col vh-100">
-            <div echarts style="height: 35rem;" [options]="y"></div>
-        </div>
-    </div>
-
-</div>
+        </mat-tab>
+        <mat-tab label="Guía de interpretación">
+            <div class="container pt-3 pb-3">
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+    
+                            <th scope="col">Métrica</th>
+                            <th scope="col">Definición</th>
+                            <th scope="col">Unidades</th>
+                            <th scope="col">Bueno</th>
+                            <th scope="col">Moderado</th>
+                            <th scope="col">Insalubre</th>
+                            <th scope="col" class="text-center">Muy Insalubre</th>
+                            <th scope="col">Peligroso</th>
+    
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+    
+                            <td>PM2.5</td>
+                            <td>Concentración de microgramos por metro cúbico de partículas suspendidas en el aire con un
+                                diámetro aerodinámico de 2.5 micrómetros </td>
+                            <td>(μg/m3)</td>
+                            <td>0-12</td>
+                            <td>12-35</td>
+                            <td>35-55</td>
+                            <td>55-150</td>
+                            <td>> 150</td>
+                        </tr>
+    
+                        <tr>
+    
+                            <td>PM10</td>
+                            <td>Concentración de microgramos por metro cúbico de partículas suspendidas en el aire con un
+                                diámetro aerodinámico de 10 micrómetros </td>
+                            <td>(μg/m3)</td>
+                            <td>0-50</td>
+                            <td>50-150</td>
+                            <td>150-250</td>
+                            <td>250-350</td>
+                            <td>> 350</td>
+                        </tr>
+    
+                        <tr>
+    
+                            <td>CO2</td>
+                            <td>Concentración de dióxido de carbono en el aire</td>
+                            <td>(ppm)</td>
+                            <td>35-100</td>
+                            <td>100-200</td>
+                            <td>200-500</td>
+                            <td>-</td>
+                            <td>> 500</td>
+                        </tr>
+    
+                        <tr>
+                            <td>VOC</td>
+                            <td>Concentración de Compuestos Orgánicos Volátiles en el aire.
+                            </td>
+                            <td>(ppm)</td>
+                            <td>28.19-Estable</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+    
+                    </tbody>
+                </table>
+            </div>
+    
+        </mat-tab>
+        
