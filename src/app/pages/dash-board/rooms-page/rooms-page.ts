@@ -29,6 +29,8 @@ import { UrlPages } from 'src/app/common/enums/url-pages.enum';
 import { Device } from 'src/app/models/devices.interface';
 import { loadDevices } from 'src/app/store/actions/device.actions';
 import { AssignRoomDeviceFormComponent } from '../components/assign-room-device-component/assign-room-device-component';
+import { PlanValidatorService } from 'src/app/auth/services/plan.service';
+
 
 @Component({
   templateUrl: './rooms-page.html',
@@ -38,6 +40,7 @@ export class RoomsPage implements OnInit, OnDestroy {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   displayedColumns: string[] = [];
+  planValidator = new PlanValidatorService();
 
   medicalCenters: MedicalCenter[] = [];
   medicalCenterOptions: SelectOption[] = [];
@@ -47,6 +50,7 @@ export class RoomsPage implements OnInit, OnDestroy {
   devices: Device[] = [];
   devicesOptions: SelectOption[] = [];
   requestDeviceId: number = 0;
+  planName: string = "";
 
   private statusSubscription: Subscription = new Subscription();
   private activeUserSuscription: Subscription = new Subscription();
@@ -74,7 +78,9 @@ export class RoomsPage implements OnInit, OnDestroy {
    this.activeUserSuscription = this.store
       .select((state) => state.user.activeUser)
       .subscribe((user) => {
-
+        if(user.subscription){
+          this.planName = user.subscription?.planName;
+        }
         if(user.id !== 0){
           const login = JSON.parse(sessionStorage.getItem('login') || '{}');
           this.isAdmin = login ? login.isAdmin : false;
@@ -96,7 +102,7 @@ export class RoomsPage implements OnInit, OnDestroy {
     }
     this.medicalCenters = this.activeUser.medicalCenters;
       
-
+    
     this.store.dispatch(loadRooms({ id: this.activeUser.id }));
     this.loadRoomsTable();
   }
@@ -124,11 +130,20 @@ export class RoomsPage implements OnInit, OnDestroy {
   }
 
   registerRoom(id: number, room: Room) {
-    this.store.dispatch(addRoom({ id: id, content: room }));
-    this.checkStatusRequest(
-      'Sala registrada con éxito',
-      'Ha sucedido un error, por favor intente de nuevo'
-    );
+    if(this.planValidator.validarRoom(this.dataSource.data, this.planName)){
+      this.store.dispatch(addRoom({ id: id, content: room }));
+      this.checkStatusRequest(
+        'Sala registrada con éxito',
+        'Ha sucedido un error, por favor intente de nuevo'
+      );
+    }else{
+      Utils.showNotification({
+        icon: 'error',
+        text: "Número máximo de salas registradas para su plan",
+        showConfirmButton: true,
+      });
+    }
+    
   }
 
   editRoom(id: number, room: Room, newMedicalCenterId: number) {
@@ -250,6 +265,7 @@ export class RoomsPage implements OnInit, OnDestroy {
         }
       });
   }
+
 
   returnMedicalCenterViewValue(medicalCenterId: number) {
     const viewValue = this.medicalCenters.find(
