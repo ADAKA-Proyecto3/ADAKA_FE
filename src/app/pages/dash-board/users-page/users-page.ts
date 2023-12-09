@@ -1,4 +1,10 @@
-import { AfterViewInit, Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  OnInit,
+  ViewChild,
+  OnDestroy,
+} from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { User } from 'src/app/models/user.interface';
@@ -27,6 +33,7 @@ import { loadMedicalCenter } from 'src/app/store/actions/medicalCenter.actions';
 import { MedicalCenter } from 'src/app/models/medical-center.interface';
 import { PageRouterService } from 'src/app/services/page-router-service/page-router.service';
 import { UrlPages } from 'src/app/common/enums/url-pages.enum';
+import { PlanValidatorService } from 'src/app/auth/services/plan.service';
 
 @Component({
   selector: 'app-users-page',
@@ -40,10 +47,10 @@ export class UsersPage implements OnInit, OnDestroy {
     private store: Store<AppState>,
     private dialog: MatDialog,
     private readonly dialogService: DialogService,
-    private readonly pageRouter: PageRouterService
+    private readonly pageRouter: PageRouterService,
   ) {}
- 
-
+  planValidator = new PlanValidatorService();
+  planName:string="";
   result: string = '';
   activeUser: any;
   medicalCenters: MedicalCenter[] = [];
@@ -66,14 +73,16 @@ export class UsersPage implements OnInit, OnDestroy {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
-
   }
 
   ngOnInit(): void {
-   this.activeUserSuscription = this.store
-      .select((state) => state.user.activeUser.id)
-      .subscribe((id) => {
-        this.activeUser = id;
+    this.activeUserSuscription = this.store
+      .select((state) => state.user.activeUser)
+      .subscribe((user) => {
+        if(user.subscription){
+          this.planName = user.subscription.planName;
+        }
+        this.activeUser = user.id;
         this.store.dispatch(loadUsers({ id: this.activeUser }));
         this.store.dispatch(loadMedicalCenter({ id: this.activeUser }));
       });
@@ -87,20 +96,25 @@ export class UsersPage implements OnInit, OnDestroy {
   }
 
   loadUsersTable(): void {
-    this.medicalCenterSuscription = this.store.select('medicalCenters').subscribe(({ medicalCenters }) => {
-      this.medicalCenters = medicalCenters;
-    });
+    this.medicalCenterSuscription = this.store
+      .select('medicalCenters')
+      .subscribe(({ medicalCenters }) => {
+        this.medicalCenters = medicalCenters;
+      });
 
-    this.usersSuscription = this.store.select('users').subscribe(({ users, status }) => {
-      this.dataSource.data = users;
-    });
+    this.usersSuscription = this.store
+      .select('users')
+      .subscribe(({ users, status }) => {
+        this.dataSource.data = users;
+      });
 
     this.dataSource.paginator = this.paginator;
   }
 
   //CRUD
   registerUser(user: User, parentId: number, medicalCenterId: number) {
-    this.store.dispatch(
+    if(this.planValidator.validarUsers(this.dataSource.data, this.planName)){
+      this.store.dispatch(
       addSubUser({
         content: user,
         parentId: parentId,
@@ -111,6 +125,14 @@ export class UsersPage implements OnInit, OnDestroy {
       'Usuario registrado con éxito',
       'Ha sucedido un error, por favor intente de nuevo'
     );
+    }else{
+      Utils.showNotification({
+        icon: 'error',
+        text: "Número máximo de usuarios registrados para su plan",
+        showConfirmButton: true,
+      });
+    }
+    
   }
 
   editUser(id: number, user: User) {
@@ -216,6 +238,7 @@ export class UsersPage implements OnInit, OnDestroy {
       });
   }
 
+
   returRoleViewValue(role: string) {
     const viewValue = roleOptions.find(
       (option) => option.value === role
@@ -237,7 +260,7 @@ export class UsersPage implements OnInit, OnDestroy {
     return viewValue;
   }
 
-  goToMain(){
-this.pageRouter.route(`${UrlPages.DASHBOARD}/${UrlPages.MAIN}`)
+  goToMain() {
+    this.pageRouter.route(`${UrlPages.DASHBOARD}/${UrlPages.MAIN}`);
   }
 }

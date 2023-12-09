@@ -16,6 +16,7 @@ import { Utils } from 'src/app/common/utils/app-util';
 import Swal from 'sweetalert2';
 import { UrlPages } from 'src/app/common/enums/url-pages.enum';
 import { PageRouterService } from 'src/app/services/page-router-service/page-router.service';
+import { PlanValidatorService } from 'src/app/auth/services/plan.service';
 
 @Component({
   selector: 'app-devices-page',
@@ -27,6 +28,8 @@ export class DevicesPage  implements AfterViewInit, OnInit, OnDestroy{
   private statusSubscription: Subscription = new Subscription();
   activeUser: any;
   idAdmin: any = 0;
+  planValidator = new PlanValidatorService();
+  planName:string="";
 
   private activeUserSuscription: Subscription = new Subscription();
   constructor(
@@ -56,9 +59,12 @@ export class DevicesPage  implements AfterViewInit, OnInit, OnDestroy{
 
   ngOnInit(): void {
     this.activeUserSuscription = this.store
-    .select((state) => state.user.activeUser.id)
-    .subscribe((id) => {
-      this.activeUser = id;
+    .select((state) => state.user.activeUser)
+    .subscribe((user) => {
+      if(user.subscription){
+        this.planName = user.subscription.planName;
+      }
+      this.activeUser = user.id;
       this.store.dispatch(loadDevices({ adminId: this.activeUser }));
     });
   this.loadDevicesTable();
@@ -84,16 +90,25 @@ export class DevicesPage  implements AfterViewInit, OnInit, OnDestroy{
 
   //CRUD
   registerDevice(userId: number, device: Device) {
-    this.store.dispatch(
-      addDevice({
-        adminId: userId,
-        content: device,
-      })
-    );
-    this.checkStatusRequest(
-      'Dispositivo registrado con éxito',
-      'Ha sucedido un error, por favor intente de nuevo'
-    );
+    if(this.planValidator.validarDevices(this.dataSource.data, this.planName)){
+      this.store.dispatch(
+        addDevice({
+          adminId: userId,
+          content: device,
+        })
+      );
+      this.checkStatusRequest(
+        'Dispositivo registrado con éxito',
+        'Ha sucedido un error, por favor intente de nuevo'
+      );
+    }else{
+      Utils.showNotification({
+        icon: 'error',
+        text: "Número máximo de dispositivos registrados para su plan",
+        showConfirmButton: true,
+      });
+    }
+    
     }
 
   getDeleteDeviceConfirmation(device: Device) {
